@@ -1,3 +1,5 @@
+using FantasyTeams.Models;
+using FantasyTeams.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,6 +33,9 @@ namespace FantasyTeams
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FantasyTeams", Version = "v1" });
             });
 
+            services.Configure<DbConfiguration>(Configuration.GetSection("MongoDbConnection"));
+            services.AddScoped<ITeamRepository, TeamRepository>();
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddControllers();
         }
 
