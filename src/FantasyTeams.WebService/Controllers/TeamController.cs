@@ -1,4 +1,5 @@
 ﻿using FantasyTeams.Commands;
+using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
 using FantasyTeams.Repository;
 using Microsoft.AspNetCore.Mvc;
@@ -12,17 +13,18 @@ namespace FantasyTeams.Controllers
     public class TeamController : ControllerBase
     {
         private readonly ILogger<TeamController> _logger;
-        private readonly ITeamRepository _teamRepository;
+        private readonly ITeamService _teamService;
         public TeamController(ILogger<TeamController> logger,
-            ITeamRepository teamRepository)
+            ITeamService teamService)
         {
             _logger = logger;
-            _teamRepository = teamRepository;
+            _teamService = teamService;
         }
         [HttpPost("CreateTeam")]
         public async Task<Team> CreateTeam([FromBody] CreateNewTeamCommand createNewTeamCommand)
         {
-            return await _teamRepository.CreateAsync(createNewTeamCommand);
+            await _teamService.CreateNewTeam(createNewTeamCommand);
+            return null;
         }
     }
 }

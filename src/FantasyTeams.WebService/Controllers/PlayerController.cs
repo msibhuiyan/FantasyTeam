@@ -1,8 +1,10 @@
 ﻿using FantasyTeams.Commands;
+using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
 using FantasyTeams.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FantasyTeams.Controllers
@@ -12,18 +14,24 @@ namespace FantasyTeams.Controllers
     public class PlayerController : ControllerBase
     {
         private readonly ILogger<PlayerController> _logger;
-        private readonly IPlayerRepository _playerRepository;
+        private readonly IPlayerService _playerService;
         public PlayerController(ILogger<PlayerController> logger,
-            IPlayerRepository playerRepository)
+            IPlayerService playerService)
         {
             _logger = logger;
-            _playerRepository = playerRepository;
+            _playerService = playerService;
         }
 
         [HttpPost("CreatePlayer")]
         public async Task<Player> CreatePlayer([FromBody] CreateNewPlayerCommand createNewPlayerCommand)
         {
-            return await _playerRepository.CreateAsync(createNewPlayerCommand);
+            await _playerService.CreateNewPlayer(createNewPlayerCommand);
+            return null;
+        }
+        [HttpGet("GetAllPlayer")]
+        public async Task<List<Player>> GetAllPlayer()
+        {
+            return await _playerService.GetAllPlayer();
         }
     }
 }

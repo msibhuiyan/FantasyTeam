@@ -1,5 +1,4 @@
-﻿using FantasyTeams.Commands;
-using FantasyTeams.Entities;
+﻿using FantasyTeams.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,7 +8,7 @@ namespace FantasyTeams.Repository
     {
         Task<List<Team>> GetAllAsync();
         Task<Team> GetByIdAsync(string id);
-        Task<Team> CreateAsync(CreateNewTeamCommand createNewTeamCommand);
+        public Task CreateAsync(Team team);
         Task UpdateAsync(string id, Team team);
         Task DeleteAsync(string id);
     }

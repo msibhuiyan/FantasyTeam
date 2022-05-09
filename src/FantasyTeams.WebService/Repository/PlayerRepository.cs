@@ -29,25 +29,11 @@ namespace FantasyTeams.Repository
         {
             return _collection.Find(c => c.Id == id).FirstOrDefaultAsync();
         }
-        public async Task<Player> CreateAsync(CreateNewPlayerCommand createNewPlayerCommand)
+        public async Task CreateAsync(Player player)
         {
-            Random rnd = new Random();
-
-            var player = new Player();
-            player.Id = Guid.NewGuid().ToString();
-            player.FirstName = createNewPlayerCommand.FirstName;
-            player.LastName = createNewPlayerCommand.LastName;
-            player.FullName = createNewPlayerCommand.FirstName + " " + createNewPlayerCommand.LastName;
-            player.Country = createNewPlayerCommand.Country;
-            player.Value = 1000000;
-            player.Age = rnd.Next(18, 40);
-            player.ForSale = false;
-            player.AskingPrice = 0;
-            player.PlayerType = "Attacker";
-            player.TeamId = null;
+            
 
             await _collection.InsertOneAsync(player).ConfigureAwait(false);
-            return player;
         }
         public Task UpdateAsync(string id, Player team)
         {
@@ -58,5 +44,9 @@ namespace FantasyTeams.Repository
             return _collection.DeleteOneAsync(c => c.Id == id);
         }
 
+        public async Task CreateManyAsync(List<Player> players)
+        {
+            await _collection.InsertManyAsync(players).ConfigureAwait(false);
+        }
     }
 }

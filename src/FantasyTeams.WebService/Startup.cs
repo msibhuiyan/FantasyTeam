@@ -1,5 +1,7 @@
+using FantasyTeams.Contracts;
 using FantasyTeams.Models;
 using FantasyTeams.Repository;
+using FantasyTeams.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,6 +38,8 @@ namespace FantasyTeams
             services.Configure<DbConfiguration>(Configuration.GetSection("MongoDbConnection"));
             services.AddScoped<ITeamRepository, TeamRepository>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
+            services.AddScoped<IPlayerService, PlayerService>();
+            services.AddScoped<ITeamService, TeamService>();
             services.AddControllers();
         }
 

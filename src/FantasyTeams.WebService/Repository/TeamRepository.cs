@@ -29,21 +29,9 @@ namespace FantasyTeams.Repository
         {
             return _collection.Find(c => c.Id == id).FirstOrDefaultAsync();
         }
-        public async Task<Team> CreateAsync(CreateNewTeamCommand createNewTeamCommand)
+        public async Task CreateAsync(Team team)
         {
-            var team = new Team();
-            team.Id = Guid.NewGuid().ToString();
-            team.Name = createNewTeamCommand.Name;
-            team.Country = createNewTeamCommand.Country;
-            team.Attackers = new string[] { };
-            team.Defenders = new string[] { };
-            team.MidFielders = new string[] { };
-            team.GoalKeepers = new string[] { };
-            team.Budget = 5000000;
-            team.Value = 20000000;
-
             await _collection.InsertOneAsync(team).ConfigureAwait(false);
-            return team;
         }
         public Task UpdateAsync(string id, Team team)
         {
@@ -53,6 +41,5 @@ namespace FantasyTeams.Repository
         {
             return _collection.DeleteOneAsync(c => c.Id == id);
         }
-
     }
 }
