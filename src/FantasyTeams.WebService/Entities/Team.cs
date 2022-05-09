@@ -1,8 +1,8 @@
-﻿namespace FantasyTeams.Models
+﻿namespace FantasyTeams.Entities
 {
     public class Team
     {
-        public string ItemId { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }
         public double Value { get; set; }
