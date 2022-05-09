@@ -153,6 +153,7 @@ namespace FantasyTeams.Services
         {
             var playerInfo  = await _repository.GetByIdAsync(setPlayerForSaleCommand.PlayerId);
             playerInfo.ForSale = true;
+            playerInfo.AskingPrice = setPlayerForSaleCommand.AskingPrice;
             await _repository.UpdateAsync(playerInfo.Id, playerInfo);
         }
     }
