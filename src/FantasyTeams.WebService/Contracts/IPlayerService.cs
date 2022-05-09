@@ -8,6 +8,7 @@ namespace FantasyTeams.Contracts
     public interface IPlayerService
     {
         Task CreateNewPlayer(CreateNewPlayerCommand createNewPlayerCommand);
+        List<Player> CreateNewTeamPlayers(string teamId);
         Task<List<Player>> GetAllPlayer();
     }
 }
