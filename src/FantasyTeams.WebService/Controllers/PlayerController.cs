@@ -33,5 +33,12 @@ namespace FantasyTeams.Controllers
         {
             return await _playerService.GetAllPlayer();
         }
+
+        [HttpPost("SetForSale")]
+        public async Task<Player> MoveToMarketPlace([FromBody] SetPlayerForSaleCommand moveToMarketPlaceCommand)
+        {
+            await _playerService.SetPlayerForSale(moveToMarketPlaceCommand);
+            return null;
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace FantasyTeams.Contracts
         Task CreateNewPlayer(CreateNewPlayerCommand createNewPlayerCommand);
         List<Player> CreateNewTeamPlayers(string teamId);
         Task<List<Player>> GetAllPlayer();
+        Task SetPlayerForSale(SetPlayerForSaleCommand setPlayerForSaleCommand);
     }
 }

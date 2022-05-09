@@ -148,5 +148,12 @@ namespace FantasyTeams.Services
             }
             return players;
         }
+
+        public async Task SetPlayerForSale(SetPlayerForSaleCommand setPlayerForSaleCommand)
+        {
+            var playerInfo  = await _repository.GetByIdAsync(setPlayerForSaleCommand.PlayerId);
+            playerInfo.ForSale = true;
+            await _repository.UpdateAsync(playerInfo.Id, playerInfo);
+        }
     }
 }
