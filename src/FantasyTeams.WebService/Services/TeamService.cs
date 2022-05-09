@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace FantasyTeams.Services
 {
@@ -39,6 +40,16 @@ namespace FantasyTeams.Services
             team.Budget = 5000000;
             team.Value = 20000000;
             await _repository.CreateAsync(team);
+        }
+
+        public async Task<Team> GetTeamInfo(string TeamId)
+        {
+            return await _repository.GetByIdAsync(TeamId);
+        }
+
+        public async Task<List<Team>> GetAllTeams()
+        {
+            return await _repository.GetAllAsync();
         }
     }
 }
