@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyTeams", "FantasyTeams\FantasyTeams.csproj", "{CDF460D3-2110-4579-A60B-B37C2D20276C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{01DEF93F-59DC-46F5-96EC-3F4EAF8D4BB5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FantasyTeams", "src\FantasyTeams.WebService\FantasyTeams.csproj", "{CDF460D3-2110-4579-A60B-B37C2D20276C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B7C0406E-83B1-4907-8035-3FE0112F4467}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyTeams.Tests", "tests\FantasyTeams.Tests\FantasyTeams.Tests.csproj", "{9751C3F3-F3FF-464D-AA1C-7618910D87F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +21,17 @@ Global
 		{CDF460D3-2110-4579-A60B-B37C2D20276C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDF460D3-2110-4579-A60B-B37C2D20276C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDF460D3-2110-4579-A60B-B37C2D20276C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9751C3F3-F3FF-464D-AA1C-7618910D87F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9751C3F3-F3FF-464D-AA1C-7618910D87F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9751C3F3-F3FF-464D-AA1C-7618910D87F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9751C3F3-F3FF-464D-AA1C-7618910D87F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CDF460D3-2110-4579-A60B-B37C2D20276C} = {01DEF93F-59DC-46F5-96EC-3F4EAF8D4BB5}
+		{9751C3F3-F3FF-464D-AA1C-7618910D87F5} = {B7C0406E-83B1-4907-8035-3FE0112F4467}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1D012829-3453-4AB1-B7EF-C936B136EA34}
