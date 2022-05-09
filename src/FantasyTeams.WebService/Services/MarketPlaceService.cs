@@ -67,14 +67,9 @@ namespace FantasyTeams.Services
                 await _teamRepository.UpdateAsync(sellerTeamInfo.Id, sellerTeamInfo);
             }
 
-            playerInfo.ForSale = false;
-            playerInfo.Value = playerInfo.Value + (playerInfo.Value * rnd.Next(10, 100))/100;
-            playerInfo.TeamId = buyerTeamInfo.Id;
-
-            await _marketPlacecRepository.UpdateAsync(playerInfo.Id, playerInfo);
-
             buyerTeamInfo.Value += playerInfo.Value;
-            if(playerInfo.PlayerType == PlayerType.Defender.ToString())
+            buyerTeamInfo.Budget -= playerInfo.AskingPrice;
+            if (playerInfo.PlayerType == PlayerType.Defender.ToString())
             {
                 var playerTypeList = buyerTeamInfo.Defenders.ToList();
                 playerTypeList.Add(playerInfo.Id);
@@ -100,6 +95,16 @@ namespace FantasyTeams.Services
             }
 
             await _teamRepository.UpdateAsync(buyerTeamInfo.Id, buyerTeamInfo);
+
+
+            playerInfo.ForSale = false;
+            playerInfo.Value = playerInfo.Value + (playerInfo.Value * rnd.Next(10, 100))/100;
+            playerInfo.TeamId = buyerTeamInfo.Id;
+            playerInfo.AskingPrice = 0;
+
+            await _marketPlacecRepository.UpdateAsync(playerInfo.Id, playerInfo);
+
+            
         }
     }
 }
