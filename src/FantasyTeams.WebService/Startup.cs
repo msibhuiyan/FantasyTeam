@@ -38,8 +38,10 @@ namespace FantasyTeams
             services.Configure<DbConfiguration>(Configuration.GetSection("MongoDbConnection"));
             services.AddScoped<ITeamRepository, TeamRepository>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
+            services.AddScoped<IMarketPlaceRepository, MarketPlaceRepository>();
             services.AddScoped<IPlayerService, PlayerService>();
             services.AddScoped<ITeamService, TeamService>();
+            services.AddScoped<IMarketPlaceService, MarketPlaceService>();
             services.AddControllers();
         }
 
