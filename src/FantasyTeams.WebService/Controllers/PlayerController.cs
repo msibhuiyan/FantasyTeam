@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 namespace FantasyTeams.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PlayerController : ControllerBase
     {
         private readonly ILogger<PlayerController> _logger;
