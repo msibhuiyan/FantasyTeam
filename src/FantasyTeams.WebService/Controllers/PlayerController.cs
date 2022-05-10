@@ -46,5 +46,11 @@ namespace FantasyTeams.Controllers
         {
             await _playerService.UpdatePlayerInfo(updateTeamCommand);
         }
+
+        [HttpDelete("DeletePlayer")]
+        public async Task DeletePlayer([FromBody] DeletePlayerCommand deletePlayerCommand)
+        {
+            await _playerService.DeletePlayer(deletePlayerCommand);
+        }
     }
 }

@@ -43,5 +43,9 @@ namespace FantasyTeams.Repository
             || c.Country == country 
             || c.Value == value).ToListAsync();
         }
+        public Task DeleteAsync(string id)
+        {
+            return _collection.DeleteOneAsync(c => c.Id == id);
+        }
     }
 }

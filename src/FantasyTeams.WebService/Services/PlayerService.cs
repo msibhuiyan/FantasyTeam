@@ -174,5 +174,15 @@ namespace FantasyTeams.Services
 
             await _repository.UpdateAsync(updatePlayerCommand.PlayerId, playerInfo);
         }
+
+        public async Task DeletePlayer(DeletePlayerCommand deletePlayerCommand)
+        {
+            var player = await _repository.GetByIdAsync(deletePlayerCommand.PlayerId);
+            if(player == null)
+            {
+
+            }
+            await _repository.DeleteAsync(deletePlayerCommand.PlayerId);
+        }
     }
 }

@@ -115,5 +115,15 @@ namespace FantasyTeams.Services
 
             
         }
+
+        public async Task DeletePlayer(DeletePlayerCommand deletePlayerCommand)
+        {
+            var player = _marketPlacecRepository.GetByIdAsync(deletePlayerCommand.PlayerId);
+            if(player == null)
+            {
+                // player not found implementation.
+            }
+            await _marketPlacecRepository.DeleteAsync(deletePlayerCommand.PlayerId);
+        }
     }
 }
