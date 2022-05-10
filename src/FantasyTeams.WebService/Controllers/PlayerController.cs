@@ -23,10 +23,9 @@ namespace FantasyTeams.Controllers
         }
 
         [HttpPost("CreatePlayer")]
-        public async Task<Player> CreatePlayer([FromBody] CreateNewPlayerCommand createNewPlayerCommand)
+        public async Task CreatePlayer([FromBody] CreateNewPlayerCommand createNewPlayerCommand)
         {
             await _playerService.CreateNewPlayer(createNewPlayerCommand);
-            return null;
         }
         [HttpGet("GetAllPlayer")]
         public async Task<List<Player>> GetAllPlayer()

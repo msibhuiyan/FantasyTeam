@@ -50,5 +50,12 @@ namespace FantasyTeams.Controllers
         {
             await _marketPlaceService.DeletePlayer(deletePlayerCommand);
         }
+
+        [HttpPost("CreatePlayer")]
+        public async Task CreateNewMarketPlacePlayer([FromBody] 
+        CreateNewMarketPlacePlayerCommand createNewMarketPlacePlayerCommand)
+        {
+            await _marketPlaceService.CreateNewMarketPlacePlayer(createNewMarketPlacePlayerCommand);
+        }
     }
 }

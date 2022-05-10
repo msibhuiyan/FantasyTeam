@@ -12,5 +12,6 @@ namespace FantasyTeams.Contracts
         Task PurchasePlayer(PurchasePlayerCommand purchasePlayerCommand);
         Task<List<Player>> FindMarketPlacePlayer(FindPlayerQuery findPlayerQuery);
         Task DeletePlayer(DeletePlayerCommand deletePlayerCommand);
+        Task CreateNewMarketPlacePlayer(CreateNewMarketPlacePlayerCommand createNewMarketPlacePlayerCommand);
     }
 }

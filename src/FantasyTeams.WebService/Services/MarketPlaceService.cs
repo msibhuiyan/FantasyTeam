@@ -125,5 +125,23 @@ namespace FantasyTeams.Services
             }
             await _marketPlacecRepository.DeleteAsync(deletePlayerCommand.PlayerId);
         }
+
+        public async Task CreateNewMarketPlacePlayer(CreateNewMarketPlacePlayerCommand createNewMarketPlacePlayerCommand)
+        {
+            Random rnd = new Random();
+            var player = new Player();
+            player.Id = Guid.NewGuid().ToString();
+            player.FirstName = createNewMarketPlacePlayerCommand.FirstName;
+            player.LastName = createNewMarketPlacePlayerCommand.LastName;
+            player.FullName = player.FirstName + " " + player.LastName;
+            player.Country = createNewMarketPlacePlayerCommand.Country;
+            player.Value = 1000000;
+            player.Age = rnd.Next(18, 40);
+            player.ForSale = true;
+            player.AskingPrice = createNewMarketPlacePlayerCommand.AskingPrice;
+            player.PlayerType = createNewMarketPlacePlayerCommand.PlayerType;
+            player.TeamId = null;
+            await _marketPlacecRepository.CreateAsync(player);
+        }
     }
 }
