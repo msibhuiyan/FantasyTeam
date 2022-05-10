@@ -180,7 +180,7 @@ namespace FantasyTeams.Services
             var player = await _repository.GetByIdAsync(deletePlayerCommand.PlayerId);
             if(player == null)
             {
-
+                return;
             }
             await _repository.DeleteAsync(deletePlayerCommand.PlayerId);
         }

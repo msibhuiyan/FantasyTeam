@@ -45,5 +45,11 @@ namespace FantasyTeams.Controllers
         {
             return await _teamService.GetAllTeams();
         }
+
+        [HttpDelete("DeleteTeam")]
+        public async Task DeletePlayer([FromBody] DeleteTeamCommand deleteTeamCommand)
+        {
+            await _teamService.DeleteTeam(deleteTeamCommand);
+        }
     }
 }

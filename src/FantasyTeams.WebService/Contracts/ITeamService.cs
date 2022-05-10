@@ -11,5 +11,6 @@ namespace FantasyTeams.Contracts
         Task<Team> GetTeamInfo(string teamId);
         Task<List<Team>> GetAllTeams();
         Task UpdateTeamInfo(UpdateTeamCommand updateTeamCommand);
+        Task DeleteTeam(DeleteTeamCommand deleteTeamCommand);
     }
 }
