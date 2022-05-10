@@ -33,6 +33,13 @@ namespace FantasyTeams.Controllers
         {
             return await _teamService.GetTeamInfo(TeamId);
         }
+
+        [HttpPut("UpdateTeam")]
+        public async Task UpdateTeam([FromBody] UpdateTeamCommand updateTeamCommand)
+        {
+            await _teamService.UpdateTeamInfo(updateTeamCommand);
+        }
+
         [HttpGet("GetAllTeam")]
         public async Task<List<Team>> GetAllTeam()
         {

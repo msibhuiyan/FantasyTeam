@@ -51,5 +51,18 @@ namespace FantasyTeams.Services
         {
             return await _repository.GetAllAsync();
         }
+
+        public async Task UpdateTeamInfo(UpdateTeamCommand updateTeamCommand)
+        {
+            var teamInfo = await _repository.GetByIdAsync(updateTeamCommand.TeamId);
+            if(teamInfo == null)
+            {
+
+            }
+            teamInfo.Country = updateTeamCommand.Country;
+            teamInfo.Name = updateTeamCommand.Name;
+
+            await _repository.UpdateAsync(updateTeamCommand.TeamId, teamInfo);
+        }
     }
 }
