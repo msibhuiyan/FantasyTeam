@@ -35,5 +35,13 @@ namespace FantasyTeams.Repository
         {
             return _collection.Find(c => c.Id == id && c.ForSale == true).FirstOrDefaultAsync();
         }
+
+        public Task<List<Player>> GetPlayer(string playerName, string teamName, string country, double value)
+        {
+            return _collection.Find(c => 
+            c.FullName.Contains(playerName) 
+            || c.Country == country 
+            || c.Value == value).ToListAsync();
+        }
     }
 }

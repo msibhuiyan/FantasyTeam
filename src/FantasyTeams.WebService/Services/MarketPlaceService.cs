@@ -26,6 +26,15 @@ namespace FantasyTeams.Services
             _teamRepository = teamRepository;
         }
 
+        public Task<List<Player>> FindMarketPlacePlayer(FindPlayerQuery findPlayerQuery)
+        {
+            return _marketPlacecRepository.GetPlayer(
+                findPlayerQuery.PlayerName, 
+                findPlayerQuery.TeamName, 
+                findPlayerQuery.Country,
+                findPlayerQuery.Value);
+        }
+
         public async Task<List<Player>> GetAllMarketPlacePlayer()
         {
             return await _marketPlacecRepository.GetAllAsync();

@@ -32,6 +32,13 @@ namespace FantasyTeams.Controllers
             return await _marketPlaceService.GetMarketPlacePlayer(PlayerId);
         }
 
+        [HttpPost("FindPlayer")]
+        public async Task<List<Player>> FindPlayer(
+            [FromBody] FindPlayerQuery findPlayerQuery)
+        {
+            return await _marketPlaceService.FindMarketPlacePlayer(findPlayerQuery);
+        }
+
         [HttpPost("PurchasePlayer")]
         public async Task PurchasePlayer([FromBody] PurchasePlayerCommand purchasePlayerCommand)
         {

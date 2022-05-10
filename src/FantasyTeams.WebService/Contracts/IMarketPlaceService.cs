@@ -10,5 +10,6 @@ namespace FantasyTeams.Contracts
         Task<List<Player>> GetAllMarketPlacePlayer();
         Task<Player> GetMarketPlacePlayer(string PlayerId);
         Task PurchasePlayer(PurchasePlayerCommand purchasePlayerCommand);
+        Task<List<Player>> FindMarketPlacePlayer(FindPlayerQuery findPlayerQuery);
     }
 }
