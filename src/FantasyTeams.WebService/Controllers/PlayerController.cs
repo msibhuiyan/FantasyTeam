@@ -42,9 +42,15 @@ namespace FantasyTeams.Controllers
         }
 
         [HttpPut("UpdatePlayer")]
-        public async Task UpdatePlayer([FromBody] UpdatePlayerCommand updateTeamCommand)
+        public async Task UpdatePlayer([FromBody] UpdatePlayerCommand updatePlayerCommand)
         {
-            await _playerService.UpdatePlayerInfo(updateTeamCommand);
+            await _playerService.UpdatePlayerInfo(updatePlayerCommand);
+        }
+
+        [HttpPut("UpdatePlayerPrice")]
+        public async Task UpdatePlayerPrice([FromBody] UpdatePlayerPriceCommand updatePlayerPriceCommand)
+        {
+            await _playerService.UpdatePlayerValue(updatePlayerPriceCommand);
         }
 
         [HttpDelete("DeletePlayer")]

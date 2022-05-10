@@ -13,5 +13,6 @@ namespace FantasyTeams.Contracts
         Task SetPlayerForSale(SetPlayerForSaleCommand setPlayerForSaleCommand);
         Task UpdatePlayerInfo(UpdatePlayerCommand updatePlayerCommand);
         Task DeletePlayer(DeletePlayerCommand deletePlayerCommand);
+        Task UpdatePlayerValue(UpdatePlayerPriceCommand updatePlayerPriceCommand);
     }
 }
