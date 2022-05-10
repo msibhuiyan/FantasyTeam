@@ -59,8 +59,10 @@ namespace FantasyTeams.Services
             {
 
             }
-            teamInfo.Country = updateTeamCommand.Country;
-            teamInfo.Name = updateTeamCommand.Name;
+            teamInfo.Country = string.IsNullOrEmpty(updateTeamCommand.Country)? 
+                teamInfo.Country : updateTeamCommand.Country;
+            teamInfo.Name = string.IsNullOrEmpty(updateTeamCommand.Name)?
+                teamInfo.Name : updateTeamCommand.Name;
 
             await _repository.UpdateAsync(updateTeamCommand.TeamId, teamInfo);
         }
