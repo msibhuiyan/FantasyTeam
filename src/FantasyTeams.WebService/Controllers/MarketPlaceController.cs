@@ -44,5 +44,11 @@ namespace FantasyTeams.Controllers
         {
             await _marketPlaceService.PurchasePlayer(purchasePlayerCommand);
         }
+
+        [HttpDelete("DeletePlayer")]
+        public async Task DeletePlayer([FromBody] DeletePlayerCommand deletePlayerCommand)
+        {
+            await _marketPlaceService.DeletePlayer(deletePlayerCommand);
+        }
     }
 }
