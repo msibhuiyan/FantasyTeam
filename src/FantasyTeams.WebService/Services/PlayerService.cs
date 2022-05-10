@@ -156,5 +156,23 @@ namespace FantasyTeams.Services
             playerInfo.AskingPrice = setPlayerForSaleCommand.AskingPrice;
             await _repository.UpdateAsync(playerInfo.Id, playerInfo);
         }
+
+        public async Task UpdatePlayerInfo(UpdatePlayerCommand updatePlayerCommand)
+        {
+            var playerInfo = await _repository.GetByIdAsync(updatePlayerCommand.PlayerId);
+            if (playerInfo == null)
+            {
+
+            }
+            playerInfo.FirstName = string.IsNullOrEmpty(updatePlayerCommand.FirstName)?
+                playerInfo.FirstName : updatePlayerCommand.FirstName;
+            playerInfo.LastName = string.IsNullOrEmpty(updatePlayerCommand.LastName)?
+                playerInfo.LastName : updatePlayerCommand.LastName;
+            playerInfo.FullName = playerInfo.FirstName + " " + playerInfo.LastName;
+            playerInfo.Country = string.IsNullOrEmpty(updatePlayerCommand.Country)?
+                playerInfo.Country : updatePlayerCommand.Country;
+
+            await _repository.UpdateAsync(updatePlayerCommand.PlayerId, playerInfo);
+        }
     }
 }

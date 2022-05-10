@@ -40,5 +40,11 @@ namespace FantasyTeams.Controllers
             await _playerService.SetPlayerForSale(moveToMarketPlaceCommand);
             return null;
         }
+
+        [HttpPut("UpdatePlayer")]
+        public async Task UpdatePlayer([FromBody] UpdatePlayerCommand updateTeamCommand)
+        {
+            await _playerService.UpdatePlayerInfo(updateTeamCommand);
+        }
     }
 }
