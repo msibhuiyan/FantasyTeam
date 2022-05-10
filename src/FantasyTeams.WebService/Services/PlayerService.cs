@@ -45,7 +45,7 @@ namespace FantasyTeams.Services
             return await _repository.GetAllAsync();
         }
 
-        public List<Player> CreateNewTeamPlayers(string teamId)
+        public async Task<List<Player>> CreateNewTeamPlayers(string teamId)
         {
             List<Player> players = new List<Player>();
             players.AddRange(AddGoalKeepers(teamId));
@@ -53,7 +53,7 @@ namespace FantasyTeams.Services
             players.AddRange(AddAttackers(teamId));
             players.AddRange(AddMidFielders(teamId));
             
-            _repository.CreateMany(players);
+            await _repository.CreateManyAsync(players);
             return players;
         }
 

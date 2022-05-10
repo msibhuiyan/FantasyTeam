@@ -44,9 +44,9 @@ namespace FantasyTeams.Repository
             return _collection.DeleteOneAsync(c => c.Id == id);
         }
 
-        public void CreateMany(List<Player> players)
+        public async Task CreateManyAsync(List<Player> players)
         {
-             _collection.InsertMany(players);
+             await _collection.InsertManyAsync(players);
         }
     }
 }

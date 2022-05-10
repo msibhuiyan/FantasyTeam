@@ -72,3 +72,7 @@ F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\obj
 F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\obj\Debug\netcoreapp3.1\FantasyTeams.dll
 F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\obj\Debug\netcoreapp3.1\FantasyTeams.pdb
 F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\obj\Debug\netcoreapp3.1\FantasyTeams.genruntimeconfig.cache
+F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.JsonWebTokens.dll
+F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Logging.dll
+F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
+F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll

@@ -29,7 +29,7 @@ namespace FantasyTeams.Services
             var team = new Team();
             team.Id = Guid.NewGuid().ToString();
 
-            var getTeamMembers = _playerService.CreateNewTeamPlayers(team.Id);
+            var getTeamMembers = await _playerService.CreateNewTeamPlayers(team.Id);
 
             team.Name = createNewTeamCommand.Name;
             team.Country = createNewTeamCommand.Country;
