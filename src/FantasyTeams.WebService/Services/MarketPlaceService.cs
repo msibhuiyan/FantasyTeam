@@ -15,15 +15,15 @@ namespace FantasyTeams.Services
     {
         private readonly ILogger<MarketPlaceService> _logger;
         private readonly IMarketPlaceRepository _marketPlacecRepository;
-        private readonly ITeamRepository _teamRepository;
+        private readonly ITeamService _teamService;
 
         public MarketPlaceService(ILogger<MarketPlaceService> logger,
             IMarketPlaceRepository marketPlacecRepository,
-            ITeamRepository teamRepository)
+            ITeamService teamService)
         {
             _logger = logger;
             _marketPlacecRepository = marketPlacecRepository;
-            _teamRepository = teamRepository;
+            _teamService = teamService;
         }
 
         public Task<List<Player>> FindMarketPlacePlayer(FindPlayerQuery findPlayerQuery)
@@ -48,11 +48,11 @@ namespace FantasyTeams.Services
         public async Task PurchasePlayer(PurchasePlayerCommand purchasePlayerCommand)
         {
             Random rnd = new Random();
-            var buyerTeamInfo = await _teamRepository.GetByIdAsync(purchasePlayerCommand.TeamId);
+            var buyerTeamInfo = await _teamService.GetTeamInfo(purchasePlayerCommand.TeamId);
             var playerInfo = await _marketPlacecRepository.GetByIdAsync(purchasePlayerCommand.PlayerId);
             if (!string.IsNullOrEmpty(playerInfo.TeamId))
             {
-                var sellerTeamInfo = await _teamRepository.GetByIdAsync(playerInfo.TeamId);
+                var sellerTeamInfo = await _teamService.GetTeamInfo(playerInfo.TeamId);
                 sellerTeamInfo.Budget += playerInfo.AskingPrice;
                 sellerTeamInfo.Value -= playerInfo.Value;
                 
@@ -73,7 +73,7 @@ namespace FantasyTeams.Services
                     sellerTeamInfo.GoalKeepers = sellerTeamInfo.GoalKeepers.Where(e => e != playerInfo.Id).ToArray();
                 }
 
-                await _teamRepository.UpdateAsync(sellerTeamInfo.Id, sellerTeamInfo);
+                await _teamService.UpdateTeamInfo(sellerTeamInfo.Id, sellerTeamInfo);
             }
 
             buyerTeamInfo.Value += playerInfo.Value;
@@ -103,7 +103,7 @@ namespace FantasyTeams.Services
                 buyerTeamInfo.GoalKeepers = playerTypeList.ToArray();
             }
 
-            await _teamRepository.UpdateAsync(buyerTeamInfo.Id, buyerTeamInfo);
+            await _teamService.UpdateTeamInfo(buyerTeamInfo.Id, buyerTeamInfo);
 
 
             playerInfo.ForSale = false;
