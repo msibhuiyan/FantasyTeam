@@ -32,5 +32,11 @@ namespace FantasyTeams.Controllers
         {
             return await _uamService.UserLogin(userLoginCommand);
         }
+        [Authorize(Roles ="Admin")]
+        [HttpPost("DeleteUser")]
+        public async Task DeleteUser([FromBody] DeleteUserCommand deleteUserCommand)
+        {
+            await _uamService.DeleteUser(deleteUserCommand);
+        }
     }
 }

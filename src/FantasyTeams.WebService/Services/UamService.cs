@@ -20,20 +20,29 @@ namespace FantasyTeams.Services
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _repository;
         private readonly IPlayerService _playerService;
-        
+        private readonly ITeamService _teamService;
+
         public UamService(ILogger<UamService> logger,
             IConfiguration configuration,
             IUserRepository repository,
-            IPlayerService playerService)
+            IPlayerService playerService,
+            ITeamService teamService)
         {
             _logger = logger;
             _configuration = configuration;
             _repository = repository;
             _playerService = playerService;
+            _teamService = teamService;
         }
 
         public async Task DeleteUser(DeleteUserCommand deleteUserCommand)
         {
+            var user = await _repository.GetByEmailAsync(deleteUserCommand.Email);
+            if(user == null)
+            {
+                return;
+            }
+            await _teamService.DeleteTeam(user.TeamId);
             await _repository.DeleteAsync(deleteUserCommand.Email);
         }
 

@@ -78,6 +78,17 @@ namespace FantasyTeams.Services
             await _repository.DeleteAsync(deleteTeamCommand.TeamId);
         }
 
+        public async Task DeleteTeam(string teamId)
+        {
+            var team = await _repository.GetByIdAsync(teamId);
+            if (team == null)
+            {
+                return;
+            }
+            await _playerService.DeleteTeamPlayers(teamId);
+            await _repository.DeleteAsync(teamId);
+        }
+
         public async Task UpdateTeamInfo(string id, Team team)
         {
             await _repository.UpdateAsync(id, team);
