@@ -1,6 +1,7 @@
 ﻿using FantasyTeams.Commands;
 using FantasyTeams.Contracts;
 using FantasyTeams.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -19,11 +20,13 @@ namespace FantasyTeams.Controllers
             _logger = logger;
             _uamService = uamService;
         }
+        [AllowAnonymous]
         [HttpPost("Register")]
         public async Task Register([FromBody] UserRegistrationCommand userRegistrationCommand)
         {
             await _uamService.RegisterUser(userRegistrationCommand);
         }
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<string> Login([FromBody] UserLoginCommand userLoginCommand)
         {
