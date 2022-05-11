@@ -74,6 +74,7 @@ namespace FantasyTeams.Services
             {
                 return;
             }
+            await _playerService.DeleteTeamPlayers(team.Id);
             await _repository.DeleteAsync(deleteTeamCommand.TeamId);
         }
     }

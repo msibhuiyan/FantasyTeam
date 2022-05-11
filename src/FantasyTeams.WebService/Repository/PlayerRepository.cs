@@ -48,5 +48,10 @@ namespace FantasyTeams.Repository
         {
              await _collection.InsertManyAsync(players);
         }
+
+        public async Task DeleteManyAsync(string teamId)
+        {
+            await _collection.DeleteManyAsync(x => x.TeamId == teamId);
+        }
     }
 }

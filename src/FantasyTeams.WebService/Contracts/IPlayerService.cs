@@ -14,5 +14,6 @@ namespace FantasyTeams.Contracts
         Task UpdatePlayerInfo(UpdatePlayerCommand updatePlayerCommand);
         Task DeletePlayer(DeletePlayerCommand deletePlayerCommand);
         Task UpdatePlayerValue(UpdatePlayerPriceCommand updatePlayerPriceCommand);
+        Task DeleteTeamPlayers(string teamId);
     }
 }

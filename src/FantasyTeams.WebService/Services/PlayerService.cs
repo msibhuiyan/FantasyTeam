@@ -195,5 +195,9 @@ namespace FantasyTeams.Services
             player.Value = updatePlayerPriceCommand.PlayerValue;
             await _repository.UpdateAsync(player.Id, player);
         }
+        public async Task DeleteTeamPlayers(string teamId)
+        {
+            await _repository.DeleteManyAsync(teamId);
+        }
     }
 }
