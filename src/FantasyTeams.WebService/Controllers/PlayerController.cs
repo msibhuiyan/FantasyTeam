@@ -2,6 +2,7 @@
 using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
 using FantasyTeams.Repository;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -16,11 +17,14 @@ namespace FantasyTeams.Controllers
     {
         private readonly ILogger<PlayerController> _logger;
         private readonly IPlayerService _playerService;
+        private readonly IMediator _mediator;
         public PlayerController(ILogger<PlayerController> logger,
-            IPlayerService playerService)
+            IPlayerService playerService,
+            IMediator mediator)
         {
             _logger = logger;
             _playerService = playerService;
+            _mediator = mediator;
         }
         [Authorize(Roles = "Admin")]
         [HttpPost("CreatePlayer")]

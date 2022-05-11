@@ -2,6 +2,7 @@
 using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
 using FantasyTeams.Enums;
+using FantasyTeams.Models;
 using FantasyTeams.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -35,15 +36,24 @@ namespace FantasyTeams.Services
             _teamService = teamService;
         }
 
-        public async Task DeleteUser(DeleteUserCommand deleteUserCommand)
+        public async Task<CommandResponse> DeleteUser(DeleteUserCommand deleteUserCommand)
         {
             var user = await _repository.GetByEmailAsync(deleteUserCommand.Email);
             if(user == null)
             {
-                return;
+                return new CommandResponse
+                {
+                    Message = "User doesn't exists for deletion",
+                    IsSuccess = false
+                };
             }
             await _teamService.DeleteTeam(user.TeamId);
             await _repository.DeleteAsync(deleteUserCommand.Email);
+            return new CommandResponse
+            {
+                Message = "User deleted",
+                IsSuccess = true
+            };
         }
 
         public async Task<User> GetUserInfo(string userEmail)
@@ -51,16 +61,18 @@ namespace FantasyTeams.Services
             return await _repository.GetByEmailAsync(userEmail);
         }
 
-        public async Task RegisterUser(UserRegistrationCommand userRegistrationCommand)
+        public async Task<CommandResponse> RegisterUser(UserRegistrationCommand userRegistrationCommand)
         {
             var user = await _repository.GetByEmailAsync(userRegistrationCommand.Email);
             if (user != null)
             {
-                return;
+                return new CommandResponse
+                {
+                    Message = "User Already Exists",
+                    IsSuccess = false
+                };
             }
             user = new User();
-
-
 
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(userRegistrationCommand.Password, out passwordHash, out passwordSalt);
@@ -73,18 +85,28 @@ namespace FantasyTeams.Services
             user.Role = Role.Member.ToString();
             await _repository.CreateAsync(user);
             await _playerService.CreateNewTeamPlayers(user.TeamId);
+
+            return new CommandResponse
+            {
+                Message = "User Created",
+                IsSuccess = true
+            };
         }
 
-        public async Task<string> UserLogin(UserLoginCommand userLoginCommand)
+        public async Task<AuthCommandResponse> UserLogin(UserLoginCommand userLoginCommand)
         {
             
             var user = await _repository.GetByEmailAsync(userLoginCommand.Email);
             if (user == null)
-                return null;
-            //Register user
+                return new AuthCommandResponse
+                {
+                    Message = "User Doesn't Exists"
+                };
             if (!VerifyPasswordHash(userLoginCommand.Password, user.Password, user.Salt))
-                return null;
-                //wrong pass
+                return new AuthCommandResponse
+                {
+                    Message = "Wrong Password"
+                };
 
             var claims = new[]
             {
@@ -95,16 +117,22 @@ namespace FantasyTeams.Services
             var key = new SymmetricSecurityKey(Encoding.UTF8
                 .GetBytes(_configuration.GetSection("AppSettings:TokenKey").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
+            var tokenExpiryDate = DateTime.Now.AddDays(1);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = tokenExpiryDate,
                 SigningCredentials = creds
             };
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            string accesstoken = tokenHandler.WriteToken(token);
+            return new AuthCommandResponse
+            {
+                Message = "User Exists",
+                AccessToken = accesstoken,
+                ExpiresAt = tokenExpiryDate,
+            };
         }
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)

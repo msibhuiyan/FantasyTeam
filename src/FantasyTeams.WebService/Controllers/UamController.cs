@@ -1,6 +1,6 @@
 ﻿using FantasyTeams.Commands;
-using FantasyTeams.Contracts;
 using FantasyTeams.Models;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,30 +13,31 @@ namespace FantasyTeams.Controllers
     public class UamController : ControllerBase
     {
         private readonly ILogger<UamController> _logger;
-        private readonly IUamService _uamService;
+        private readonly IMediator _mediator;
         public UamController(ILogger<UamController> logger,
-            IUamService uamService)
+            
+            IMediator mediator)
         {
             _logger = logger;
-            _uamService = uamService;
+            _mediator = mediator;
         }
         [AllowAnonymous]
         [HttpPost("Register")]
-        public async Task Register([FromBody] UserRegistrationCommand userRegistrationCommand)
+        public async Task<CommandResponse> Register([FromBody] UserRegistrationCommand userRegistrationCommand)
         {
-            await _uamService.RegisterUser(userRegistrationCommand);
+            return await _mediator.Send(userRegistrationCommand);
         }
         [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<string> Login([FromBody] UserLoginCommand userLoginCommand)
+        public async Task<AuthCommandResponse> Login([FromBody] UserLoginCommand userLoginCommand)
         {
-            return await _uamService.UserLogin(userLoginCommand);
+            return await _mediator.Send(userLoginCommand);
         }
         [Authorize(Roles ="Admin")]
         [HttpPost("DeleteUser")]
-        public async Task DeleteUser([FromBody] DeleteUserCommand deleteUserCommand)
+        public async Task<CommandResponse> DeleteUser([FromBody] DeleteUserCommand deleteUserCommand)
         {
-            await _uamService.DeleteUser(deleteUserCommand);
+            return await _mediator.Send(deleteUserCommand);
         }
     }
 }

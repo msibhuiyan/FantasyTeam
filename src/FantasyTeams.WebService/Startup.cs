@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using MediatR;
 
 namespace FantasyTeams
 {
@@ -59,6 +61,7 @@ namespace FantasyTeams
                 };
             });
             services.AddControllers();
+            services.AddMediatR(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
