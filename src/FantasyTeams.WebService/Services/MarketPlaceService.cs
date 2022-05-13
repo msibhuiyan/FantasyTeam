@@ -63,7 +63,15 @@ namespace FantasyTeams.Services
         {
             Random rnd = new Random();
             var buyerTeamInfo = await _teamService.GetTeamInfo(purchasePlayerCommand.TeamId);
+            if(buyerTeamInfo == null)
+            {
+                return CommandResponse.Failure(new string[] { "Buyer team doesn't exists" });
+            }
             var playerInfo = await _marketPlacecRepository.GetByIdAsync(purchasePlayerCommand.PlayerId);
+            if(playerInfo == null)
+            {
+                return CommandResponse.Failure(new string[] { "The player is no longer in market place" });
+            }
             if(buyerTeamInfo.Id == playerInfo.TeamId)
             {
                 return CommandResponse.Failure(new string[] { "Can not purchase your own player" });
@@ -123,10 +131,11 @@ namespace FantasyTeams.Services
             playerInfo.ForSale = false;
             playerInfo.Value = playerInfo.Value + (playerInfo.Value * rnd.Next(10, 100))/100;
             playerInfo.TeamId = buyerTeamInfo.Id;
-            playerInfo.AskingPrice = 0;
 
             buyerTeamInfo.Value += playerInfo.Value;
             buyerTeamInfo.Budget -= playerInfo.AskingPrice;
+
+            playerInfo.AskingPrice = 0;
 
             await _marketPlacecRepository.UpdateAsync(playerInfo.Id, playerInfo);
             await _teamService.UpdateTeamInfo(buyerTeamInfo.Id, buyerTeamInfo);
