@@ -26,7 +26,7 @@ namespace FantasyTeams.Services
             _repository = repository;
             _playerService = playerService;
         }
-        public async Task<CommandResponse> CreateNewTeam(CreateNewTeamCommand createNewTeamCommand)
+        public async Task<CommandResponse> CreateNewTeam(CreateTeamCommand createNewTeamCommand)
         {
             var team = new Team();
             team.Id = Guid.NewGuid().ToString();
@@ -41,13 +41,8 @@ namespace FantasyTeams.Services
             team.GoalKeepers = getTeamMembers.Where(x => x.PlayerType == PlayerType.GoalKeeper.ToString()).Select(x => x.Id).ToArray();
             team.Budget = 5000000;
             team.Value = 20000000;
-            await _repository.CreateAsync(team);
-            //var json = JsonConvert.SerializeObject(team);
-            return new CommandResponse
-            {
-                Message = "Team " + team.Name + " created.",
-                IsSuccess = true
-            };
+            await _repository.GetAllAsync();
+            return CommandResponse.Success(team);
         }
 
         public async Task<Team> GetTeamInfo(string TeamId)
@@ -63,13 +58,9 @@ namespace FantasyTeams.Services
         public async Task<CommandResponse> UpdateTeamInfo(UpdateTeamCommand updateTeamCommand)
         {
             var teamInfo = await _repository.GetByIdAsync(updateTeamCommand.TeamId);
-            if(teamInfo == null)
+            if (teamInfo == null)
             {
-                return new CommandResponse
-                {
-                    Message = "No team found for update",
-                    IsSuccess = false
-                };
+                return CommandResponse.Failure(new string[] { "No team found for update" });
             }
             teamInfo.Country = string.IsNullOrEmpty(updateTeamCommand.Country)? 
                 teamInfo.Country : updateTeamCommand.Country;
@@ -77,11 +68,7 @@ namespace FantasyTeams.Services
                 teamInfo.Name : updateTeamCommand.Name;
 
             await _repository.UpdateAsync(updateTeamCommand.TeamId, teamInfo);
-            return new CommandResponse
-            {
-                Message = "Team "+ teamInfo.Name + " updated",
-                IsSuccess = true
-            };
+            return CommandResponse.Success();
         }
 
         public async Task<CommandResponse> DeleteTeam(DeleteTeamCommand deleteTeamCommand)

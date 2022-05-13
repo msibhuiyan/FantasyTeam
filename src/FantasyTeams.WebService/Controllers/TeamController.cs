@@ -26,10 +26,10 @@ namespace FantasyTeams.Controllers
         }
         [Authorize(Roles = "Admin")]
         [HttpPost("CreateTeam")]
-        public async Task<Team> CreateTeam([FromBody] CreateNewTeamCommand createNewTeamCommand)
+        public async Task<CommandResponse> CreateTeam([FromBody] CreateTeamCommand createNewTeamCommand)
         {
-            return null;
-            //return await _mediator.Send(createNewTeamCommand);
+            //return null;
+            return await _mediator.Send(createNewTeamCommand);
         }
         [Authorize(Roles = "Admin, Member")]
         [HttpGet("GetTeam")]
