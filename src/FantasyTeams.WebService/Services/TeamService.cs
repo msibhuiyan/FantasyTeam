@@ -8,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using FantasyTeams.Models;
 
 namespace FantasyTeams.Services
 {
@@ -24,7 +25,7 @@ namespace FantasyTeams.Services
             _repository = repository;
             _playerService = playerService;
         }
-        public async Task CreateNewTeam(CreateNewTeamCommand createNewTeamCommand)
+        public async Task<CommandResponse> CreateNewTeam(CreateNewTeamCommand createNewTeamCommand)
         {
             var team = new Team();
             team.Id = Guid.NewGuid().ToString();
@@ -40,6 +41,11 @@ namespace FantasyTeams.Services
             team.Budget = 5000000;
             team.Value = 20000000;
             await _repository.CreateAsync(team);
+            return new CommandResponse
+            {
+                Message = "Team " + team.Name + " created.",
+                IsSuccess = true
+            };
         }
 
         public async Task<Team> GetTeamInfo(string TeamId)
@@ -52,12 +58,16 @@ namespace FantasyTeams.Services
             return await _repository.GetAllAsync();
         }
 
-        public async Task UpdateTeamInfo(UpdateTeamCommand updateTeamCommand)
+        public async Task<CommandResponse> UpdateTeamInfo(UpdateTeamCommand updateTeamCommand)
         {
             var teamInfo = await _repository.GetByIdAsync(updateTeamCommand.TeamId);
             if(teamInfo == null)
             {
-
+                return new CommandResponse
+                {
+                    Message = "No team found for update",
+                    IsSuccess = false
+                };
             }
             teamInfo.Country = string.IsNullOrEmpty(updateTeamCommand.Country)? 
                 teamInfo.Country : updateTeamCommand.Country;
@@ -65,33 +75,61 @@ namespace FantasyTeams.Services
                 teamInfo.Name : updateTeamCommand.Name;
 
             await _repository.UpdateAsync(updateTeamCommand.TeamId, teamInfo);
+            return new CommandResponse
+            {
+                Message = "Team "+ teamInfo.Name + " updated",
+                IsSuccess = true
+            };
         }
 
-        public async Task DeleteTeam(DeleteTeamCommand deleteTeamCommand)
+        public async Task<CommandResponse> DeleteTeam(DeleteTeamCommand deleteTeamCommand)
         {
             var team = await _repository.GetByIdAsync(deleteTeamCommand.TeamId);
             if(team == null)
             {
-                return;
+                return new CommandResponse
+                {
+                    Message = "No team found for delete",
+                    IsSuccess = false
+                };
             }
             await _playerService.DeleteTeamPlayers(team.Id);
             await _repository.DeleteAsync(deleteTeamCommand.TeamId);
+            return new CommandResponse
+            {
+                Message = "Team " + team.Name + " deleted",
+                IsSuccess = true
+            };
         }
 
-        public async Task DeleteTeam(string teamId)
+        public async Task<CommandResponse> DeleteTeam(string teamId)
         {
             var team = await _repository.GetByIdAsync(teamId);
             if (team == null)
             {
-                return;
+                return new CommandResponse
+                {
+                    Message = "No team found for delete",
+                    IsSuccess = false
+                };
             }
             await _playerService.DeleteTeamPlayers(teamId);
             await _repository.DeleteAsync(teamId);
+            return new CommandResponse
+            {
+                Message = "Team " + team.Name + " deleted",
+                IsSuccess = true
+            };
         }
 
-        public async Task UpdateTeamInfo(string id, Team team)
+        public async Task<CommandResponse> UpdateTeamInfo(string id, Team team)
         {
             await _repository.UpdateAsync(id, team);
+            return new CommandResponse
+            {
+                Message = "Team " + team.Name + " updated",
+                IsSuccess = true
+            };
         }
     }
 }

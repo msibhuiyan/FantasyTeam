@@ -1,7 +1,9 @@
 ﻿using FantasyTeams.Commands;
 using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
+using FantasyTeams.Models;
 using FantasyTeams.Repository;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,12 +17,12 @@ namespace FantasyTeams.Controllers
     public class TeamController : ControllerBase
     {
         private readonly ILogger<TeamController> _logger;
-        private readonly ITeamService _teamService;
+        private readonly IMediator _mediator;
         public TeamController(ILogger<TeamController> logger,
-            ITeamService teamService)
+            IMediator mediator)
         {
             _logger = logger;
-            _teamService = teamService;
+            _mediator = mediator;
         }
         [Authorize(Roles = "Admin")]
         [HttpPost("CreateTeam")]
@@ -37,9 +39,10 @@ namespace FantasyTeams.Controllers
         }
         [Authorize(Roles = "Admin, Member")]
         [HttpPut("UpdateTeam")]
-        public async Task UpdateTeam([FromBody] UpdateTeamCommand updateTeamCommand)
+        public async Task<CommandResponse> UpdateTeam([FromBody] UpdateTeamCommand updateTeamCommand)
         {
-            await _teamService.UpdateTeamInfo(updateTeamCommand);
+            return await _mediator.Send(updateTeamCommand);
+            //await _teamService.UpdateTeamInfo(updateTeamCommand);
         }
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAllTeam")]
