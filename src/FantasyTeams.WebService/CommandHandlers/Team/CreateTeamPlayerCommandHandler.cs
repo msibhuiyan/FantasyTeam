@@ -17,7 +17,7 @@ namespace FantasyTeams.CommandHandlers.Team
 
         public async Task<CommandResponse> Handle(CreateTeamPlayerCommand request, CancellationToken cancellationToken)
         {
-            return CommandResponse.Failure(new string[] { "Not Implemented" });
+            return await _teamService.CreateTeamPlayer(request);
         }
     }
 }

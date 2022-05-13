@@ -15,5 +15,6 @@ namespace FantasyTeams.Contracts
         Task<CommandResponse> DeleteTeam(DeleteTeamCommand deleteTeamCommand);
         Task<CommandResponse> DeleteTeam(string teamId);
         Task<CommandResponse> UpdateTeamInfo(string id, Team team);
+        Task<CommandResponse> CreateTeamPlayer(CreateTeamPlayerCommand request);
     }
 }

@@ -100,5 +100,15 @@ namespace FantasyTeams.Services
             await _repository.UpdateAsync(id, team);
             return CommandResponse.Success();
         }
+
+        public async Task<CommandResponse> CreateTeamPlayer(CreateTeamPlayerCommand request)
+        {
+            var team = await _repository.GetByIdAsync(request.TeamId);
+            if(team == null)
+            {
+                return CommandResponse.Failure(new string[] {"No team found to add this player"});
+            }
+            return CommandResponse.Failure(new string[] { "Not implemented" });
+        }
     }
 }
