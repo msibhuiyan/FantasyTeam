@@ -28,33 +28,34 @@ namespace FantasyTeams.Controllers
         [HttpPost("CreateTeam")]
         public async Task<Team> CreateTeam([FromBody] CreateNewTeamCommand createNewTeamCommand)
         {
-            await _teamService.CreateNewTeam(createNewTeamCommand);
             return null;
+            //return await _mediator.Send(createNewTeamCommand);
         }
         [Authorize(Roles = "Admin, Member")]
         [HttpGet("GetTeam")]
         public async Task<Team> GetTeam([FromQuery] string TeamId)
         {
-            return await _teamService.GetTeamInfo(TeamId);
+            return null;
+            //return await _teamService.GetTeamInfo(TeamId);
         }
         [Authorize(Roles = "Admin, Member")]
         [HttpPut("UpdateTeam")]
         public async Task<CommandResponse> UpdateTeam([FromBody] UpdateTeamCommand updateTeamCommand)
         {
             return await _mediator.Send(updateTeamCommand);
-            //await _teamService.UpdateTeamInfo(updateTeamCommand);
         }
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAllTeam")]
         public async Task<List<Team>> GetAllTeam()
         {
-            return await _teamService.GetAllTeams();
+            return null;
+            //return await _teamService.GetAllTeams();
         }
         [Authorize(Roles = "Admin")]
         [HttpDelete("DeleteTeam")]
-        public async Task DeletePlayer([FromBody] DeleteTeamCommand deleteTeamCommand)
+        public async Task<CommandResponse> DeletePlayer([FromBody] DeleteTeamCommand deleteTeamCommand)
         {
-            await _teamService.DeleteTeam(deleteTeamCommand);
+            return await _mediator.Send(deleteTeamCommand);
         }
     }
 }

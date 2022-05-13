@@ -1,6 +1,9 @@
-﻿namespace FantasyTeams.Commands
+﻿using FantasyTeams.Models;
+using MediatR;
+
+namespace FantasyTeams.Commands
 {
-    public class CreateNewTeamPlayerCommand
+    public class CreateNewTeamPlayerCommand : IRequest<CommandResponse>
     {
     }
 }

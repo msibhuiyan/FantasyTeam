@@ -14,9 +14,9 @@ namespace FantasyTeams.CommandHandlers.Team
         {
             _teamService = teamService;
         }
-        public Task<CommandResponse> Handle(UpdateTeamCommand request, CancellationToken cancellationToken)
+        public async Task<CommandResponse> Handle(UpdateTeamCommand request, CancellationToken cancellationToken)
         {
-            return _teamService.UpdateTeamInfo(request);
+            return await _teamService.UpdateTeamInfo(request);
         }
     }
 }

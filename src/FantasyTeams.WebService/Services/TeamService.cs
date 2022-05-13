@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using FantasyTeams.Models;
+using Newtonsoft.Json;
 
 namespace FantasyTeams.Services
 {
@@ -41,6 +42,7 @@ namespace FantasyTeams.Services
             team.Budget = 5000000;
             team.Value = 20000000;
             await _repository.CreateAsync(team);
+            //var json = JsonConvert.SerializeObject(team);
             return new CommandResponse
             {
                 Message = "Team " + team.Name + " created.",
