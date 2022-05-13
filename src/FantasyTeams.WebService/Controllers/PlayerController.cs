@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FantasyTeams.Controllers
@@ -35,7 +36,17 @@ namespace FantasyTeams.Controllers
         [HttpGet("GetAllPlayer")]
         public async Task<QueryResponse> GetAllPlayer()
         {
-            return await _mediator.Send(new GetAllPlayerQuery());
+            var teamId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string role = User.FindFirst(ClaimTypes.Role).Value;
+            if(role == "Admin")
+            {
+                return await _mediator.Send(new GetAllPlayerQuery());
+            }
+            return await _mediator.Send(new GetAllPlayerQuery
+            {
+                TeamId = teamId
+            });
+
         }
         [Authorize(Roles = "Member")]
         [HttpPost("SetForSale")]

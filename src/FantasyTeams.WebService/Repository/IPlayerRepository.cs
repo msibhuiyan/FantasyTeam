@@ -8,6 +8,7 @@ namespace FantasyTeams.Repository
     public interface IPlayerRepository
     {
         Task<List<Player>> GetAllAsync();
+        Task<List<Player>> GetAllAsync(string teamId);
         Task<Player> GetByIdAsync(string id);
         Task CreateAsync(Player player);
         Task CreateManyAsync(List<Player> players);

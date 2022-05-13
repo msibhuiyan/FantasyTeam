@@ -3,6 +3,7 @@ using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
 using FantasyTeams.Enums;
 using FantasyTeams.Models;
+using FantasyTeams.Queries;
 using FantasyTeams.Repository;
 using Microsoft.Extensions.Logging;
 using System;
@@ -43,9 +44,15 @@ namespace FantasyTeams.Services
 
         }
 
-        public async Task<QueryResponse> GetAllPlayer()
+        public async Task<QueryResponse> GetAllPlayer(GetAllPlayerQuery getAllPlayerQuery)
         {
-            var players =  await _repository.GetAllAsync();
+            var players = new List<Player>();
+            if (string.IsNullOrEmpty(getAllPlayerQuery.TeamId))
+            {
+                players = await _repository.GetAllAsync();
+                return QueryResponse.Success(players);
+            }
+            players =  await _repository.GetAllAsync(getAllPlayerQuery.TeamId);
             return QueryResponse.Success(players);
         }
 

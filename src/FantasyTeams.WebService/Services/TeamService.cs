@@ -45,14 +45,16 @@ namespace FantasyTeams.Services
             return CommandResponse.Success(team);
         }
 
-        public async Task<Team> GetTeamInfo(string TeamId)
+        public async Task<QueryResponse> GetTeamInfo(string TeamId)
         {
-            return await _repository.GetByIdAsync(TeamId);
+            var team = await _repository.GetByIdAsync(TeamId);
+            return QueryResponse.Success(team);
         }
 
-        public async Task<List<Team>> GetAllTeams()
+        public async Task<QueryResponse> GetAllTeams()
         {
-            return await _repository.GetAllAsync();
+            var teams = await _repository.GetAllAsync();
+            return QueryResponse.Success(teams);
         }
 
         public async Task<CommandResponse> UpdateTeamInfo(UpdateTeamCommand updateTeamCommand)

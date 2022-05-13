@@ -23,11 +23,11 @@ namespace FantasyTeams.Repository
 
         public Task<List<Player>> GetAllAsync()
         {
-            return _collection.Find(c => true).ToListAsync();
+            return _collection.Find(x => true).ToListAsync();
         }
         public Task<Player> GetByIdAsync(string id)
         {
-            return _collection.Find(c => c.Id == id).FirstOrDefaultAsync();
+            return _collection.Find(x => x.Id == id).FirstOrDefaultAsync();
         }
         public async Task CreateAsync(Player player)
         {
@@ -37,11 +37,11 @@ namespace FantasyTeams.Repository
         }
         public Task UpdateAsync(string id, Player team)
         {
-            return _collection.ReplaceOneAsync(c => c.Id == id, team);
+            return _collection.ReplaceOneAsync(x => x.Id == id, team);
         }
         public Task DeleteAsync(string id)
         {
-            return _collection.DeleteOneAsync(c => c.Id == id);
+            return _collection.DeleteOneAsync(x => x.Id == id);
         }
 
         public async Task CreateManyAsync(List<Player> players)
@@ -52,6 +52,11 @@ namespace FantasyTeams.Repository
         public async Task DeleteManyAsync(string teamId)
         {
             await _collection.DeleteManyAsync(x => x.TeamId == teamId);
+        }
+
+        public async Task<List<Player>> GetAllAsync(string teamId)
+        {
+            return await _collection.Find(x => x.TeamId == teamId).ToListAsync();
         }
     }
 }

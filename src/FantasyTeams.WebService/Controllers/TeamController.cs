@@ -2,6 +2,7 @@
 using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
 using FantasyTeams.Models;
+using FantasyTeams.Queries;
 using FantasyTeams.Repository;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -28,15 +29,15 @@ namespace FantasyTeams.Controllers
         [HttpPost("CreateTeam")]
         public async Task<CommandResponse> CreateTeam([FromBody] CreateTeamCommand createNewTeamCommand)
         {
-            //return null;
             return await _mediator.Send(createNewTeamCommand);
         }
         [Authorize(Roles = "Admin, Member")]
         [HttpGet("GetTeam")]
-        public async Task<Team> GetTeam([FromQuery] string TeamId)
+        public async Task<QueryResponse> GetTeam([FromQuery] string teamId)
         {
-            return null;
-            //return await _teamService.GetTeamInfo(TeamId);
+            return await _mediator.Send(new GetTeamQuery { 
+                TeamId = teamId
+            });
         }
         [Authorize(Roles = "Admin, Member")]
         [HttpPut("UpdateTeam")]
@@ -46,10 +47,9 @@ namespace FantasyTeams.Controllers
         }
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAllTeam")]
-        public async Task<List<Team>> GetAllTeam()
+        public async Task<QueryResponse> GetAllTeam()
         {
-            return null;
-            //return await _teamService.GetAllTeams();
+            return await _mediator.Send(new GetAllTeamQuery()); ;
         }
         [Authorize(Roles = "Admin")]
         [HttpDelete("DeleteTeam")]
