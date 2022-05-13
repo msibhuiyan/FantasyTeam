@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FantasyTeams.Commands
 {
-    public class CreateNewTeamCommand : IRequest<CommandResponse>
+    public class CreateTeamCommand : IRequest<CommandResponse>
     {
         [Required]
         public string Name { get; set; }

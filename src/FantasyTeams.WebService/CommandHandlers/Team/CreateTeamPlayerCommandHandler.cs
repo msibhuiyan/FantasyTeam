@@ -1,6 +1,6 @@
 ﻿namespace FantasyTeams.CommandHandlers.Team
 {
-    public class CreateNewTeamCommandHandler
+    public class CreateTeamPlayerCommandHandler
     {
     }
 }

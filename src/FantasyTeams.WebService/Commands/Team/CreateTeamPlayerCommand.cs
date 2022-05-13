@@ -3,7 +3,7 @@ using MediatR;
 
 namespace FantasyTeams.Commands
 {
-    public class CreateNewTeamPlayerCommand : IRequest<CommandResponse>
+    public class CreateTeamPlayerCommand : IRequest<CommandResponse>
     {
     }
 }
