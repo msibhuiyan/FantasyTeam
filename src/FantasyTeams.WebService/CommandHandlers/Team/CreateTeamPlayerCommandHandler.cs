@@ -1,6 +1,23 @@
-﻿namespace FantasyTeams.CommandHandlers.Team
+﻿using FantasyTeams.Commands;
+using FantasyTeams.Contracts;
+using FantasyTeams.Models;
+using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace FantasyTeams.CommandHandlers.Team
 {
-    public class CreateTeamPlayerCommandHandler
+    public class CreateTeamPlayerCommandHandler : IRequestHandler<CreateTeamPlayerCommand, CommandResponse>
     {
+        private readonly ITeamService _teamService;
+        public CreateTeamPlayerCommandHandler(ITeamService teamService)
+        {
+            _teamService = teamService;
+        }
+
+        public async Task<CommandResponse> Handle(CreateTeamPlayerCommand request, CancellationToken cancellationToken)
+        {
+            return CommandResponse.Failure(new string[] { "Not Implemented" });
+        }
     }
 }
