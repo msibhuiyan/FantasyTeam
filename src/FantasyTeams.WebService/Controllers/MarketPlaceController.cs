@@ -1,4 +1,5 @@
 ﻿using FantasyTeams.Commands;
+using FantasyTeams.Queries;
 using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
 using Microsoft.AspNetCore.Authorization;

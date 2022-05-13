@@ -1,4 +1,4 @@
-﻿namespace FantasyTeams.Commands
+﻿namespace FantasyTeams.Queries
 {
     public class FindPlayerQuery
     {

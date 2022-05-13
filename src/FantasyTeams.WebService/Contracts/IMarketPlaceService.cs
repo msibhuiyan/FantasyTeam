@@ -1,4 +1,5 @@
 ﻿using FantasyTeams.Commands;
+using FantasyTeams.Queries;
 using FantasyTeams.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;

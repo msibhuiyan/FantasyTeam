@@ -34,7 +34,6 @@ F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\bin
 F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\bin\Debug\netcoreapp3.1\AutoMapper.dll
 F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\bin\Debug\netcoreapp3.1\DnsClient.dll
-F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\bin\Debug\netcoreapp3.1\FluentValidation.dll
 F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\bin\Debug\netcoreapp3.1\MediatR.dll
 F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\bin\Debug\netcoreapp3.1\MediatR.Extensions.Microsoft.DependencyInjection.dll
 F:\Toptal-Test-Project\Saiful-Islam\FantasyTeams\src\FantasyTeams.WebService\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
