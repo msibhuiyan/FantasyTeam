@@ -1,8 +1,10 @@
 ﻿using FantasyTeams.Enums;
+using FantasyTeams.Models;
+using MediatR;
 
 namespace FantasyTeams.Commands
 {
-    public class CreateNewMarketPlacePlayerCommand
+    public class CreateMarketPlacePlayerCommand : IRequest<CommandResponse>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

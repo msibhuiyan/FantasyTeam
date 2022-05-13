@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MediatR;
+using FantasyTeams.Models;
 
 namespace FantasyTeams.Controllers
 {
@@ -15,51 +17,55 @@ namespace FantasyTeams.Controllers
     public class MarketPlaceController : ControllerBase
     {
         private readonly ILogger<MarketPlaceController> _logger;
-        private readonly IMarketPlaceService _marketPlaceService;
+        private readonly IMediator _mediator;
         public MarketPlaceController(ILogger<MarketPlaceController> logger,
-            IMarketPlaceService marketPlaceService)
+            IMediator mediator)
         {
             _logger = logger;
-            _marketPlaceService = marketPlaceService;
+            _mediator = mediator;
         }
         [Authorize(Roles = "Admin, Member")]
         [HttpGet("GetAllPlayer")]
-        public async Task<List<Player>> GetAllPlayer()
+        public async Task<QueryResponse> GetAllPlayer()
         {
-            return await _marketPlaceService.GetAllMarketPlacePlayer();
+            return await _mediator.Send(new GetAllPlayerQuery());
         }
         [Authorize(Roles = "Admin, Member")]
         [HttpGet("GetPlayer")]
-        public async Task<Player> GetPlayer([FromQuery] string PlayerId)
+        public async Task<QueryResponse> GetPlayer([FromQuery] string PlayerId)
         {
-            return await _marketPlaceService.GetMarketPlacePlayer(PlayerId);
+            return await _mediator.Send(
+                new GetPlayerQuery
+                { 
+                    PlayerId = PlayerId 
+                });
         }
         [Authorize(Roles = "Admin, Member")]
         [HttpPost("FindPlayer")]
-        public async Task<List<Player>> FindPlayer(
+        public async Task<QueryResponse> FindPlayer(
             [FromBody] FindPlayerQuery findPlayerQuery)
         {
-            return await _marketPlaceService.FindMarketPlacePlayer(findPlayerQuery);
+            return await _mediator.Send(findPlayerQuery);
         }
         [Authorize(Roles = "Member")]
         [HttpPost("PurchasePlayer")]
-        public async Task PurchasePlayer([FromBody] PurchasePlayerCommand purchasePlayerCommand)
+        public async Task<CommandResponse> PurchasePlayer([FromBody] PurchasePlayerCommand purchasePlayerCommand)
         {
-            await _marketPlaceService.PurchasePlayer(purchasePlayerCommand);
+            return await _mediator.Send(purchasePlayerCommand);
         }
         [Authorize(Roles = "Admin")]
         [HttpDelete("DeletePlayer")]
-        public async Task DeletePlayer([FromBody] DeletePlayerCommand deletePlayerCommand)
+        public async Task<CommandResponse> DeletePlayer([FromBody] DeletePlayerCommand deletePlayerCommand)
         {
-            await _marketPlaceService.DeletePlayer(deletePlayerCommand);
+            return await _mediator.Send(deletePlayerCommand);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost("CreatePlayer")]
-        public async Task CreateNewMarketPlacePlayer([FromBody] 
-        CreateNewMarketPlacePlayerCommand createNewMarketPlacePlayerCommand)
+        public async Task<CommandResponse> CreateNewMarketPlacePlayer([FromBody] 
+        CreateMarketPlacePlayerCommand createNewMarketPlacePlayerCommand)
         {
-            await _marketPlaceService.CreateNewMarketPlacePlayer(createNewMarketPlacePlayerCommand);
+            return await _mediator.Send(createNewMarketPlacePlayerCommand);
         }
     }
 }

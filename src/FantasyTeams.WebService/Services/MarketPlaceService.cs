@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FantasyTeams.Models;
 
 namespace FantasyTeams.Services
 {
@@ -27,26 +28,29 @@ namespace FantasyTeams.Services
             _teamService = teamService;
         }
 
-        public Task<List<Player>> FindMarketPlacePlayer(FindPlayerQuery findPlayerQuery)
+        public async Task<QueryResponse> FindMarketPlacePlayer(FindPlayerQuery findPlayerQuery)
         {
-            return _marketPlacecRepository.GetPlayer(
+            var searchedPlayers = await _marketPlacecRepository.GetPlayer(
                 findPlayerQuery.PlayerName, 
                 findPlayerQuery.TeamName, 
                 findPlayerQuery.Country,
                 findPlayerQuery.Value);
+            return QueryResponse.Success(searchedPlayers);
         }
 
-        public async Task<List<Player>> GetAllMarketPlacePlayer()
+        public async Task<QueryResponse> GetAllMarketPlacePlayer()
         {
-            return await _marketPlacecRepository.GetAllAsync();
+            var marketPlacePlayers = await _marketPlacecRepository.GetAllAsync();
+            return QueryResponse.Success(marketPlacePlayers);
         }
 
-        public async Task<Player> GetMarketPlacePlayer(string PlayerId)
+        public async Task<QueryResponse> GetMarketPlacePlayer(string PlayerId)
         {
-            return await _marketPlacecRepository.GetByIdAsync(PlayerId);
+            var marketPlacePlayer = await _marketPlacecRepository.GetByIdAsync(PlayerId);
+            return QueryResponse.Success(marketPlacePlayer);
         }
 
-        public async Task PurchasePlayer(PurchasePlayerCommand purchasePlayerCommand)
+        public async Task<CommandResponse> PurchasePlayer(PurchasePlayerCommand purchasePlayerCommand)
         {
             Random rnd = new Random();
             var buyerTeamInfo = await _teamService.GetTeamInfo(purchasePlayerCommand.TeamId);
@@ -113,21 +117,22 @@ namespace FantasyTeams.Services
             playerInfo.AskingPrice = 0;
 
             await _marketPlacecRepository.UpdateAsync(playerInfo.Id, playerInfo);
-
+            return CommandResponse.Success();
             
         }
 
-        public async Task DeletePlayer(DeletePlayerCommand deletePlayerCommand)
+        public async Task<CommandResponse> DeletePlayer(DeletePlayerCommand deletePlayerCommand)
         {
             var player = _marketPlacecRepository.GetByIdAsync(deletePlayerCommand.PlayerId);
             if(player == null)
             {
-                // player not found implementation.
+                return CommandResponse.Failure(new string[] {"Player not found in marketplace for deletion"});
             }
             await _marketPlacecRepository.DeleteAsync(deletePlayerCommand.PlayerId);
+            return CommandResponse.Success();
         }
 
-        public async Task CreateNewMarketPlacePlayer(CreateNewMarketPlacePlayerCommand createNewMarketPlacePlayerCommand)
+        public async Task<CommandResponse> CreateNewMarketPlacePlayer(CreateMarketPlacePlayerCommand createNewMarketPlacePlayerCommand)
         {
             Random rnd = new Random();
             var player = new Player();
@@ -143,6 +148,7 @@ namespace FantasyTeams.Services
             player.PlayerType = createNewMarketPlacePlayerCommand.PlayerType;
             player.TeamId = null;
             await _marketPlacecRepository.CreateAsync(player);
+            return CommandResponse.Success();
         }
     }
 }

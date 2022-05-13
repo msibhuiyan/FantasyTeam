@@ -1,6 +1,9 @@
-﻿namespace FantasyTeams.Queries
+﻿using FantasyTeams.Models;
+using MediatR;
+
+namespace FantasyTeams.Queries
 {
-    public class GetTeamQuery
+    public class GetTeamQuery : IRequest<QueryResponse>
     {
         public string TeamId { get; set; }
     }
