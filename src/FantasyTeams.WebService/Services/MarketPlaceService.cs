@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FantasyTeams.Models;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace FantasyTeams.Services
 {
@@ -30,12 +32,19 @@ namespace FantasyTeams.Services
 
         public async Task<QueryResponse> FindMarketPlacePlayer(FindPlayerQuery findPlayerQuery)
         {
+            var filter1 = Builders<Player>.Filter.Eq("FullName", findPlayerQuery.PlayerName);
+            var filter2 = Builders<Player>.Filter.Eq("Country", findPlayerQuery.Country);
+            //var filter3 = Builders<BsonDocument>.Filter.Eq("PlayerType", findPlayerQuery.TeamName);
+            var filter4 = Builders<Player>.Filter.Eq("AskingPrice", findPlayerQuery.Value);
+            var andFilter = filter1 | filter2 | filter4;
+            var data = _marketPlacecRepository.GetFilteredPlayerAsync(andFilter);
+            //var cursor = ;
             var searchedPlayers = await _marketPlacecRepository.GetPlayer(
                 findPlayerQuery.PlayerName, 
                 findPlayerQuery.TeamName, 
                 findPlayerQuery.Country,
                 findPlayerQuery.Value);
-            return QueryResponse.Success(searchedPlayers);
+            return QueryResponse.Success(data.Result);
         }
 
         public async Task<QueryResponse> GetAllMarketPlacePlayer()

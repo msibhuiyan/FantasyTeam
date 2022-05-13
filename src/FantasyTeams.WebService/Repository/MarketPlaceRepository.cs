@@ -1,6 +1,7 @@
 ﻿using FantasyTeams.Entities;
 using FantasyTeams.Models;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -46,6 +47,11 @@ namespace FantasyTeams.Repository
         public Task DeleteAsync(string id)
         {
             return _collection.DeleteOneAsync(c => c.Id == id);
+        }
+
+        public Task<List<Player>> GetFilteredPlayerAsync(FilterDefinition<Player> filterDefination)
+        {
+            return _collection.Find(filterDefination).ToListAsync(); //.ToCursor()
         }
     }
 }

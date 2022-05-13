@@ -27,23 +27,28 @@ namespace FantasyTeams.Services
             _repository = repository;
             _playerService = playerService;
         }
-        public async Task<CommandResponse> CreateNewTeam(CreateTeamCommand createNewTeamCommand)
+        public async Task<CommandResponse> CreateNewTeam(CreateTeamCommand createNewTeamCommand, string teamId = null)
         {
-            var team = new Team();
-            team.Id = Guid.NewGuid().ToString();
-
-            var getTeamMembers = await _playerService.CreateNewTeamPlayers(team.Id);
-
+            var team = await _repository.GetByNameAsync(createNewTeamCommand.Name);
+            if(team != null)
+            {
+                return CommandResponse.Failure(new string[] { "Team already exists." });
+            }
+            team = new Team();
+            team.Id = string.IsNullOrEmpty(teamId) ? Guid.NewGuid().ToString() : teamId;
             team.Name = createNewTeamCommand.Name;
             team.Country = createNewTeamCommand.Country;
+
+            var getTeamMembers = await _playerService.CreateNewTeamPlayers(team);
+
             team.Attackers = getTeamMembers.Where(x=> x.PlayerType == PlayerType.Attacker.ToString()).Select(x=> x.Id).ToArray() ;
             team.Defenders = getTeamMembers.Where(x => x.PlayerType == PlayerType.Defender.ToString()).Select(x => x.Id).ToArray();
             team.MidFielders = getTeamMembers.Where(x => x.PlayerType == PlayerType.MidFielder.ToString()).Select(x => x.Id).ToArray();
             team.GoalKeepers = getTeamMembers.Where(x => x.PlayerType == PlayerType.GoalKeeper.ToString()).Select(x => x.Id).ToArray();
             team.Budget = 5000000;
             team.Value = 20000000;
-            await _repository.GetAllAsync();
-            return CommandResponse.Success(team);
+            await _repository.CreateAsync(team);
+            return CommandResponse.Success();
         }
 
         public async Task<QueryResponse> GetTeamInfo(GetTeamQuery query)

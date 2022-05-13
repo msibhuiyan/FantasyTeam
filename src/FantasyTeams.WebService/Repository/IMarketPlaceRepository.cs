@@ -1,4 +1,6 @@
 ﻿using FantasyTeams.Entities;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,5 +14,6 @@ namespace FantasyTeams.Repository
         Task<Player> GetByIdAsync(string id);
         Task<List<Player>> GetPlayer(string playerName, string teamName, string country, double value);
         Task DeleteAsync(string id);
+        Task<List<Player>> GetFilteredPlayerAsync(FilterDefinition<Player> filterDefination);
     }
 }

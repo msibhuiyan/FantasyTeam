@@ -10,7 +10,7 @@ namespace FantasyTeams.Contracts
     public interface IPlayerService
     {
         Task<CommandResponse> CreateNewPlayer(CreateNewPlayerCommand createNewPlayerCommand);
-        Task<List<Player>> CreateNewTeamPlayers(string teamId);
+        Task<List<Player>> CreateNewTeamPlayers(Team teamId);
         Task<QueryResponse> GetAllPlayer(GetAllPlayerQuery getAllPlayerQuery);
         Task<CommandResponse> SetPlayerForSale(SetPlayerForSaleCommand setPlayerForSaleCommand);
         Task<CommandResponse> UpdatePlayerInfo(UpdatePlayerCommand updatePlayerCommand);

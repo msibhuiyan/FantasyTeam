@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,9 +71,27 @@ namespace FantasyTeams.Services
             user.Password = passwordHash;
             user.Salt = passwordSalt;
             user.TeamId = Guid.NewGuid().ToString();
+            user.TeamName = userRegistrationCommand.TeamName;
+            user.FirstName = userRegistrationCommand.FirstName;
+            user.LastName = userRegistrationCommand.LastName;
+            user.Country = userRegistrationCommand.Country;
             user.Role = Role.Member.ToString();
+            var teamCreationResponse = await _teamService.CreateNewTeam(new CreateTeamCommand{
+                Name = user.TeamName,
+                Country = user.Country
+            }, user.TeamId);
+            if(teamCreationResponse.Errors.Length > 0)
+            {
+                var userCreationResponseErrors = teamCreationResponse.Errors.ToList();
+                userCreationResponseErrors.Add("User creation failed");
+                return CommandResponse.Failure(userCreationResponseErrors.ToArray());
+            }
+            //await _playerService.CreateNewTeamPlayers(new Team { 
+            //    Id = user.TeamId,
+            //    Name = user.TeamName,
+            //    Country = user.Country
+            //});
             await _repository.CreateAsync(user);
-            await _playerService.CreateNewTeamPlayers(user.TeamId);
 
             return CommandResponse.Success();
         }

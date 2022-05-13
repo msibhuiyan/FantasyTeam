@@ -29,6 +29,11 @@ namespace FantasyTeams.Repository
         {
             return _collection.Find(c => c.Id == id).FirstOrDefaultAsync();
         }
+
+        public Task<Team> GetByNameAsync(string name)
+        {
+            return _collection.Find(c => c.Name == name).FirstOrDefaultAsync();
+        }
         public async Task CreateAsync(Team team)
         {
             await _collection.InsertOneAsync(team).ConfigureAwait(false);

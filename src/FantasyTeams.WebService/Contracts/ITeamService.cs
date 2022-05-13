@@ -9,7 +9,7 @@ namespace FantasyTeams.Contracts
 {
     public interface ITeamService
     {
-        Task<CommandResponse> CreateNewTeam(CreateTeamCommand createNewTeamCommand);
+        Task<CommandResponse> CreateNewTeam(CreateTeamCommand createNewTeamCommand, string teamId = null);
         Task<Team> GetTeamInfo(string teamId);
         Task<QueryResponse> GetTeamInfo(GetTeamQuery query);
 
