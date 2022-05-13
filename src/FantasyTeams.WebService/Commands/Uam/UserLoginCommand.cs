@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FantasyTeams.Commands
 {
-    public class UserLoginCommand : IRequest<AuthCommandResponse>
+    public class UserLoginCommand : IRequest<CommandResponse>
     {
         [Required]
         [EmailAddress]

@@ -77,20 +77,14 @@ namespace FantasyTeams.Services
             return CommandResponse.Success();
         }
 
-        public async Task<AuthCommandResponse> UserLogin(UserLoginCommand userLoginCommand)
+        public async Task<CommandResponse> UserLogin(UserLoginCommand userLoginCommand)
         {
             
             var user = await _repository.GetByEmailAsync(userLoginCommand.Email);
             if (user == null)
-                return new AuthCommandResponse
-                {
-                    Message = "User Doesn't Exists"
-                };
+                return CommandResponse.Failure(new string[] { "User Doesn't Exists" });
             if (!VerifyPasswordHash(userLoginCommand.Password, user.Password, user.Salt))
-                return new AuthCommandResponse
-                {
-                    Message = "Wrong Password"
-                };
+                return CommandResponse.Failure(new string[] { "User Doesn't Exists" });
 
             var claims = new[]
             {
@@ -111,12 +105,11 @@ namespace FantasyTeams.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             string accesstoken = tokenHandler.WriteToken(token);
-            return new AuthCommandResponse
+            return CommandResponse.Success(new
             {
-                Message = "User Exists",
                 AccessToken = accesstoken,
                 ExpiresAt = tokenExpiryDate,
-            };
+            });
         }
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)

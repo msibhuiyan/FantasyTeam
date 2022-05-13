@@ -29,7 +29,7 @@ namespace FantasyTeams.Controllers
         }
         [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<AuthCommandResponse> Login([FromBody] UserLoginCommand userLoginCommand)
+        public async Task<CommandResponse> Login([FromBody] UserLoginCommand userLoginCommand)
         {
             return await _mediator.Send(userLoginCommand);
         }

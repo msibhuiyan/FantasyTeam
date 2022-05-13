@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FantasyTeams.CommandHandlers
 {
-    public class UserLoginCommandHandler : IRequestHandler<UserLoginCommand, AuthCommandResponse>
+    public class UserLoginCommandHandler : IRequestHandler<UserLoginCommand, CommandResponse>
     {
         private readonly ILogger<UserLoginCommandHandler> _logger;
         private readonly IUamService _uamService;
@@ -19,7 +19,7 @@ namespace FantasyTeams.CommandHandlers
             _uamService = uamService;
         }
 
-        public async Task<AuthCommandResponse> Handle(UserLoginCommand request, CancellationToken cancellationToken)
+        public async Task<CommandResponse> Handle(UserLoginCommand request, CancellationToken cancellationToken)
         {
             return await _uamService.UserLogin(request);
         }
