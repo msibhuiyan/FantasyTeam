@@ -34,7 +34,7 @@ namespace FantasyTeams.Controllers
             return await _mediator.Send(userLoginCommand);
         }
         [Authorize(Roles ="Admin")]
-        [HttpPost("DeleteUser")]
+        [HttpDelete("DeleteUser")]
         public async Task<CommandResponse> DeleteUser([FromBody] DeleteUserCommand deleteUserCommand)
         {
             return await _mediator.Send(deleteUserCommand);
