@@ -7,7 +7,7 @@ namespace FantasyTeams.Commands
     public class CreateTeamCommand : IRequest<CommandResponse>
     {
         [Required]
-        [RegularExpression("^[a-zA-Z]?$",
+        [RegularExpression("^[a-zA-Z0-9]?$",
             ErrorMessage = "Please provide alpha numeric value")]
         public string Name { get; set; }
         [Required]

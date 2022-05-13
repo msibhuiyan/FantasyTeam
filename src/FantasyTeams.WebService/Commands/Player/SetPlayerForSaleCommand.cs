@@ -11,7 +11,7 @@ namespace FantasyTeams.Commands
             ErrorMessage = "Please provide correct GUID")]
         public string PlayerId { get; set; }
         [Required]
-        [Range(0, 1000000000, ErrorMessage = "Please provide Asking price between 0 to 1000000000"),]
+        [Range(0, 1000000000, ErrorMessage = "Please provide Asking price between 0 to 1000000000")]
         public double AskingPrice { get; set; }
     }
 }
