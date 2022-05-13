@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FantasyTeams.Controllers
@@ -31,11 +32,21 @@ namespace FantasyTeams.Controllers
         {
             return await _mediator.Send(createNewTeamCommand);
         }
-        [Authorize(Roles = "Admin, Member")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetTeam")]
         public async Task<QueryResponse> GetTeam([FromQuery] string teamId)
         {
             return await _mediator.Send(new GetTeamQuery { 
+                TeamId = teamId
+            });
+        }
+        [Authorize(Roles = "Member")]
+        [HttpGet("GetMyTeam")]
+        public async Task<QueryResponse> GetMyTeam()
+        {
+            var teamId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return await _mediator.Send(new GetTeamQuery
+            {
                 TeamId = teamId
             });
         }
