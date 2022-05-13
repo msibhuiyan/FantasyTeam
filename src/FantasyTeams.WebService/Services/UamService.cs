@@ -41,19 +41,11 @@ namespace FantasyTeams.Services
             var user = await _repository.GetByEmailAsync(deleteUserCommand.Email);
             if(user == null)
             {
-                return new CommandResponse
-                {
-                    Message = "User doesn't exists for deletion",
-                    IsSuccess = false
-                };
+                return CommandResponse.Failure(new string[] { "User doesn't exists for deletion" });
             }
             await _teamService.DeleteTeam(user.TeamId);
             await _repository.DeleteAsync(deleteUserCommand.Email);
-            return new CommandResponse
-            {
-                Message = "User deleted",
-                IsSuccess = true
-            };
+            return CommandResponse.Success();
         }
 
         public async Task<User> GetUserInfo(string userEmail)
@@ -66,11 +58,7 @@ namespace FantasyTeams.Services
             var user = await _repository.GetByEmailAsync(userRegistrationCommand.Email);
             if (user != null)
             {
-                return new CommandResponse
-                {
-                    Message = "User Already Exists",
-                    IsSuccess = false
-                };
+                return CommandResponse.Failure(new string[] { "User Already Exists" });
             }
             user = new User();
 
@@ -86,11 +74,7 @@ namespace FantasyTeams.Services
             await _repository.CreateAsync(user);
             await _playerService.CreateNewTeamPlayers(user.TeamId);
 
-            return new CommandResponse
-            {
-                Message = "User Created",
-                IsSuccess = true
-            };
+            return CommandResponse.Success();
         }
 
         public async Task<AuthCommandResponse> UserLogin(UserLoginCommand userLoginCommand)

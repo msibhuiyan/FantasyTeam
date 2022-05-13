@@ -76,19 +76,11 @@ namespace FantasyTeams.Services
             var team = await _repository.GetByIdAsync(deleteTeamCommand.TeamId);
             if(team == null)
             {
-                return new CommandResponse
-                {
-                    Message = "No team found for delete",
-                    IsSuccess = false
-                };
+                return CommandResponse.Failure(new string[] { "No team found for delete" });
             }
             await _playerService.DeleteTeamPlayers(team.Id);
             await _repository.DeleteAsync(deleteTeamCommand.TeamId);
-            return new CommandResponse
-            {
-                Message = "Team " + team.Name + " deleted",
-                IsSuccess = true
-            };
+            return CommandResponse.Success();
         }
 
         public async Task<CommandResponse> DeleteTeam(string teamId)
@@ -96,29 +88,17 @@ namespace FantasyTeams.Services
             var team = await _repository.GetByIdAsync(teamId);
             if (team == null)
             {
-                return new CommandResponse
-                {
-                    Message = "No team found for delete",
-                    IsSuccess = false
-                };
+                return CommandResponse.Failure(new string[] { "No team found for delete" });
             }
             await _playerService.DeleteTeamPlayers(teamId);
             await _repository.DeleteAsync(teamId);
-            return new CommandResponse
-            {
-                Message = "Team " + team.Name + " deleted",
-                IsSuccess = true
-            };
+            return CommandResponse.Success();
         }
 
         public async Task<CommandResponse> UpdateTeamInfo(string id, Team team)
         {
             await _repository.UpdateAsync(id, team);
-            return new CommandResponse
-            {
-                Message = "Team " + team.Name + " updated",
-                IsSuccess = true
-            };
+            return CommandResponse.Success();
         }
     }
 }
