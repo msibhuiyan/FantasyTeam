@@ -64,6 +64,10 @@ namespace FantasyTeams.Services
             Random rnd = new Random();
             var buyerTeamInfo = await _teamService.GetTeamInfo(purchasePlayerCommand.TeamId);
             var playerInfo = await _marketPlacecRepository.GetByIdAsync(purchasePlayerCommand.PlayerId);
+            if(buyerTeamInfo.Id == playerInfo.TeamId)
+            {
+                return CommandResponse.Failure(new string[] { "Can not purchase your own player" });
+            }
             if (!string.IsNullOrEmpty(playerInfo.TeamId))
             {
                 var sellerTeamInfo = await _teamService.GetTeamInfo(playerInfo.TeamId);
@@ -90,8 +94,7 @@ namespace FantasyTeams.Services
                 await _teamService.UpdateTeamInfo(sellerTeamInfo.Id, sellerTeamInfo);
             }
 
-            buyerTeamInfo.Value += playerInfo.Value;
-            buyerTeamInfo.Budget -= playerInfo.AskingPrice;
+            
             if (playerInfo.PlayerType == PlayerType.Defender.ToString())
             {
                 var playerTypeList = buyerTeamInfo.Defenders.ToList();
@@ -117,15 +120,16 @@ namespace FantasyTeams.Services
                 buyerTeamInfo.GoalKeepers = playerTypeList.ToArray();
             }
 
-            await _teamService.UpdateTeamInfo(buyerTeamInfo.Id, buyerTeamInfo);
-
-
             playerInfo.ForSale = false;
             playerInfo.Value = playerInfo.Value + (playerInfo.Value * rnd.Next(10, 100))/100;
             playerInfo.TeamId = buyerTeamInfo.Id;
             playerInfo.AskingPrice = 0;
 
+            buyerTeamInfo.Value += playerInfo.Value;
+            buyerTeamInfo.Budget -= playerInfo.AskingPrice;
+
             await _marketPlacecRepository.UpdateAsync(playerInfo.Id, playerInfo);
+            await _teamService.UpdateTeamInfo(buyerTeamInfo.Id, buyerTeamInfo);
             return CommandResponse.Success();
             
         }
