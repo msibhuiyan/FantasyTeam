@@ -49,6 +49,20 @@ namespace FantasyTeams.Controllers
             });
 
         }
+        [Authorize(Roles = "Admin, Member")]
+        [HttpGet("GetPlayer")]
+        public async Task<QueryResponse> GetPlayer([FromQuery] GetPlayerQuery getPlayerQuery)
+        {
+            var teamId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string role = User.FindFirst(ClaimTypes.Role).Value;
+            getPlayerQuery.TeamId = teamId;
+            if (role == "Admin")
+            {
+                return await _mediator.Send(getPlayerQuery);
+            }
+            return await _mediator.Send(getPlayerQuery);
+
+        }
         [Authorize(Roles = "Member")]
         [HttpPost("SetForSale")]
         public async Task<CommandResponse> MoveToMarketPlace([FromBody] SetPlayerForSaleCommand moveToMarketPlaceCommand)

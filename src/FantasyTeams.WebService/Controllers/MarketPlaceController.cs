@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using MediatR;
 using FantasyTeams.Models;
 using FantasyTeams.Queries.MarketPlace;
+using System.Security.Claims;
 
 namespace FantasyTeams.Controllers
 {
@@ -52,6 +53,8 @@ namespace FantasyTeams.Controllers
         [HttpPost("PurchasePlayer")]
         public async Task<CommandResponse> PurchasePlayer([FromBody] PurchasePlayerCommand purchasePlayerCommand)
         {
+            var teamId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            purchasePlayerCommand.TeamId = teamId;
             return await _mediator.Send(purchasePlayerCommand);
         }
         [Authorize(Roles = "Admin")]

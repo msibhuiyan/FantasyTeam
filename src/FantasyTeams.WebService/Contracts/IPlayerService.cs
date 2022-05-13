@@ -15,6 +15,7 @@ namespace FantasyTeams.Contracts
         Task<QueryResponse> GetAllPlayer(GetAllPlayerQuery getAllPlayerQuery);
         Task<CommandResponse> SetPlayerForSale(SetPlayerForSaleCommand setPlayerForSaleCommand);
         Task<CommandResponse> UpdatePlayerInfo(UpdatePlayerCommand updatePlayerCommand);
+        Task<QueryResponse> GetPlayer(GetPlayerQuery request);
         Task<CommandResponse> DeletePlayer(DeletePlayerCommand deletePlayerCommand);
         Task<CommandResponse> UpdatePlayerValue(UpdatePlayerValueCommand updatePlayerPriceCommand);
         Task<CommandResponse> DeleteTeamPlayers(string teamId);

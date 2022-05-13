@@ -220,5 +220,15 @@ namespace FantasyTeams.Services
             await _repository.DeleteManyAsync(teamId);
             return CommandResponse.Success();
         }
+
+        public async Task<QueryResponse> GetPlayer(GetPlayerQuery request)
+        {
+            var player = await _repository.GetByIdAsync(request.PlayerId);
+            if( player.TeamId == request.TeamId)
+            {
+                return QueryResponse.Success(player);
+            }
+            return QueryResponse.Failure(new string[] {"Can not fetch other team player"});
+        }
     }
 }
