@@ -1,10 +1,9 @@
 ﻿using FantasyTeams.Models;
 using MediatR;
 
-namespace FantasyTeams.Queries
+namespace FantasyTeams.Queries.MarketPlace
 {
     public class GetAllPlayerQuery : IRequest<QueryResponse>
     {
-        public string TeamId { get; set; }
     }
 }

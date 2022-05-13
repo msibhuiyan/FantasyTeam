@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using FantasyTeams.Models;
+using FantasyTeams.Queries.MarketPlace;
 
 namespace FantasyTeams.Controllers
 {

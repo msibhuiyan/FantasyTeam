@@ -3,6 +3,7 @@ using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
 using FantasyTeams.Models;
 using FantasyTeams.Queries;
+using FantasyTeams.Queries.Player;
 using FantasyTeams.Repository;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

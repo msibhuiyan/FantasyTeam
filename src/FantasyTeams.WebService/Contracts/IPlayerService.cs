@@ -2,6 +2,7 @@
 using FantasyTeams.Entities;
 using FantasyTeams.Models;
 using FantasyTeams.Queries;
+using FantasyTeams.Queries.Player;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

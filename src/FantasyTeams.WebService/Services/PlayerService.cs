@@ -4,6 +4,7 @@ using FantasyTeams.Entities;
 using FantasyTeams.Enums;
 using FantasyTeams.Models;
 using FantasyTeams.Queries;
+using FantasyTeams.Queries.Player;
 using FantasyTeams.Repository;
 using Microsoft.Extensions.Logging;
 using System;
