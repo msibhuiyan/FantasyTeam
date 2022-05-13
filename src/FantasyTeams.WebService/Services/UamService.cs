@@ -84,7 +84,7 @@ namespace FantasyTeams.Services
             if (user == null)
                 return CommandResponse.Failure(new string[] { "User Doesn't Exists" });
             if (!VerifyPasswordHash(userLoginCommand.Password, user.Password, user.Salt))
-                return CommandResponse.Failure(new string[] { "User Doesn't Exists" });
+                return CommandResponse.Failure(new string[] { "Provide correct password" });
 
             var claims = new[]
             {
