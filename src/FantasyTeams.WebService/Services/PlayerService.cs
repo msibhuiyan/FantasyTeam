@@ -2,6 +2,7 @@
 using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
 using FantasyTeams.Enums;
+using FantasyTeams.Models;
 using FantasyTeams.Repository;
 using Microsoft.Extensions.Logging;
 using System;
@@ -21,7 +22,7 @@ namespace FantasyTeams.Services
             _logger = logger;
             _repository = repository;
         }
-        public async Task CreateNewPlayer(CreateNewPlayerCommand createNewPlayerCommand)
+        public async Task<CommandResponse> CreateNewPlayer(CreateNewPlayerCommand createNewPlayerCommand)
         {
             Random rnd = new Random();
 
@@ -38,11 +39,14 @@ namespace FantasyTeams.Services
             player.PlayerType = "Attacker";
             player.TeamId = null;
             await _repository.CreateAsync(player);
+            return CommandResponse.Success();
+
         }
 
-        public async Task<List<Player>> GetAllPlayer()
+        public async Task<QueryResponse> GetAllPlayer()
         {
-            return await _repository.GetAllAsync();
+            var players =  await _repository.GetAllAsync();
+            return QueryResponse.Success(players);
         }
 
         public async Task<List<Player>> CreateNewTeamPlayers(string teamId)
@@ -52,7 +56,7 @@ namespace FantasyTeams.Services
             players.AddRange(AddDefenders(teamId));
             players.AddRange(AddAttackers(teamId));
             players.AddRange(AddMidFielders(teamId));
-            
+
             await _repository.CreateManyAsync(players);
             return players;
         }
@@ -149,20 +153,21 @@ namespace FantasyTeams.Services
             return players;
         }
 
-        public async Task SetPlayerForSale(SetPlayerForSaleCommand setPlayerForSaleCommand)
+        public async Task<CommandResponse> SetPlayerForSale(SetPlayerForSaleCommand setPlayerForSaleCommand)
         {
             var playerInfo  = await _repository.GetByIdAsync(setPlayerForSaleCommand.PlayerId);
             playerInfo.ForSale = true;
             playerInfo.AskingPrice = setPlayerForSaleCommand.AskingPrice;
             await _repository.UpdateAsync(playerInfo.Id, playerInfo);
+            return CommandResponse.Success();
         }
 
-        public async Task UpdatePlayerInfo(UpdatePlayerCommand updatePlayerCommand)
+        public async Task<CommandResponse> UpdatePlayerInfo(UpdatePlayerCommand updatePlayerCommand)
         {
             var playerInfo = await _repository.GetByIdAsync(updatePlayerCommand.PlayerId);
             if (playerInfo == null)
             {
-
+                return CommandResponse.Failure(new string[] { "Player not found for update" });
             }
             playerInfo.FirstName = string.IsNullOrEmpty(updatePlayerCommand.FirstName)?
                 playerInfo.FirstName : updatePlayerCommand.FirstName;
@@ -173,31 +178,35 @@ namespace FantasyTeams.Services
                 playerInfo.Country : updatePlayerCommand.Country;
 
             await _repository.UpdateAsync(updatePlayerCommand.PlayerId, playerInfo);
+            return CommandResponse.Success();
         }
 
-        public async Task DeletePlayer(DeletePlayerCommand deletePlayerCommand)
+        public async Task<CommandResponse> DeletePlayer(DeletePlayerCommand deletePlayerCommand)
         {
             var player = await _repository.GetByIdAsync(deletePlayerCommand.PlayerId);
             if(player == null)
             {
-                return;
+                return CommandResponse.Failure(new string[] { "Player not found to delete" });
             }
             await _repository.DeleteAsync(deletePlayerCommand.PlayerId);
+            return CommandResponse.Success();
         }
 
-        public async Task UpdatePlayerValue(UpdatePlayerPriceCommand updatePlayerPriceCommand)
+        public async Task<CommandResponse> UpdatePlayerValue(UpdatePlayerValueCommand updatePlayerPriceCommand)
         {
             var player = await _repository.GetByIdAsync(updatePlayerPriceCommand.PlayerId);
             if(player == null)
             {
-                return;
+                return CommandResponse.Failure(new string[] {"Player not found for update"});
             }
             player.Value = updatePlayerPriceCommand.PlayerValue;
             await _repository.UpdateAsync(player.Id, player);
+            return CommandResponse.Success();
         }
-        public async Task DeleteTeamPlayers(string teamId)
+        public async Task<CommandResponse> DeleteTeamPlayers(string teamId)
         {
             await _repository.DeleteManyAsync(teamId);
+            return CommandResponse.Success();
         }
     }
 }

@@ -1,6 +1,9 @@
-﻿namespace FantasyTeams.Commands
+﻿using FantasyTeams.Models;
+using MediatR;
+
+namespace FantasyTeams.Commands
 {
-    public class DeletePlayerCommand
+    public class DeletePlayerCommand : IRequest<CommandResponse>
     {
         public string PlayerId { get; set; }
     }

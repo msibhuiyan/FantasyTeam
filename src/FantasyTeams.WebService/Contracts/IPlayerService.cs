@@ -1,5 +1,6 @@
 ﻿using FantasyTeams.Commands;
 using FantasyTeams.Entities;
+using FantasyTeams.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,13 +8,13 @@ namespace FantasyTeams.Contracts
 {
     public interface IPlayerService
     {
-        Task CreateNewPlayer(CreateNewPlayerCommand createNewPlayerCommand);
+        Task<CommandResponse> CreateNewPlayer(CreateNewPlayerCommand createNewPlayerCommand);
         Task<List<Player>> CreateNewTeamPlayers(string teamId);
-        Task<List<Player>> GetAllPlayer();
-        Task SetPlayerForSale(SetPlayerForSaleCommand setPlayerForSaleCommand);
-        Task UpdatePlayerInfo(UpdatePlayerCommand updatePlayerCommand);
-        Task DeletePlayer(DeletePlayerCommand deletePlayerCommand);
-        Task UpdatePlayerValue(UpdatePlayerPriceCommand updatePlayerPriceCommand);
-        Task DeleteTeamPlayers(string teamId);
+        Task<QueryResponse> GetAllPlayer();
+        Task<CommandResponse> SetPlayerForSale(SetPlayerForSaleCommand setPlayerForSaleCommand);
+        Task<CommandResponse> UpdatePlayerInfo(UpdatePlayerCommand updatePlayerCommand);
+        Task<CommandResponse> DeletePlayer(DeletePlayerCommand deletePlayerCommand);
+        Task<CommandResponse> UpdatePlayerValue(UpdatePlayerValueCommand updatePlayerPriceCommand);
+        Task<CommandResponse> DeleteTeamPlayers(string teamId);
     }
 }

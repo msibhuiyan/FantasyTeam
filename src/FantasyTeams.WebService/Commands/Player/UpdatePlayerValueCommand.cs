@@ -3,9 +3,9 @@ using MediatR;
 
 namespace FantasyTeams.Commands
 {
-    public class SetPlayerForSaleCommand : IRequest<CommandResponse>
+    public class UpdatePlayerValueCommand : IRequest<CommandResponse>
     {
         public string PlayerId { get; set; }
-        public double AskingPrice { get; set; }
+        public double PlayerValue { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using FantasyTeams.Commands;
 using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
+using FantasyTeams.Models;
+using FantasyTeams.Queries;
 using FantasyTeams.Repository;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -16,52 +18,48 @@ namespace FantasyTeams.Controllers
     public class PlayerController : ControllerBase
     {
         private readonly ILogger<PlayerController> _logger;
-        private readonly IPlayerService _playerService;
         private readonly IMediator _mediator;
         public PlayerController(ILogger<PlayerController> logger,
-            IPlayerService playerService,
             IMediator mediator)
         {
             _logger = logger;
-            _playerService = playerService;
             _mediator = mediator;
         }
         [Authorize(Roles = "Admin")]
         [HttpPost("CreatePlayer")]
-        public async Task CreatePlayer([FromBody] CreateNewPlayerCommand createNewPlayerCommand)
+        public async Task<CommandResponse> CreatePlayer([FromBody] CreateNewPlayerCommand createNewPlayerCommand)
         {
-            await _playerService.CreateNewPlayer(createNewPlayerCommand);
+            return await _mediator.Send(createNewPlayerCommand);
         }
         [Authorize(Roles = "Admin, Member")]
         [HttpGet("GetAllPlayer")]
-        public async Task<List<Player>> GetAllPlayer()
+        public async Task<QueryResponse> GetAllPlayer()
         {
-            return await _playerService.GetAllPlayer();
+            return await _mediator.Send(new GetAllPlayerQuery());
         }
         [Authorize(Roles = "Member")]
         [HttpPost("SetForSale")]
-        public async Task<Player> MoveToMarketPlace([FromBody] SetPlayerForSaleCommand moveToMarketPlaceCommand)
+        public async Task<CommandResponse> MoveToMarketPlace([FromBody] SetPlayerForSaleCommand moveToMarketPlaceCommand)
         {
-            await _playerService.SetPlayerForSale(moveToMarketPlaceCommand);
-            return null;
+            return await _mediator.Send(moveToMarketPlaceCommand);
         }
         [Authorize(Roles = "Member")]
         [HttpPut("UpdatePlayer")]
-        public async Task UpdatePlayer([FromBody] UpdatePlayerCommand updatePlayerCommand)
+        public async Task<CommandResponse> UpdatePlayer([FromBody] UpdatePlayerCommand updatePlayerCommand)
         {
-            await _playerService.UpdatePlayerInfo(updatePlayerCommand);
+            return await _mediator.Send(updatePlayerCommand);
         }
         [Authorize(Roles = "Admin, Member")]
         [HttpPut("UpdatePlayerPrice")]
-        public async Task UpdatePlayerPrice([FromBody] UpdatePlayerPriceCommand updatePlayerPriceCommand)
+        public async Task<CommandResponse> UpdatePlayerPrice([FromBody] UpdatePlayerValueCommand updatePlayerPriceCommand)
         {
-            await _playerService.UpdatePlayerValue(updatePlayerPriceCommand);
+            return await _mediator.Send(updatePlayerPriceCommand);
         }
         [Authorize(Roles = "Admin")]
         [HttpDelete("DeletePlayer")]
-        public async Task DeletePlayer([FromBody] DeletePlayerCommand deletePlayerCommand)
+        public async Task<CommandResponse> DeletePlayer([FromBody] DeletePlayerCommand deletePlayerCommand)
         {
-            await _playerService.DeletePlayer(deletePlayerCommand);
+            return await _mediator.Send(deletePlayerCommand);
         }
     }
 }
