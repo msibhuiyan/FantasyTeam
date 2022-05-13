@@ -10,6 +10,7 @@ using System.Linq;
 using System.Collections.Generic;
 using FantasyTeams.Models;
 using Newtonsoft.Json;
+using FantasyTeams.Queries;
 
 namespace FantasyTeams.Services
 {
@@ -45,10 +46,15 @@ namespace FantasyTeams.Services
             return CommandResponse.Success(team);
         }
 
-        public async Task<QueryResponse> GetTeamInfo(string TeamId)
+        public async Task<QueryResponse> GetTeamInfo(GetTeamQuery query)
         {
-            var team = await _repository.GetByIdAsync(TeamId);
+            var team = await _repository.GetByIdAsync(query.TeamId);
             return QueryResponse.Success(team);
+        }
+
+        public async Task<Team> GetTeamInfo(string TeamId)
+        {
+            return await _repository.GetByIdAsync(TeamId);
         }
 
         public async Task<QueryResponse> GetAllTeams()

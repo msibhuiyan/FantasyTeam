@@ -1,6 +1,7 @@
 ﻿using FantasyTeams.Commands;
 using FantasyTeams.Entities;
 using FantasyTeams.Models;
+using FantasyTeams.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,7 +10,9 @@ namespace FantasyTeams.Contracts
     public interface ITeamService
     {
         Task<CommandResponse> CreateNewTeam(CreateTeamCommand createNewTeamCommand);
-        Task<QueryResponse> GetTeamInfo(string teamId);
+        Task<Team> GetTeamInfo(string teamId);
+        Task<QueryResponse> GetTeamInfo(GetTeamQuery query);
+
         Task<QueryResponse> GetAllTeams();
         Task<CommandResponse> UpdateTeamInfo(UpdateTeamCommand updateTeamCommand);
         Task<CommandResponse> DeleteTeam(DeleteTeamCommand deleteTeamCommand);

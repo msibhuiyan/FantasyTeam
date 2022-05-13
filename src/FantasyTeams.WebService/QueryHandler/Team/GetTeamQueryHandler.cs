@@ -17,7 +17,7 @@ namespace FantasyTeams.QueryHandler.Team
 
         public async Task<QueryResponse> Handle(GetTeamQuery request, CancellationToken cancellationToken)
         {
-            return await _teamService.GetTeamInfo(request.TeamId);
+            return await _teamService.GetTeamInfo(request);
         }
     }
 }
