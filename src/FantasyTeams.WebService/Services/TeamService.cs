@@ -75,6 +75,19 @@ namespace FantasyTeams.Services
             {
                 return CommandResponse.Failure(new string[] { "No team found for update" });
             }
+            if(string.IsNullOrEmpty(updateTeamCommand.Country) &&
+                string.IsNullOrEmpty(updateTeamCommand.Name))
+            {
+                return CommandResponse.Success();
+            }
+            if (!string.IsNullOrEmpty(updateTeamCommand.Name))
+            {
+                var team = await _repository.GetByNameAsync(updateTeamCommand.Name);
+                if(team != null)
+                {
+                    return CommandResponse.Failure(new string[] { "Already a team exists on this name" });
+                }
+            }
             teamInfo.Country = string.IsNullOrEmpty(updateTeamCommand.Country)? 
                 teamInfo.Country : updateTeamCommand.Country;
             teamInfo.Name = string.IsNullOrEmpty(updateTeamCommand.Name)?

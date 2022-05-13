@@ -54,7 +54,17 @@ namespace FantasyTeams.Controllers
         [HttpPut("UpdateTeam")]
         public async Task<CommandResponse> UpdateTeam([FromBody] UpdateTeamCommand updateTeamCommand)
         {
-            return await _mediator.Send(updateTeamCommand);
+            var teamId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string role = User.FindFirst(ClaimTypes.Role).Value;
+            if(role == "Admin")
+            {
+                return await _mediator.Send(updateTeamCommand);
+            }
+            if(teamId == updateTeamCommand.TeamId)
+            {
+                return await _mediator.Send(updateTeamCommand);
+            }
+            return CommandResponse.Failure(new string[] { "Can not update other team info" });
         }
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAllTeam")]

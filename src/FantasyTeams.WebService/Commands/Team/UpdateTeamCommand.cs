@@ -10,10 +10,10 @@ namespace FantasyTeams.Commands
         [RegularExpression("[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}",
             ErrorMessage = "Please provide correct GUID")]
         public string TeamId { get; set; }
-        [RegularExpression("^[a-zA-Z]?$",
+        [RegularExpression("[a-zA-Z0-9]+",
             ErrorMessage = "Please provide alphabetic value")]
         public string Country { get; set; }
-        [RegularExpression("^[a-zA-Z]?$",
+        [RegularExpression("[a-zA-Z0-9]+",
             ErrorMessage = "Please provide alpha numeric value")]
         public string Name { get; set; }
     }
