@@ -23,7 +23,8 @@ namespace FantasyTeams.Tests
         private readonly Mock<ILogger<UamService>> _logger;
         private readonly Mock<IConfiguration> _configuration;
         private readonly Mock<IUserRepository> _userRepository;
-        private readonly Mock<ITeamService> _teamService;
+        private readonly Mock<ITeamRepository> _teamRepository;
+        private readonly Mock<IPlayerRepository> _playerRepository;
         private readonly IUamService _sut;
         private readonly IFixture _fixture = new Fixture();
 
@@ -32,12 +33,14 @@ namespace FantasyTeams.Tests
             _logger = new Mock<ILogger<UamService>>();
             _configuration = new Mock<IConfiguration>();
             _userRepository = new Mock<IUserRepository>();
-            _teamService = new Mock<ITeamService>();
+            _teamRepository = new Mock<ITeamRepository>();
+            _playerRepository = new Mock<IPlayerRepository>();
             _sut = new UamService(
                 _logger.Object,
                 _configuration.Object,
                 _userRepository.Object,
-                _teamService.Object);
+                _teamRepository.Object,
+                _playerRepository.Object);
         }
 
         [Fact]
