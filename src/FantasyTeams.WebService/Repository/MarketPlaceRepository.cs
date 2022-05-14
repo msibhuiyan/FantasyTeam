@@ -53,5 +53,11 @@ namespace FantasyTeams.Repository
         {
             return _collection.Find(filterDefination).ToListAsync(); //.ToCursor()
         }
+
+        public async Task<List<Player>> GetByFilterDefinition(FilterDefinition<Player> filterDefinition)
+        {
+            var items = await _collection.FindAsync<Player>(filterDefinition);
+            return items.ToList();
+        }
     }
 }

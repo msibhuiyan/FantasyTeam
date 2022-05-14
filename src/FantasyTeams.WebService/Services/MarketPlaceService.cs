@@ -32,19 +32,34 @@ namespace FantasyTeams.Services
 
         public async Task<QueryResponse> FindMarketPlacePlayer(FindPlayerQuery findPlayerQuery)
         {
-            var filter1 = Builders<Player>.Filter.Eq("FullName", findPlayerQuery.PlayerName);
-            var filter2 = Builders<Player>.Filter.Eq("Country", findPlayerQuery.Country);
-            //var filter3 = Builders<BsonDocument>.Filter.Eq("PlayerType", findPlayerQuery.TeamName);
-            var filter4 = Builders<Player>.Filter.Eq("AskingPrice", findPlayerQuery.Value);
-            var andFilter = filter1 | filter2 | filter4;
-            var data = _marketPlacecRepository.GetFilteredPlayerAsync(andFilter);
-            //var cursor = ;
-            var searchedPlayers = await _marketPlacecRepository.GetPlayer(
-                findPlayerQuery.PlayerName, 
-                findPlayerQuery.TeamName, 
-                findPlayerQuery.Country,
-                findPlayerQuery.Value);
-            return QueryResponse.Success(data.Result);
+            var findPlayerfilter = GetFilteredPlayerAsync(findPlayerQuery);
+
+            var filteredPlayer = await this._marketPlacecRepository.GetByFilterDefinition(findPlayerfilter);
+            
+            return QueryResponse.Success(filteredPlayer);
+        }
+
+        private FilterDefinition<Player> GetFilteredPlayerAsync(FindPlayerQuery findPlayerQuery)
+        {
+            var combinedFilter = Builders<Player>.Filter.Empty;
+            if (!string.IsNullOrEmpty(findPlayerQuery.TeamName))
+            {
+                combinedFilter &= new FilterDefinitionBuilder<Player>().Eq(x => x.TeamName, findPlayerQuery.TeamName);
+            }
+            if (!string.IsNullOrEmpty(findPlayerQuery.Country))
+            {
+                combinedFilter &= new FilterDefinitionBuilder<Player>().Eq(x => x.Country, findPlayerQuery.Country);
+            }
+            if (!string.IsNullOrEmpty(findPlayerQuery.PlayerName))
+            {
+                combinedFilter &= new FilterDefinitionBuilder<Player>().Eq(x => x.FullName, findPlayerQuery.PlayerName);
+            }
+            if (findPlayerQuery.Value != null)
+            {
+                combinedFilter &= new FilterDefinitionBuilder<Player>().Eq(x => x.AskingPrice, findPlayerQuery.Value);
+            }
+
+            return combinedFilter;
         }
 
         public async Task<QueryResponse> GetAllMarketPlacePlayer()
@@ -140,7 +155,6 @@ namespace FantasyTeams.Services
             await _marketPlacecRepository.UpdateAsync(playerInfo.Id, playerInfo);
             await _teamService.UpdateTeamInfo(buyerTeamInfo.Id, buyerTeamInfo);
             return CommandResponse.Success();
-            
         }
 
         public async Task<CommandResponse> DeletePlayer(DeletePlayerCommand deletePlayerCommand)
