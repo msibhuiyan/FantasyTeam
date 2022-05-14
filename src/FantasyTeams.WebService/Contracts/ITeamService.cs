@@ -9,13 +9,13 @@ namespace FantasyTeams.Contracts
     public interface ITeamService
     {
         Task<CommandResponse> CreateNewTeam(CreateTeamCommand createNewTeamCommand, string teamId = null);
-        Task<Team> GetTeamInfo(string teamId);
+        //Task<Team> GetTeamInfo(string teamId);
         Task<QueryResponse> GetTeamInfo(GetTeamQuery query);
 
         Task<QueryResponse> GetAllTeams();
         Task<CommandResponse> UpdateTeamInfo(UpdateTeamCommand updateTeamCommand);
         Task<CommandResponse> DeleteTeam(DeleteTeamCommand deleteTeamCommand);
-        Task<CommandResponse> UpdateTeamInfo(string id, Team team);
+        //Task<CommandResponse> UpdateTeamInfo(string id, Team team);
         Task<CommandResponse> CreateTeamPlayer(CreateTeamPlayerCommand request);
     }
 }

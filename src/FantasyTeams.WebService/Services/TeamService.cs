@@ -179,10 +179,10 @@ namespace FantasyTeams.Services
             return QueryResponse.Success(teamById);
         }
 
-        public async Task<Team> GetTeamInfo(string TeamId)
-        {
-            return await _teamRepository.GetByIdAsync(TeamId);
-        }
+        //public async Task<Team> GetTeamInfo(string TeamId)
+        //{
+        //    return await _teamRepository.GetByIdAsync(TeamId);
+        //}
 
         public async Task<QueryResponse> GetAllTeams()
         {
@@ -232,11 +232,11 @@ namespace FantasyTeams.Services
             return CommandResponse.Success();
         }
 
-        public async Task<CommandResponse> UpdateTeamInfo(string id, Team team)
-        {
-            await _teamRepository.UpdateAsync(id, team);
-            return CommandResponse.Success();
-        }
+        //public async Task<CommandResponse> UpdateTeamInfo(string id, Team team)
+        //{
+        //    await _teamRepository.UpdateAsync(id, team);
+        //    return CommandResponse.Success();
+        //}
 
         public async Task<CommandResponse> CreateTeamPlayer(CreateTeamPlayerCommand request)
         {
