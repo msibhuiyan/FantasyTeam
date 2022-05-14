@@ -106,113 +106,113 @@ namespace FantasyTeams.Services
             return QueryResponse.Success(players);
         }
 
-        public async Task<List<Player>> CreateNewTeamPlayers(Team team)
-        {
-            List<Player> players = new List<Player>();
-            players.AddRange(AddGoalKeepers(team));
-            players.AddRange(AddDefenders(team));
-            players.AddRange(AddAttackers(team));
-            players.AddRange(AddMidFielders(team));
+        //public async Task<List<Player>> CreateNewTeamPlayers(Team team)
+        //{
+        //    List<Player> players = new List<Player>();
+        //    players.AddRange(AddGoalKeepers(team));
+        //    players.AddRange(AddDefenders(team));
+        //    players.AddRange(AddAttackers(team));
+        //    players.AddRange(AddMidFielders(team));
 
-            await _playerRepository.CreateManyAsync(players);
-            return players;
-        }
+        //    await _playerRepository.CreateManyAsync(players);
+        //    return players;
+        //}
 
-        private IEnumerable<Player> AddMidFielders(Team team)
-        {
-            Random rnd = new Random();
-            List<Player> players = new List<Player>();
-            for(int i = 0; i < 6; i++)
-            {
-                var player = new Player();
-                player.Id = Guid.NewGuid().ToString();
-                player.FirstName = "MidFielder";
-                player.LastName = Guid.NewGuid().ToString();
-                player.FullName = player.FirstName + " " + player.LastName;
-                player.Country = team.Country;
-                player.Value = 1000000;
-                player.Age = rnd.Next(18, 40);
-                player.ForSale = false;
-                player.AskingPrice = 0;
-                player.PlayerType = PlayerType.MidFielder.ToString();
-                player.TeamId = team.Id;
-                player.TeamName = team.Name;
-                players.Add(player);
-            }
-            return players;
-        }
+        //private IEnumerable<Player> AddMidFielders(Team team)
+        //{
+        //    Random rnd = new Random();
+        //    List<Player> players = new List<Player>();
+        //    for(int i = 0; i < 6; i++)
+        //    {
+        //        var player = new Player();
+        //        player.Id = Guid.NewGuid().ToString();
+        //        player.FirstName = "MidFielder";
+        //        player.LastName = Guid.NewGuid().ToString();
+        //        player.FullName = player.FirstName + " " + player.LastName;
+        //        player.Country = team.Country;
+        //        player.Value = 1000000;
+        //        player.Age = rnd.Next(18, 40);
+        //        player.ForSale = false;
+        //        player.AskingPrice = 0;
+        //        player.PlayerType = PlayerType.MidFielder.ToString();
+        //        player.TeamId = team.Id;
+        //        player.TeamName = team.Name;
+        //        players.Add(player);
+        //    }
+        //    return players;
+        //}
 
-        private IEnumerable<Player> AddAttackers(Team team)
-        {
-            Random rnd = new Random();
-            List<Player> players = new List<Player>();
-            for (int i = 0; i < 5; i++)
-            {
-                var player = new Player();
-                player.Id = Guid.NewGuid().ToString();
-                player.FirstName = "Attacker";
-                player.LastName = Guid.NewGuid().ToString();
-                player.FullName = player.FirstName + " " + player.LastName;
-                player.Country = team.Country;
-                player.Value = 1000000;
-                player.Age = rnd.Next(18, 40);
-                player.ForSale = false;
-                player.AskingPrice = 0;
-                player.PlayerType = PlayerType.Attacker.ToString();
-                player.TeamId = team.Id;
-                player.TeamName = team.Name;
-                players.Add(player);
-            }
-            return players;
-        }
+        //private IEnumerable<Player> AddAttackers(Team team)
+        //{
+        //    Random rnd = new Random();
+        //    List<Player> players = new List<Player>();
+        //    for (int i = 0; i < 5; i++)
+        //    {
+        //        var player = new Player();
+        //        player.Id = Guid.NewGuid().ToString();
+        //        player.FirstName = "Attacker";
+        //        player.LastName = Guid.NewGuid().ToString();
+        //        player.FullName = player.FirstName + " " + player.LastName;
+        //        player.Country = team.Country;
+        //        player.Value = 1000000;
+        //        player.Age = rnd.Next(18, 40);
+        //        player.ForSale = false;
+        //        player.AskingPrice = 0;
+        //        player.PlayerType = PlayerType.Attacker.ToString();
+        //        player.TeamId = team.Id;
+        //        player.TeamName = team.Name;
+        //        players.Add(player);
+        //    }
+        //    return players;
+        //}
 
-        private IEnumerable<Player> AddDefenders(Team team)
-        {
-            Random rnd = new Random();
-            List<Player> players = new List<Player>();
-            for (int i = 0; i < 6; i++)
-            {
-                var player = new Player();
-                player.Id = Guid.NewGuid().ToString();
-                player.FirstName = "Defender";
-                player.LastName = Guid.NewGuid().ToString();
-                player.FullName = player.FirstName + " " + player.LastName;
-                player.Country = team.Country;
-                player.Value = 1000000;
-                player.Age = rnd.Next(18, 40);
-                player.ForSale = false;
-                player.AskingPrice = 0;
-                player.PlayerType = PlayerType.Defender.ToString();
-                player.TeamId = team.Id;
-                player.TeamName = team.Name;
-                players.Add(player);
-            }
-            return players;
-        }
+        //private IEnumerable<Player> AddDefenders(Team team)
+        //{
+        //    Random rnd = new Random();
+        //    List<Player> players = new List<Player>();
+        //    for (int i = 0; i < 6; i++)
+        //    {
+        //        var player = new Player();
+        //        player.Id = Guid.NewGuid().ToString();
+        //        player.FirstName = "Defender";
+        //        player.LastName = Guid.NewGuid().ToString();
+        //        player.FullName = player.FirstName + " " + player.LastName;
+        //        player.Country = team.Country;
+        //        player.Value = 1000000;
+        //        player.Age = rnd.Next(18, 40);
+        //        player.ForSale = false;
+        //        player.AskingPrice = 0;
+        //        player.PlayerType = PlayerType.Defender.ToString();
+        //        player.TeamId = team.Id;
+        //        player.TeamName = team.Name;
+        //        players.Add(player);
+        //    }
+        //    return players;
+        //}
 
-        private IEnumerable<Player> AddGoalKeepers(Team team)
-        {
-            Random rnd = new Random();
-            List<Player> players = new List<Player>();
-            for (int i = 0; i < 3; i++)
-            {
-                var player = new Player();
-                player.Id = Guid.NewGuid().ToString();
-                player.FirstName = "Keeper";
-                player.LastName = Guid.NewGuid().ToString();
-                player.FullName = player.FirstName + " " + player.LastName;
-                player.Country = team.Country;
-                player.Value = 1000000;
-                player.Age = rnd.Next(18, 40);
-                player.ForSale = false;
-                player.AskingPrice = 0;
-                player.PlayerType = PlayerType.GoalKeeper.ToString();
-                player.TeamId = team.Id;
-                player.TeamName = team.Name;
-                players.Add(player);
-            }
-            return players;
-        }
+        //private IEnumerable<Player> AddGoalKeepers(Team team)
+        //{
+        //    Random rnd = new Random();
+        //    List<Player> players = new List<Player>();
+        //    for (int i = 0; i < 3; i++)
+        //    {
+        //        var player = new Player();
+        //        player.Id = Guid.NewGuid().ToString();
+        //        player.FirstName = "Keeper";
+        //        player.LastName = Guid.NewGuid().ToString();
+        //        player.FullName = player.FirstName + " " + player.LastName;
+        //        player.Country = team.Country;
+        //        player.Value = 1000000;
+        //        player.Age = rnd.Next(18, 40);
+        //        player.ForSale = false;
+        //        player.AskingPrice = 0;
+        //        player.PlayerType = PlayerType.GoalKeeper.ToString();
+        //        player.TeamId = team.Id;
+        //        player.TeamName = team.Name;
+        //        players.Add(player);
+        //    }
+        //    return players;
+        //}
 
         public async Task<CommandResponse> SetPlayerForSale(SetPlayerForSaleCommand setPlayerForSaleCommand)
         {
@@ -323,11 +323,11 @@ namespace FantasyTeams.Services
             await _playerRepository.UpdateAsync(player.Id, player);
             return CommandResponse.Success();
         }
-        public async Task<CommandResponse> DeleteTeamPlayers(string teamId)
-        {
-            await _playerRepository.DeleteManyAsync(teamId);
-            return CommandResponse.Success();
-        }
+        //public async Task<CommandResponse> DeleteTeamPlayers(string teamId)
+        //{
+        //    await _playerRepository.DeleteManyAsync(teamId);
+        //    return CommandResponse.Success();
+        //}
 
         public async Task<QueryResponse> GetPlayer(GetPlayerQuery request)
         {
