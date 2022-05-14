@@ -59,5 +59,10 @@ namespace FantasyTeams.Repository
             var items = await _collection.FindAsync<Player>(filterDefinition);
             return items.ToList();
         }
+
+        public Task<Player> GetByNameAsync(string fullName)
+        {
+            return _collection.Find(x => x.FullName == fullName).FirstOrDefaultAsync();
+        }
     }
 }

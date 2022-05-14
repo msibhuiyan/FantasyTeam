@@ -173,7 +173,13 @@ namespace FantasyTeams.Services
         public async Task<CommandResponse> CreateNewMarketPlacePlayer(CreateMarketPlacePlayerCommand createNewMarketPlacePlayerCommand)
         {
             Random rnd = new Random();
-            var player = new Player();
+            var fullName = createNewMarketPlacePlayerCommand.FirstName + " " + createNewMarketPlacePlayerCommand.LastName;
+            var player = await _marketPlacecRepository.GetByNameAsync(fullName);
+            if(player != null)
+            {
+                return CommandResponse.Failure(new string[] { "This player already exists" });
+            }
+            player = new Player();
             player.Id = Guid.NewGuid().ToString();
             player.FirstName = createNewMarketPlacePlayerCommand.FirstName;
             player.LastName = createNewMarketPlacePlayerCommand.LastName;

@@ -8,11 +8,11 @@ namespace FantasyTeams.Commands
     public class CreateMarketPlacePlayerCommand : IRequest<CommandResponse>
     {
         [Required]
-        [RegularExpression("^[a-zA-Z0-9]?$",
+        [RegularExpression("[a-zA-Z0-9]+",
             ErrorMessage = "Please provide alpha numeric value")]
         public string FirstName { get; set; }
         [Required]
-        [RegularExpression("^[a-zA-Z0-9]?$",
+        [RegularExpression("[a-zA-Z0-9]+",
             ErrorMessage = "Please provide alpha numeric value")]
         public string LastName { get; set; }
         [Required]
@@ -21,6 +21,7 @@ namespace FantasyTeams.Commands
         [Range(0, 1000000000, ErrorMessage = "Please provide Asking price between 0 to 1000000000")]
         public double AskingPrice { get; set; }
         [Required]
+        [EnumDataType(typeof(PlayerType), ErrorMessage = "Select From GoalKeeper, Attacker, Defender, MidFielder")]
         public string PlayerType { get; set; }
     }
 }

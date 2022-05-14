@@ -15,5 +15,6 @@ namespace FantasyTeams.Repository
         Task<List<Player>> GetPlayer(string playerName, string teamName, string country, double value);
         Task DeleteAsync(string id);
         Task<List<Player>> GetByFilterDefinition(FilterDefinition<Player> filterDefinition);
+        Task<Player> GetByNameAsync(string fullName);
     }
 }
