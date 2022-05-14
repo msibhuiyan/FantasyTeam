@@ -279,6 +279,14 @@ namespace FantasyTeams.Services
             {
                 return CommandResponse.Failure(new string[] {"Player not found for update"});
             }
+
+            var team = await _teamRepository.GetByIdAsync(player.TeamId);
+            if (team != null)
+            {
+                team.Value -= player.Value;
+                team.Value += updatePlayerPriceCommand.PlayerValue;
+                await _teamRepository.UpdateAsync(team.Id, team);
+            }
             player.Value = updatePlayerPriceCommand.PlayerValue;
             await _playerRepository.UpdateAsync(player.Id, player);
             return CommandResponse.Success();
