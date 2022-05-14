@@ -2,7 +2,7 @@
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 
-namespace FantasyTeams.Commands.Player
+namespace FantasyTeams.Commands.MarketPlace
 {
     public class DeletePlayerCommand : IRequest<CommandResponse>
     {

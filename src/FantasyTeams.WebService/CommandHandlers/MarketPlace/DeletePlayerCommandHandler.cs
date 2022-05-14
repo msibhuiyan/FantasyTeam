@@ -1,24 +1,23 @@
-﻿using FantasyTeams.Commands;
-using FantasyTeams.Commands.Player;
+﻿using FantasyTeams.Commands.MarketPlace;
 using FantasyTeams.Contracts;
 using FantasyTeams.Models;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FantasyTeams.CommandHandlers.Player
+namespace FantasyTeams.CommandHandlers.MarketPlace
 {
     public class DeletePlayerCommandHandler : IRequestHandler<DeletePlayerCommand, CommandResponse>
     {
-        private readonly IPlayerService _playerService;
-        public DeletePlayerCommandHandler(IPlayerService playerService)
+        private readonly IMarketPlaceService _marketplaceService;
+        public DeletePlayerCommandHandler(IMarketPlaceService marketplaceService)
         {
-            _playerService = playerService;
+            _marketplaceService = marketplaceService;
         }
 
         public async Task<CommandResponse> Handle(DeletePlayerCommand request, CancellationToken cancellationToken)
         {
-            return await _playerService.DeletePlayer(request);
+            return await _marketplaceService.DeletePlayer(request);
         }
     }
 }

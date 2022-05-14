@@ -11,6 +11,7 @@ using MediatR;
 using FantasyTeams.Models;
 using FantasyTeams.Queries.MarketPlace;
 using System.Security.Claims;
+using FantasyTeams.Commands.MarketPlace;
 
 namespace FantasyTeams.Controllers
 {

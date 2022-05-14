@@ -4,6 +4,7 @@ using FantasyTeams.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FantasyTeams.Models;
+using FantasyTeams.Commands.MarketPlace;
 
 namespace FantasyTeams.Contracts
 {

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using FantasyTeams.Models;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using FantasyTeams.Commands.MarketPlace;
 
 namespace FantasyTeams.Services
 {
@@ -165,10 +166,14 @@ namespace FantasyTeams.Services
 
         public async Task<CommandResponse> DeletePlayer(DeletePlayerCommand deletePlayerCommand)
         {
-            var player = _marketPlacecRepository.GetByIdAsync(deletePlayerCommand.PlayerId);
+            var player = await _marketPlacecRepository.GetByIdAsync(deletePlayerCommand.PlayerId);
             if(player == null)
             {
                 return CommandResponse.Failure(new string[] {"Player not found in marketplace for deletion"});
+            }
+            if (!string.IsNullOrEmpty(player.TeamId))
+            {
+                return CommandResponse.Failure(new string[] { "Can not delete market place player associated with a team" });
             }
             await _marketPlacecRepository.DeleteAsync(deletePlayerCommand.PlayerId);
             return CommandResponse.Success();
