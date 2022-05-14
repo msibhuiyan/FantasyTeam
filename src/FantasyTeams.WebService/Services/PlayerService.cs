@@ -56,12 +56,13 @@ namespace FantasyTeams.Services
             player.TeamId = team.Id;
             player.TeamName = team.Name;
             await _playerRepository.CreateAsync(player);
-            await UpdateCorrespondingTeam(team, player);
+
+            await AddNewPlayerToTeam(team, player);
             return CommandResponse.Success();
 
         }
 
-        private async Task UpdateCorrespondingTeam(Team team, Player playerInfo)
+        private async Task AddNewPlayerToTeam(Team team, Player playerInfo)
         {
             team.Value += playerInfo.Value;
 
@@ -268,8 +269,39 @@ namespace FantasyTeams.Services
             {
                 return CommandResponse.Failure(new string[] { "Player not found to delete" });
             }
+            if (!string.IsNullOrEmpty(player.TeamId))
+            {
+                var team = await _teamRepository.GetByIdAsync(player.TeamId);
+                if(team != null)
+                {
+                    team.Value -= player.Value;
+                    await DeletePlayerFromTeam(team, player);
+                }
+            }
             await _playerRepository.DeleteAsync(deletePlayerCommand.PlayerId);
             return CommandResponse.Success();
+        }
+
+        private async Task DeletePlayerFromTeam(Team team, Player playerInfo)
+        {
+            if (playerInfo.PlayerType == PlayerType.Defender.ToString())
+            {
+                team.Defenders = team.Defenders.Where(e => e != playerInfo.Id).ToArray();
+            }
+            else if (playerInfo.PlayerType == PlayerType.Attacker.ToString())
+            {
+                team.Attackers = team.Attackers.Where(e => e != playerInfo.Id).ToArray();
+            }
+            else if (playerInfo.PlayerType == PlayerType.MidFielder.ToString())
+            {
+                team.MidFielders = team.MidFielders.Where(e => e != playerInfo.Id).ToArray();
+            }
+            else if (playerInfo.PlayerType == PlayerType.GoalKeeper.ToString())
+            {
+                team.GoalKeepers = team.GoalKeepers.Where(e => e != playerInfo.Id).ToArray();
+            }
+
+            await _teamRepository.UpdateAsync(team.Id, team);
         }
 
         public async Task<CommandResponse> UpdatePlayerValue(UpdatePlayerValueCommand updatePlayerPriceCommand)
