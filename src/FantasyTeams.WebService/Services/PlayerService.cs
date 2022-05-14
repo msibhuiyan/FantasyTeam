@@ -244,12 +244,14 @@ namespace FantasyTeams.Services
             playerInfo.LastName = string.IsNullOrEmpty(updatePlayerCommand.LastName)?
                 playerInfo.LastName : updatePlayerCommand.LastName;
             playerInfo.FullName = playerInfo.FirstName + " " + playerInfo.LastName;
-
-            var playerAlreadyExistsWithName = await _playerRepository.GetByNameAsync(playerInfo.FullName);
-
-            if(playerAlreadyExistsWithName != null)
+            if(!string.IsNullOrEmpty(updatePlayerCommand.FirstName) || !string.IsNullOrEmpty(updatePlayerCommand.LastName))
             {
-                return CommandResponse.Failure(new string[] {"Player name already exists"});
+                var playerAlreadyExistsWithName = await _playerRepository.GetByNameAsync(playerInfo.FullName);
+
+                if(playerAlreadyExistsWithName != null)
+                {
+                    return CommandResponse.Failure(new string[] {"Player name already exists"});
+                }
             }
 
             playerInfo.Country = string.IsNullOrEmpty(updatePlayerCommand.Country)?
@@ -290,6 +292,10 @@ namespace FantasyTeams.Services
         public async Task<QueryResponse> GetPlayer(GetPlayerQuery request)
         {
             var player = await _playerRepository.GetByIdAsync(request.PlayerId);
+            if(player == null)
+            {
+                return QueryResponse.Failure(new string[] { "Player not found" });
+            }
             if( player.TeamId == request.TeamId || string.IsNullOrEmpty(request.TeamId))
             {
                 return QueryResponse.Success(player);
