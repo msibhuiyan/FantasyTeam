@@ -35,11 +35,12 @@ namespace FantasyTeams.Controllers
         }
         [Authorize(Roles = "Admin")]
         [HttpGet("GetTeam")]
-        public async Task<QueryResponse> GetTeam([FromQuery] string teamId)
+        public async Task<QueryResponse> GetTeam([FromQuery] string teamId, string teamName)
         {
             return await _mediator.Send(new GetTeamQuery { 
-                TeamId = teamId
-            });
+                TeamId = teamId,
+                TeamName = teamName
+            });;
         }
         [Authorize(Roles = "Member")]
         [HttpGet("GetMyTeam")]

@@ -51,8 +51,13 @@ namespace FantasyTeams.Services
 
         public async Task<QueryResponse> GetTeamInfo(GetTeamQuery query)
         {
-            var team = await _repository.GetByIdAsync(query.TeamId);
-            return QueryResponse.Success(team);
+            if (!string.IsNullOrEmpty(query.TeamName))
+            {
+                var teamByname = await _repository.GetByNameAsync(query.TeamName);
+                return QueryResponse.Success(teamByname);
+            }
+            var teamById = await _repository.GetByIdAsync(query.TeamId);
+            return QueryResponse.Success(teamById);
         }
 
         public async Task<Team> GetTeamInfo(string TeamId)
