@@ -42,6 +42,7 @@ namespace FantasyTeams.Services
         private FilterDefinition<Player> GetFilteredPlayerAsync(FindPlayerQuery findPlayerQuery)
         {
             var combinedFilter = Builders<Player>.Filter.Empty;
+            combinedFilter = new FilterDefinitionBuilder<Player>().Eq(x => x.ForSale, true);
             if (!string.IsNullOrEmpty(findPlayerQuery.TeamName))
             {
                 combinedFilter &= new FilterDefinitionBuilder<Player>().Eq(x => x.TeamName, findPlayerQuery.TeamName);
