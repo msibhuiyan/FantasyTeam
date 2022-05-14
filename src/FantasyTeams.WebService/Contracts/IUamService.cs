@@ -1,4 +1,4 @@
-﻿using FantasyTeams.Commands;
+﻿using FantasyTeams.Commands.Uam;
 using FantasyTeams.Entities;
 using FantasyTeams.Models;
 using System.Threading.Tasks;

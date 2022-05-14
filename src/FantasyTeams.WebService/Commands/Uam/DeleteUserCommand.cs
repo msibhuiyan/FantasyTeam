@@ -1,9 +1,8 @@
 ﻿using FantasyTeams.Models;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
-namespace FantasyTeams.Commands
+namespace FantasyTeams.Commands.Uam
 {
     public class DeleteUserCommand : IRequest<CommandResponse>
     {

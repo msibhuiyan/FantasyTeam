@@ -2,7 +2,7 @@
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 
-namespace FantasyTeams.Commands
+namespace FantasyTeams.Commands.Uam
 {
     public class UserRegistrationCommand : IRequest<CommandResponse>
     {

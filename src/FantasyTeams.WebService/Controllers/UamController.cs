@@ -1,4 +1,4 @@
-﻿using FantasyTeams.Commands;
+﻿using FantasyTeams.Commands.Uam;
 using FantasyTeams.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
