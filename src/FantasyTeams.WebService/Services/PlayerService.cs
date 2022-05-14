@@ -185,15 +185,25 @@ namespace FantasyTeams.Services
             {
                 return CommandResponse.Failure(new string[] { "Player not found for update" });
             }
-            if(playerInfo.TeamId == updatePlayerCommand.TeamId && !string.IsNullOrEmpty(updatePlayerCommand.TeamId))
+            if(playerInfo.TeamId != updatePlayerCommand.TeamId && !string.IsNullOrEmpty(updatePlayerCommand.TeamId))
             {
                 return CommandResponse.Failure(new string[] { "You can not update other team" });
             }
+            
+
             playerInfo.FirstName = string.IsNullOrEmpty(updatePlayerCommand.FirstName)?
                 playerInfo.FirstName : updatePlayerCommand.FirstName;
             playerInfo.LastName = string.IsNullOrEmpty(updatePlayerCommand.LastName)?
                 playerInfo.LastName : updatePlayerCommand.LastName;
             playerInfo.FullName = playerInfo.FirstName + " " + playerInfo.LastName;
+
+            var playerAlreadyExistsWithName = await _repository.GetByNameAsync(playerInfo.FullName);
+
+            if(playerAlreadyExistsWithName != null)
+            {
+                return CommandResponse.Failure(new string[] {"Player name already exists"});
+            }
+
             playerInfo.Country = string.IsNullOrEmpty(updatePlayerCommand.Country)?
                 playerInfo.Country : updatePlayerCommand.Country;
 

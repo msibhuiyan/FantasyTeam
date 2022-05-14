@@ -15,5 +15,6 @@ namespace FantasyTeams.Repository
         Task UpdateAsync(string id, Player team);
         Task DeleteAsync(string id);
         Task DeleteManyAsync(string teamId);
+        Task<Player> GetByNameAsync(string fullName);
     }
 }

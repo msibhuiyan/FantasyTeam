@@ -19,10 +19,10 @@ namespace FantasyTeams.Commands
             get; set;
         }
         public string Country { get; set; }
-        [RegularExpression("^[a-zA-Z]?$",
+        [RegularExpression("[a-zA-Z0-9]+",
             ErrorMessage = "Please provide alpha numeric value")]
         public string FirstName { get; set; }
-        [RegularExpression("^[a-zA-Z]?$",
+        [RegularExpression("[a-zA-Z0-9]+",
             ErrorMessage = "Please provide alpha numeric value")]
         public string LastName { get; set; }
     }

@@ -31,8 +31,6 @@ namespace FantasyTeams.Repository
         }
         public async Task CreateAsync(Player player)
         {
-            
-
             await _collection.InsertOneAsync(player).ConfigureAwait(false);
         }
         public Task UpdateAsync(string id, Player team)
@@ -57,6 +55,11 @@ namespace FantasyTeams.Repository
         public async Task<List<Player>> GetAllAsync(string teamId)
         {
             return await _collection.Find(x => x.TeamId == teamId).ToListAsync();
+        }
+
+        public async Task<Player> GetByNameAsync(string fullName)
+        {
+            return await _collection.Find(x => x.FullName == fullName).FirstOrDefaultAsync();
         }
     }
 }
