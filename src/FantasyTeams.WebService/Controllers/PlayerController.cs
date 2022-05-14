@@ -54,12 +54,7 @@ namespace FantasyTeams.Controllers
         public async Task<QueryResponse> GetPlayer([FromQuery] GetPlayerQuery getPlayerQuery)
         {
             var teamId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            string role = User.FindFirst(ClaimTypes.Role).Value;
             getPlayerQuery.TeamId = teamId;
-            if (role == "Admin")
-            {
-                return await _mediator.Send(getPlayerQuery);
-            }
             return await _mediator.Send(getPlayerQuery);
 
         }
@@ -71,17 +66,20 @@ namespace FantasyTeams.Controllers
             moveToMarketPlaceCommand.TeamId = teamId;
             return await _mediator.Send(moveToMarketPlaceCommand);
         }
-        [Authorize(Roles = "Member")]
+        [Authorize(Roles = "Admin, Member")]
         [HttpPut("UpdatePlayer")]
         public async Task<CommandResponse> UpdatePlayer([FromBody] UpdatePlayerCommand updatePlayerCommand)
         {
+            var teamId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            updatePlayerCommand.TeamId = teamId;
+
             return await _mediator.Send(updatePlayerCommand);
         }
-        [Authorize(Roles = "Admin, Member")]
-        [HttpPut("UpdatePlayerPrice")]
-        public async Task<CommandResponse> UpdatePlayerPrice([FromBody] UpdatePlayerValueCommand updatePlayerPriceCommand)
+        [Authorize(Roles = "Admin")]
+        [HttpPut("UpdatePlayerValue")]
+        public async Task<CommandResponse> UpdatePlayerValue([FromBody] UpdatePlayerValueCommand updatePlayerValueCommand)
         {
-            return await _mediator.Send(updatePlayerPriceCommand);
+            return await _mediator.Send(updatePlayerValueCommand);
         }
         [Authorize(Roles = "Admin")]
         [HttpDelete("DeletePlayer")]

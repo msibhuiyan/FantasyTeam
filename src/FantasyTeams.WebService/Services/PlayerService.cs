@@ -185,6 +185,10 @@ namespace FantasyTeams.Services
             {
                 return CommandResponse.Failure(new string[] { "Player not found for update" });
             }
+            if(playerInfo.TeamId == updatePlayerCommand.TeamId && !string.IsNullOrEmpty(updatePlayerCommand.TeamId))
+            {
+                return CommandResponse.Failure(new string[] { "You can not update other team" });
+            }
             playerInfo.FirstName = string.IsNullOrEmpty(updatePlayerCommand.FirstName)?
                 playerInfo.FirstName : updatePlayerCommand.FirstName;
             playerInfo.LastName = string.IsNullOrEmpty(updatePlayerCommand.LastName)?
@@ -228,7 +232,7 @@ namespace FantasyTeams.Services
         public async Task<QueryResponse> GetPlayer(GetPlayerQuery request)
         {
             var player = await _repository.GetByIdAsync(request.PlayerId);
-            if( player.TeamId == request.TeamId)
+            if( player.TeamId == request.TeamId || string.IsNullOrEmpty(request.TeamId))
             {
                 return QueryResponse.Success(player);
             }

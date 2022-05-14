@@ -1,6 +1,7 @@
 ﻿using FantasyTeams.Models;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FantasyTeams.Commands
 {
@@ -10,6 +11,13 @@ namespace FantasyTeams.Commands
         [RegularExpression("[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}",
             ErrorMessage = "Please provide correct GUID")]
         public string PlayerId { get; set; }
+        [RegularExpression("[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}",
+            ErrorMessage = "Please provide correct GUID")]
+        [JsonIgnore]
+        public string TeamId
+        {
+            get; set;
+        }
         public string Country { get; set; }
         [RegularExpression("^[a-zA-Z]?$",
             ErrorMessage = "Please provide alpha numeric value")]
