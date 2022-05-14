@@ -147,6 +147,7 @@ namespace FantasyTeams.Services
             playerInfo.ForSale = false;
             playerInfo.Value = playerInfo.Value + (playerInfo.Value * rnd.Next(10, 100))/100;
             playerInfo.TeamId = buyerTeamInfo.Id;
+            playerInfo.TeamName = buyerTeamInfo.Name;
 
             buyerTeamInfo.Value += playerInfo.Value;
             buyerTeamInfo.Budget -= playerInfo.AskingPrice;

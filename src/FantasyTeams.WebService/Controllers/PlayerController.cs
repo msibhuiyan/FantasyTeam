@@ -67,6 +67,8 @@ namespace FantasyTeams.Controllers
         [HttpPost("SetForSale")]
         public async Task<CommandResponse> MoveToMarketPlace([FromBody] SetPlayerForSaleCommand moveToMarketPlaceCommand)
         {
+            var teamId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            moveToMarketPlaceCommand.TeamId = teamId;
             return await _mediator.Send(moveToMarketPlaceCommand);
         }
         [Authorize(Roles = "Member")]
