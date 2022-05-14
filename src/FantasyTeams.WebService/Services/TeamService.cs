@@ -17,13 +17,16 @@ namespace FantasyTeams.Services
         private readonly ILogger<TeamService> _logger;
         private readonly ITeamRepository _repository;
         private readonly IPlayerService _playerService;
+        private readonly IUserRepository _userRepository;
         public TeamService(ILogger<TeamService> logger,
             ITeamRepository repository,
-            IPlayerService playerService)
+            IPlayerService playerService,
+            IUserRepository userRepository)
         {
             _logger = logger;
             _repository = repository;
             _playerService = playerService;
+            _userRepository = userRepository;
         }
         public async Task<CommandResponse> CreateNewTeam(CreateTeamCommand createNewTeamCommand, string teamId = null)
         {
@@ -54,9 +57,17 @@ namespace FantasyTeams.Services
             if (!string.IsNullOrEmpty(query.TeamName))
             {
                 var teamByname = await _repository.GetByNameAsync(query.TeamName);
+                if(teamByname == null)
+                {
+                    return QueryResponse.Success(new string[] {"No team Found"});
+                }
                 return QueryResponse.Success(teamByname);
             }
             var teamById = await _repository.GetByIdAsync(query.TeamId);
+            if (teamById == null)
+            {
+                return QueryResponse.Success(new string[] { "No team Found" });
+            }
             return QueryResponse.Success(teamById);
         }
 
@@ -109,6 +120,7 @@ namespace FantasyTeams.Services
             }
             await _playerService.DeleteTeamPlayers(team.Id);
             await _repository.DeleteAsync(deleteTeamCommand.TeamId);
+            await _userRepository.DeleteByTeamIdAsync(deleteTeamCommand.TeamId);
             return CommandResponse.Success();
         }
 

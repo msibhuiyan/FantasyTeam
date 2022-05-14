@@ -41,5 +41,9 @@ namespace FantasyTeams.Repository
         {
             await _collection.DeleteOneAsync(c => c.Email == email);
         }
+        public async Task DeleteByTeamIdAsync(string teamId)
+        {
+            await _collection.DeleteOneAsync(c => c.TeamId == teamId);
+        }
     }
 }
