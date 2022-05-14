@@ -22,19 +22,16 @@ namespace FantasyTeams.Services
         private readonly ILogger<UamService> _logger;
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _repository;
-        private readonly IPlayerService _playerService;
         private readonly ITeamService _teamService;
 
         public UamService(ILogger<UamService> logger,
             IConfiguration configuration,
             IUserRepository repository,
-            IPlayerService playerService,
             ITeamService teamService)
         {
             _logger = logger;
             _configuration = configuration;
             _repository = repository;
-            _playerService = playerService;
             _teamService = teamService;
         }
 
@@ -87,11 +84,6 @@ namespace FantasyTeams.Services
                 userCreationResponseErrors.Add("User creation failed");
                 return CommandResponse.Failure(userCreationResponseErrors.ToArray());
             }
-            //await _playerService.CreateNewTeamPlayers(new Team { 
-            //    Id = user.TeamId,
-            //    Name = user.TeamName,
-            //    Country = user.Country
-            //});
             await _repository.CreateAsync(user);
 
             return CommandResponse.Success();
