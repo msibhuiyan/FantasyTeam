@@ -20,7 +20,7 @@ namespace FantasyTeams.Tests
     {
         private readonly Mock<ILogger<TeamService>> _logger;
         private readonly Mock<ITeamRepository> _teamRepository;
-        private readonly Mock<IPlayerService> _playerService;
+        private readonly Mock<IPlayerRepository> _playerRepository;
         private readonly Mock<IUserRepository> _userRepository;
         private readonly ITeamService _sut;
         private readonly IFixture _fixture = new Fixture();
@@ -28,16 +28,16 @@ namespace FantasyTeams.Tests
         {
             _logger = new Mock<ILogger<TeamService>>();
             _teamRepository = new Mock<ITeamRepository>();
-            _playerService = new Mock<IPlayerService>();
+            _playerRepository = new Mock<IPlayerRepository>();
             _userRepository = new Mock<IUserRepository>();
             _sut = new TeamService(
                 _logger.Object,
                 _teamRepository.Object,
-                _playerService.Object,
+                _playerRepository.Object,
                 _userRepository.Object);
         }
         [Fact]
-        public async Task CreateTeamShouldNotCreateTeamIfATeamAlaredyExists()
+        public async Task CreateTeamShouldNotCreateTeam_WhenATeamAlaredyExists()
         {
             //Arrange
             CreateTeamCommand createTeamCommand = _fixture.Build<CreateTeamCommand>()
@@ -54,6 +54,19 @@ namespace FantasyTeams.Tests
 
             Assert.True(result.Errors.Length == 1);
             Assert.Matches("Team already exists.", result.Errors.FirstOrDefault());
+        }
+        [Fact]
+        public async Task CreateTeamShouldCreateTeam_WhenTeamDoesnotExists()
+        {
+            //Arrange
+            CreateTeamCommand createTeamCommand = _fixture.Build<CreateTeamCommand>()
+                .Create();
+            //Act
+            var result = await _sut.CreateNewTeam(createTeamCommand);
+            //Assert
+
+            Assert.True(result.Errors.Length == 0);
+            Assert.True(result.Succeeded);
         }
         [Fact]
         public async Task GetTeamInfoByTeamNameShouldReturnSuccess_WhenTeamsAreQueried()
