@@ -92,6 +92,10 @@ namespace FantasyTeams.Services
             {
                 return CommandResponse.Failure(new string[] { "Can not purchase your own player" });
             }
+            if (buyerTeamInfo.Budget < playerInfo.AskingPrice)
+            {
+                return CommandResponse.Failure(new string[] { "Dont have enough budget to purchase" });
+            }
             if (!string.IsNullOrEmpty(playerInfo.TeamId))
             {
                 var sellerTeamInfo = await _teamService.GetTeamInfo(playerInfo.TeamId);
