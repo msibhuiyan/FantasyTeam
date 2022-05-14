@@ -65,31 +65,47 @@ namespace FantasyTeams.Tests
             Assert.True(result.Errors.Length == 1);
             Assert.Matches("User Already Exists", result.Errors.FirstOrDefault());
         }
-        //[Fact]
-        //public async Task RegisterUserShouldNotRegisterNewUser_WhenTeamCannotGeneratedCreate()
-        //{
-        //    //Arrange
-        //    UserRegistrationCommand userRegistrationCommand = _fixture.Build<UserRegistrationCommand>()
-        //        .With(x => x.Email, "saif_lesnar@outlok.com")
-        //        .With(x => x.Password, "1qazZAQ!")
-        //        .Create();
+        [Fact]
+        public async Task RegisterUserShouldNotRegisterNewUser_WhenTeamCannotGenerated()
+        {
+            //Arrange
+            var userRegistrationCommand = _fixture.Build<UserRegistrationCommand>()
+                .With(x => x.Email, "saif_lesnar@outlok.com")
+                .With(x => x.Password, "1qazZAQ!")
+                .Create();
 
-        //    CreateTeamCommand createTeamCommand = _fixture.Build<CreateTeamCommand>()
-        //        .With(x => x.Name, userRegistrationCommand.TeamName)
-        //        .With(x => x.Country, userRegistrationCommand.Country)
-        //        .Create();
+            var team = _fixture.Build<Team>()
+                .With(x=> x.Name, userRegistrationCommand.TeamName)
+                .Create();
 
+            var teamByName = _teamRepository.Setup(x => x.GetByNameAsync(userRegistrationCommand.TeamName)).ReturnsAsync(team);
 
-        //    var commandresponse = _teamService.Setup(
-        //        x => x.CreateNewTeam(createTeamCommand, Guid.NewGuid().ToString()))
-        //        .ReturnsAsync(CommandResponse.Failure(new string[] { "Team Already Exusts"}));
-        //    //Act
-        //    var result = await _sut.RegisterUser(userRegistrationCommand);
-        //    //Assert
+            //Act
+            var result = await _sut.RegisterUser(userRegistrationCommand);
+            //Assert
 
-        //    Assert.True(result.Errors.Length == 2);
-        //    Assert.Matches("User creation failed", result.Errors.FirstOrDefault());
-        //}
+            Assert.True(result.Errors.Length == 2);
+            //Assert.Matches("User creation failed", result.Errors.FirstOrDefault());
+        }
+        [Fact]
+        public async Task RegisterUserShouldRegisterNewUser_WhenTeamGenerated()
+        {
+            //Arrange
+            var userRegistrationCommand = _fixture.Build<UserRegistrationCommand>()
+                .With(x => x.Email, "saif_lesnar@outlok.com")
+                .With(x => x.Password, "1qazZAQ!")
+                .Create();
+
+            var user = _fixture.Build<User>()
+                .Create();
+
+            _userRepository.Setup(x => x.CreateAsync(user));
+            //Act
+            var result = await _sut.RegisterUser(userRegistrationCommand);
+            //Assert
+            Assert.True(result.Errors.Length == 0);
+            Assert.True(result.Succeeded);
+        }
         [Fact]
         public async Task UserLoginShouldReturnError_WhenUserDoesnotExists()
         {
