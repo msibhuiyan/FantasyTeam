@@ -34,7 +34,7 @@ namespace FantasyTeams.Controllers
         public async Task<QueryResponse> GetPlayer([FromQuery] string PlayerId)
         {
             return await _mediator.Send(
-                new GetPlayerQuery
+                new GetMarketPlacePlayerQuery
                 { 
                     PlayerId = PlayerId 
                 });
@@ -54,12 +54,12 @@ namespace FantasyTeams.Controllers
             purchasePlayerCommand.TeamId = teamId;
             return await _mediator.Send(purchasePlayerCommand);
         }
-        [Authorize(Roles = "Admin")]
-        [HttpDelete("DeletePlayer")]
-        public async Task<CommandResponse> DeletePlayer([FromBody] DeletePlayerCommand deletePlayerCommand)
-        {
-            return await _mediator.Send(deletePlayerCommand);
-        }
+        //[Authorize(Roles = "Admin")]
+        //[HttpDelete("DeletePlayer")]
+        //public async Task<CommandResponse> DeletePlayer([FromBody] DeletePlayerCommand deletePlayerCommand)
+        //{
+        //    return await _mediator.Send(deletePlayerCommand);
+        //}
 
         [Authorize(Roles = "Admin")]
         [HttpPost("CreatePlayer")]
