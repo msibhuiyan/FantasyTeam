@@ -453,4 +453,5 @@ $RECYCLE.BIN/
 !.vscode/launch.json
 !.vscode/extensions.json
 
-tests/FantasyTeams.Tests/
+
+/tests/FantasyTeams.Tests/coverageresults

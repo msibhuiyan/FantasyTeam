@@ -30,12 +30,12 @@ namespace FantasyTeams.Services
         }
         public async Task<CommandResponse> CreateNewTeam(CreateTeamCommand createNewTeamCommand, string teamId = null)
         {
-            var team = await _repository.GetByNameAsync(createNewTeamCommand.Name);
-            if(team != null)
+            var existingTeam = await _repository.GetByNameAsync(createNewTeamCommand.Name);
+            if(existingTeam != null)
             {
                 return CommandResponse.Failure(new string[] { "Team already exists." });
             }
-            team = new Team();
+            var team = new Team();
             team.Id = string.IsNullOrEmpty(teamId) ? Guid.NewGuid().ToString() : teamId;
             team.Name = createNewTeamCommand.Name;
             team.Country = createNewTeamCommand.Country;
