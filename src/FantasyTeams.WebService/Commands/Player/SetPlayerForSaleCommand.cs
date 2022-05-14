@@ -3,7 +3,7 @@ using MediatR;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace FantasyTeams.Commands
+namespace FantasyTeams.Commands.Player
 {
     public class SetPlayerForSaleCommand : IRequest<CommandResponse>
     {

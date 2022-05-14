@@ -1,11 +1,7 @@
-﻿using FantasyTeams.Commands;
-using FantasyTeams.Queries;
-using FantasyTeams.Contracts;
-using FantasyTeams.Entities;
+﻿using FantasyTeams.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using FantasyTeams.Models;

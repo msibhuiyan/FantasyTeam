@@ -1,17 +1,14 @@
-﻿using FantasyTeams.Commands;
-using FantasyTeams.Queries;
+﻿using FantasyTeams.Queries;
 using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
 using FantasyTeams.Enums;
 using FantasyTeams.Repository;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FantasyTeams.Models;
 using MongoDB.Driver;
-using MongoDB.Bson;
 using FantasyTeams.Commands.MarketPlace;
 
 namespace FantasyTeams.Services

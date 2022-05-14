@@ -2,7 +2,7 @@
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 
-namespace FantasyTeams.Commands
+namespace FantasyTeams.Commands.Player
 {
     public class CreateNewPlayerCommand : IRequest<CommandResponse>
     {

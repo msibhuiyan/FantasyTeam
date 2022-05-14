@@ -1,16 +1,13 @@
-﻿using FantasyTeams.Commands;
-using FantasyTeams.Commands.Player;
+﻿using FantasyTeams.Commands.Player;
 using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
 using FantasyTeams.Enums;
 using FantasyTeams.Models;
-using FantasyTeams.Queries;
 using FantasyTeams.Queries.Player;
 using FantasyTeams.Repository;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FantasyTeams.Services

@@ -1,7 +1,4 @@
-﻿using FantasyTeams.Commands;
-using FantasyTeams.Queries;
-using FantasyTeams.Entities;
-using System.Collections.Generic;
+﻿using FantasyTeams.Queries;
 using System.Threading.Tasks;
 using FantasyTeams.Models;
 using FantasyTeams.Commands.MarketPlace;

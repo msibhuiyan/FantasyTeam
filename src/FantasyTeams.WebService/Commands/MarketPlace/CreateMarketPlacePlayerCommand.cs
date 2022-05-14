@@ -3,7 +3,7 @@ using FantasyTeams.Models;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 
-namespace FantasyTeams.Commands
+namespace FantasyTeams.Commands.MarketPlace
 {
     public class CreateMarketPlacePlayerCommand : IRequest<CommandResponse>
     {

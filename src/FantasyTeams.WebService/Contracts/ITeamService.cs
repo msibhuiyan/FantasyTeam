@@ -1,8 +1,7 @@
-﻿using FantasyTeams.Commands;
+﻿using FantasyTeams.Commands.Team;
 using FantasyTeams.Entities;
 using FantasyTeams.Models;
 using FantasyTeams.Queries;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FantasyTeams.Contracts

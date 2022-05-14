@@ -1,4 +1,4 @@
-﻿using FantasyTeams.Commands;
+﻿using FantasyTeams.Commands.Team;
 using FantasyTeams.Contracts;
 using FantasyTeams.Models;
 using MediatR;

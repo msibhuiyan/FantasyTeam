@@ -1,4 +1,4 @@
-﻿using FantasyTeams.Commands;
+﻿using FantasyTeams.Commands.Team;
 using FantasyTeams.Contracts;
 using FantasyTeams.Entities;
 using FantasyTeams.Enums;
@@ -7,9 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Collections.Generic;
 using FantasyTeams.Models;
-using Newtonsoft.Json;
 using FantasyTeams.Queries;
 
 namespace FantasyTeams.Services
