@@ -278,5 +278,32 @@ namespace FantasyTeams.Services
             }
 
         }
+
+        public async Task<CommandResponse> OnboardUser(OnboardUserCommand onboardUserCommand)
+        {
+            var user = await _userRepository.GetByEmailAsync(onboardUserCommand.Email);
+            if (user != null)
+            {
+                return CommandResponse.Failure(new string[] { "User Already Exists" });
+            }
+            user = new User();
+
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash(onboardUserCommand.Password, out passwordHash, out passwordSalt);
+
+            user.Id = Guid.NewGuid().ToString();
+            user.Email = onboardUserCommand.Email;
+            user.Password = passwordHash;
+            user.Salt = passwordSalt;
+            user.TeamId = "";
+            user.TeamName = "";
+            user.FirstName = onboardUserCommand.FirstName;
+            user.LastName = onboardUserCommand.LastName;
+            user.Country = onboardUserCommand.Country;
+            user.Role = Role.Member.ToString();
+            await _userRepository.CreateAsync(user);
+
+            return CommandResponse.Success();
+        }
     }
 }

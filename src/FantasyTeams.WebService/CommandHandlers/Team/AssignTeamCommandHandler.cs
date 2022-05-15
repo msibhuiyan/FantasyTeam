@@ -18,6 +18,5 @@ namespace FantasyTeams.CommandHandlers.Team
         {
             return await _teamService.AssignToUser(request);
         }
-    {
     }
 }
