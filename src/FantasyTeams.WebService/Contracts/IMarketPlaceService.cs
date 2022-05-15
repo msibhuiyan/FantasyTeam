@@ -11,7 +11,7 @@ namespace FantasyTeams.Contracts
         Task<QueryResponse> GetMarketPlacePlayer(string PlayerId);
         Task<CommandResponse> PurchasePlayer(PurchasePlayerCommand purchasePlayerCommand);
         Task<QueryResponse> FindMarketPlacePlayer(FindPlayerQuery findPlayerQuery);
-        Task<CommandResponse> DeletePlayer(DeletePlayerCommand deletePlayerCommand);
+        Task<CommandResponse> DeletePlayer(DeleteMarketPlacePlayerCommand deletePlayerCommand);
         Task<CommandResponse> CreateNewMarketPlacePlayer(CreateMarketPlacePlayerCommand createNewMarketPlacePlayerCommand);
     }
 }

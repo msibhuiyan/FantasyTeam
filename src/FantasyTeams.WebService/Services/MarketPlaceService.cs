@@ -161,7 +161,7 @@ namespace FantasyTeams.Services
             return CommandResponse.Success();
         }
 
-        public async Task<CommandResponse> DeletePlayer(DeletePlayerCommand deletePlayerCommand)
+        public async Task<CommandResponse> DeletePlayer(DeleteMarketPlacePlayerCommand deletePlayerCommand)
         {
             var player = await _marketPlacecRepository.GetByIdAsync(deletePlayerCommand.PlayerId);
             if(player == null)

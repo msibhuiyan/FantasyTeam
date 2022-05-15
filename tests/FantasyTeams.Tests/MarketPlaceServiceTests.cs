@@ -261,7 +261,7 @@ namespace FantasyTeams.Tests
         public async Task DeletePlayerShouldReturnError_WhenWhenPlayerNotFound()
         {
             //Arrange
-            var deletePlayerCommand = _fixture.Build<DeletePlayerCommand>()
+            var deletePlayerCommand = _fixture.Build<DeleteMarketPlacePlayerCommand>()
                 .Create();
             //Act
             var result = await _sut.DeletePlayer(deletePlayerCommand);
@@ -275,7 +275,7 @@ namespace FantasyTeams.Tests
         public async Task DeletePlayerShouldReturnFailure_WhenWhenPlayerHasATeam()
         {
             //Arrange
-            var deletePlayerCommand = _fixture.Build<DeletePlayerCommand>()
+            var deletePlayerCommand = _fixture.Build<DeleteMarketPlacePlayerCommand>()
                 .Create();
 
             var playerMock = _fixture.Build<Player>()
@@ -299,7 +299,7 @@ namespace FantasyTeams.Tests
         public async Task DeletePlayerShouldReturnFailure_WhenWhenPlayerHasNoTeam()
         {
             //Arrange
-            var deletePlayerCommand = _fixture.Build<DeletePlayerCommand>()
+            var deletePlayerCommand = _fixture.Build<DeleteMarketPlacePlayerCommand>()
                 .Create();
 
             var playerMock = _fixture.Build<Player>()

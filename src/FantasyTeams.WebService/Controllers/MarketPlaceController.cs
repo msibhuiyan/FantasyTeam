@@ -54,12 +54,12 @@ namespace FantasyTeams.Controllers
             purchasePlayerCommand.TeamId = teamId;
             return await _mediator.Send(purchasePlayerCommand);
         }
-        //[Authorize(Roles = "Admin")]
-        //[HttpDelete("DeletePlayer")]
-        //public async Task<CommandResponse> DeletePlayer([FromBody] DeletePlayerCommand deletePlayerCommand)
-        //{
-        //    return await _mediator.Send(deletePlayerCommand);
-        //}
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("DeletePlayer")]
+        public async Task<CommandResponse> DeletePlayer([FromBody] DeleteMarketPlacePlayerCommand deletePlayerCommand)
+        {
+            return await _mediator.Send(deletePlayerCommand);
+        }
 
         [Authorize(Roles = "Admin")]
         [HttpPost("CreatePlayer")]
