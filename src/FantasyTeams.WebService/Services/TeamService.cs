@@ -260,7 +260,7 @@ namespace FantasyTeams.Services
             {
                 return CommandResponse.Failure(new string[] { "No user found to assign team" });
             }
-            if (string.IsNullOrEmpty(user.TeamId))
+            if (!string.IsNullOrEmpty(user.TeamId))
             {
                 return CommandResponse.Failure(new string[] { "User already has a team" });
             }

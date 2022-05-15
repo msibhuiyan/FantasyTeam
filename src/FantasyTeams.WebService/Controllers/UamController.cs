@@ -1,5 +1,6 @@
 ﻿using FantasyTeams.Commands.Uam;
 using FantasyTeams.Models;
+using FantasyTeams.Queries.Uam;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,19 +27,13 @@ namespace FantasyTeams.Controllers
         [HttpPost("Register")]
         public async Task<CommandResponse> Register([FromBody] UserRegistrationCommand userRegistrationCommand)
         {
-            string role = User.FindFirst(ClaimTypes.Role).Value;
-            if(role == "Admin")
-            {
-                return await _mediator.Send(new OnboardUserCommand
-                {
-                    Email = userRegistrationCommand.Email,
-                    Password = userRegistrationCommand.Password,
-                    FirstName = userRegistrationCommand.FirstName,
-                    LastName = userRegistrationCommand.LastName,
-                    Country = userRegistrationCommand.Country
-                });
-            }
             return await _mediator.Send(userRegistrationCommand);
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPost("OnboardUser")]
+        public async Task<CommandResponse> OnboardUser([FromBody] OnboardUserCommand onboardUserCommand)
+        {
+            return await _mediator.Send(onboardUserCommand);
         }
         [AllowAnonymous]
         [HttpPost("Login")]
@@ -53,10 +48,10 @@ namespace FantasyTeams.Controllers
             return await _mediator.Send(deleteUserCommand);
         }
         [Authorize(Roles = "Admin")]
-        [HttpPost("GetUnAssignedUser")]
-        public async Task<CommandResponse> GetUnAssignedUser([FromBody] DeleteUserCommand deleteUserCommand)
+        [HttpGet("GetUnAssignedUser")]
+        public async Task<QueryResponse> GetUnAssignedUser([FromBody] GetUnAssignedUserQuery getUnAssignedUserQuery)
         {
-            return await _mediator.Send(deleteUserCommand);
+            return await _mediator.Send(getUnAssignedUserQuery);
         }
     }
 }

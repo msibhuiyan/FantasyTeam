@@ -310,7 +310,7 @@ namespace FantasyTeams.Services
         public async Task<QueryResponse> GetUnAssignedUser(GetUnAssignedUserQuery request)
         {
             var users = await _userRepository.GetAllUnAssignedTeamAsync();
-            return QueryResponse.Success(users);
+            return QueryResponse.Success(users.Select(x => new { x.Id, x.Email}));
         }
     }
 }

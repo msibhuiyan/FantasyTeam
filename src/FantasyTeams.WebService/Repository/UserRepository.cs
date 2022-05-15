@@ -56,7 +56,7 @@ namespace FantasyTeams.Repository
 
         public async Task<List<User>> GetAllUnAssignedTeamAsync()
         {
-            return await _collection.Find(x => x.TeamId == "" || x.TeamId == null).ToListAsync();
+            return await _collection.Find(x => (x.TeamId == "" || x.TeamId == null) && x.Role != "Admin").ToListAsync();
         }
     }
 }
