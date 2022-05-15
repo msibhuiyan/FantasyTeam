@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using MediatR;
 using FantasyTeams.Exceptions;
+using FantasyTeams.Filter;
 
 namespace FantasyTeams
 {
@@ -36,6 +37,7 @@ namespace FantasyTeams
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers(o => o.Filters.Add(typeof(ResponseMappingFilter)));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FantasyTeams", Version = "v1" });

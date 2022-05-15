@@ -66,7 +66,7 @@ namespace FantasyTeams.Controllers
             {
                 return await _mediator.Send(updateTeamCommand);
             }
-            return CommandResponse.Failure(new string[] { "Can not update other team info" });
+            return CommandResponse.FailureForBidden(new string[] { "Can not update other team info" });
         }
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAllTeam")]

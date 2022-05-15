@@ -153,6 +153,7 @@ namespace FantasyTeams.Tests
             var result = await _sut.SetPlayerForSale(setPlayerForSaleCommand);
             //Assert
             Assert.True(result.Errors.Length == 1);
+            Assert.True(result.StatusCode == System.Net.HttpStatusCode.Forbidden);
             Assert.Matches("Can not update other team player price", result.Errors.FirstOrDefault());
         }
         [Fact]
@@ -208,6 +209,7 @@ namespace FantasyTeams.Tests
             var result = await _sut.UpdatePlayerInfo(updatePlayerCommand);
             //Assert
             Assert.True(result.Errors.Length == 1);
+            Assert.True(result.StatusCode == System.Net.HttpStatusCode.Forbidden);
             Assert.Matches("You can not update other team", result.Errors.FirstOrDefault());
         }
         //[Fact]
@@ -309,6 +311,7 @@ namespace FantasyTeams.Tests
             //Assert
 
             Assert.True(result.Errors.Count() == 1);
+            Assert.True(result.StatusCode == System.Net.HttpStatusCode.Forbidden);
             Assert.Matches("Can not fetch other team player", result.Errors.FirstOrDefault());
         }
         [Fact]

@@ -219,7 +219,7 @@ namespace FantasyTeams.Services
             var playerInfo  = await _playerRepository.GetByIdAsync(setPlayerForSaleCommand.PlayerId);
             if(playerInfo.TeamId != setPlayerForSaleCommand.TeamId)
             {
-                return CommandResponse.Failure(new string[] { "Can not update other team player price" });
+                return CommandResponse.FailureForBidden(new string[] { "Can not update other team player price" });
             }
             playerInfo.ForSale = true;
             playerInfo.AskingPrice = setPlayerForSaleCommand.AskingPrice;
@@ -236,7 +236,7 @@ namespace FantasyTeams.Services
             }
             if(playerInfo.TeamId != updatePlayerCommand.TeamId && !string.IsNullOrEmpty(updatePlayerCommand.TeamId))
             {
-                return CommandResponse.Failure(new string[] { "You can not update other team" });
+                return CommandResponse.FailureForBidden(new string[] { "You can not update other team" });
             }
             
 
@@ -340,7 +340,7 @@ namespace FantasyTeams.Services
             {
                 return QueryResponse.Success(player);
             }
-            return QueryResponse.Failure(new string[] {"Can not fetch other team player"});
+            return QueryResponse.FailureForBidden(new string[] {"Can not fetch other team player"});
         }
     }
 }
