@@ -344,16 +344,29 @@ namespace FantasyTeams.Tests
             Assert.True(result.Errors.Length == 1);
             Assert.Matches("Player not found to delete", result.Errors.FirstOrDefault());
         }
-        [Fact]
-        public async Task DeletePlayerShouldDeletePlayer_WhenPlayerFound()
+        [Theory]
+        [InlineData(PlayerType.Attacker)]
+        [InlineData(PlayerType.Defender)]
+        [InlineData(PlayerType.MidFielder)]
+        [InlineData(PlayerType.GoalKeeper)]
+        public async Task DeletePlayerShouldDeletePlayer_WhenPlayerFound(PlayerType playertype)
         {
             var deletePlayerCommand = _fixture.Build<DeletePlayerCommand>()
                 .Create();
             var playerMock = _fixture.Build<Player>()
+                .With(x=> x.PlayerType, playertype.ToString())
                 .Create();
 
             var player = _playerRepository.Setup(x => x.GetByIdAsync(deletePlayerCommand.PlayerId))
                 .ReturnsAsync(playerMock);
+
+            var teamMock = _fixture.Build<Team>()
+                .Create();
+
+            var team = _teamRepository.Setup(x => x.GetByIdAsync(playerMock.TeamId))
+                .ReturnsAsync(teamMock);
+
+            _teamRepository.Setup(x => x.UpdateAsync(teamMock.Id, teamMock));
             //Act
             var result = await _sut.DeletePlayer(deletePlayerCommand);
             //Assert
