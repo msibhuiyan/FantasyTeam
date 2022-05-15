@@ -53,5 +53,10 @@ namespace FantasyTeams.Repository
         {
             return await _collection.Find(x => x.Id == Id).FirstOrDefaultAsync();
         }
+
+        public async Task<List<User>> GetAllUnAssignedTeamAsync()
+        {
+            return await _collection.Find(x => x.TeamId == "" || x.TeamId == null).ToListAsync();
+        }
     }
 }

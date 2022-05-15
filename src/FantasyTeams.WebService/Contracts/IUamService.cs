@@ -1,6 +1,7 @@
 ﻿using FantasyTeams.Commands.Uam;
 using FantasyTeams.Entities;
 using FantasyTeams.Models;
+using FantasyTeams.Queries.Uam;
 using System.Threading.Tasks;
 
 namespace FantasyTeams.Contracts
@@ -12,5 +13,6 @@ namespace FantasyTeams.Contracts
         Task<User> GetUserInfo(string userEmail);
         Task<CommandResponse> DeleteUser(DeleteUserCommand deleteUserCommand);
         Task<CommandResponse> OnboardUser(OnboardUserCommand request);
+        Task<QueryResponse> GetUnAssignedUser(GetUnAssignedUserQuery request);
     }
 }

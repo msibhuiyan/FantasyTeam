@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using FantasyTeams.Queries.Uam;
 
 namespace FantasyTeams.Services
 {
@@ -304,6 +305,12 @@ namespace FantasyTeams.Services
             await _userRepository.CreateAsync(user);
 
             return CommandResponse.Success();
+        }
+
+        public async Task<QueryResponse> GetUnAssignedUser(GetUnAssignedUserQuery request)
+        {
+            var users = await _userRepository.GetAllUnAssignedTeamAsync();
+            return QueryResponse.Success(users);
         }
     }
 }

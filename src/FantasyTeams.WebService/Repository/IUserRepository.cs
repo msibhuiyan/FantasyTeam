@@ -1,4 +1,5 @@
 ﻿using FantasyTeams.Entities;
+using FantasyTeams.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,5 +15,6 @@ namespace FantasyTeams.Repository
         Task DeleteByTeamIdAsync(string teamId);
         Task<User> GetByTeamIdAsync(string teamId);
         Task<User> GetByIdAsync(string teamId);
+        Task<List<User>> GetAllUnAssignedTeamAsync();
     }
 }

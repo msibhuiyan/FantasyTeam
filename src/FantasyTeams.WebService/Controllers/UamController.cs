@@ -52,5 +52,11 @@ namespace FantasyTeams.Controllers
         {
             return await _mediator.Send(deleteUserCommand);
         }
+        [Authorize(Roles = "Admin")]
+        [HttpPost("GetUnAssignedUser")]
+        public async Task<CommandResponse> GetUnAssignedUser([FromBody] DeleteUserCommand deleteUserCommand)
+        {
+            return await _mediator.Send(deleteUserCommand);
+        }
     }
 }
