@@ -180,5 +180,43 @@ namespace FantasyTeams.Tests
 
             Assert.True(result.Errors.Length == 0);
         }
+        [Fact]
+        public async Task OnboardUserShouldReturnError_WhenUserExists()
+        {
+            //Arrange
+            var onboardUserCommand = _fixture.Build<OnboardUserCommand>()
+                .With(x=> x.Password, "1qazZAQ!")
+                .Create();
+            var userMock = _fixture.Build<User>()
+                .Create();
+
+            var user = _userRepository.Setup(
+                x => x.GetByEmailAsync(onboardUserCommand.Email))
+                .ReturnsAsync(userMock);
+
+            //Act
+            var result = await _sut.OnboardUser(onboardUserCommand);
+            //Assert
+
+            Assert.True(result.Errors.Length == 1);
+            Assert.Matches("User Already Exists", result.Errors.FirstOrDefault());
+        }
+
+        [Fact]
+        public async Task OnboardUserShouldReturnSuccess_WhenUserDoesnotExists()
+        {
+            //Arrange
+            var onboardUserCommand = _fixture.Build<OnboardUserCommand>()
+                .With(x => x.Password, "1qazZAQ!")
+                .Create();
+
+            //Act
+            var result = await _sut.OnboardUser(onboardUserCommand);
+            //Assert
+
+            Assert.True(result.Errors.Length == 0);
+            Assert.True(result.Succeeded);
+        }
+
     }
 }

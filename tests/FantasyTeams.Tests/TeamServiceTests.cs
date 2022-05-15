@@ -254,5 +254,83 @@ namespace FantasyTeams.Tests
             Assert.True(result.Errors.Length == 0);
             Assert.True(result.Succeeded);
         }
+        [Fact]
+        public async void AssignToUserShoudReturnError_WhenUserNotFound()
+        {
+            var assignTeamCommand = _fixture.Build<AssignTeamCommand>()
+                .Create();
+
+            
+            //Act
+            var result = await _sut.AssignToUser(assignTeamCommand);
+            //Assert
+
+            Assert.True(result.Errors.Length == 1);
+            Assert.Matches("No user found to assign team", result.Errors.FirstOrDefault());
+        }
+        [Fact]
+        public async void AssignToUserShoudReturnError_WhenUserAlreadyHasTeam()
+        {
+            var assignTeamCommand = _fixture.Build<AssignTeamCommand>()
+                .Create();
+
+            var userMock = _fixture.Build<User>()
+                    .Create();
+
+            var user = _userRepository.Setup(x => x.GetByIdAsync(assignTeamCommand.UserId))
+                .ReturnsAsync(userMock);
+
+            //Act
+            var result = await _sut.AssignToUser(assignTeamCommand);
+            //Assert
+
+            Assert.True(result.Errors.Length == 1);
+            Assert.Matches("User already has a team", result.Errors.FirstOrDefault());
+        }
+        [Fact]
+        public async void AssignToUserShoudReturnError_WhenTeamNotFound()
+        {
+            var assignTeamCommand = _fixture.Build<AssignTeamCommand>()
+                .Create();
+            var userMock = _fixture.Build<User>()
+                .Without(x=> x.TeamId)
+                .Create();
+
+            var user = _userRepository.Setup(x => x.GetByIdAsync(assignTeamCommand.UserId))
+                .ReturnsAsync(userMock);
+
+            //Act
+            var result = await _sut.AssignToUser(assignTeamCommand);
+            //Assert
+
+            Assert.True(result.Errors.Length == 1);
+            Assert.Matches("No team found to assign to user", result.Errors.FirstOrDefault());
+        }
+        [Fact]
+        public async void AssignToUserShoudReturnSuccess_WhenTeamAndUserFound()
+        {
+            var assignTeamCommand = _fixture.Build<AssignTeamCommand>()
+                .Create();
+            var userMock = _fixture.Build<User>()
+                .Without(x => x.TeamId)
+                .Create();
+
+            var user = _userRepository.Setup(x => x.GetByIdAsync(assignTeamCommand.UserId))
+                .ReturnsAsync(userMock);
+
+            var teamMock = _fixture.Build<Team>()
+                    .Create();
+
+            var teamById = _teamRepository.Setup(x => x.GetByIdAsync(assignTeamCommand.TeamId))
+                .ReturnsAsync(teamMock);
+
+
+            //Act
+            var result = await _sut.AssignToUser(assignTeamCommand);
+            //Assert
+
+            Assert.True(result.Errors.Length == 0);
+            Assert.True(result.Succeeded);
+        }
     }
 }
