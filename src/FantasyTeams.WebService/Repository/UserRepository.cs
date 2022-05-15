@@ -45,5 +45,13 @@ namespace FantasyTeams.Repository
         {
             await _collection.DeleteOneAsync(c => c.TeamId == teamId);
         }
+        public async Task<User> GetByTeamIdAsync(string teamId)
+        {
+            return await _collection.Find(x => x.TeamId == teamId).FirstOrDefaultAsync();
+        }
+        public async Task<User> GetByIdAsync(string Id)
+        {
+            return await _collection.Find(x => x.Id == Id).FirstOrDefaultAsync();
+        }
     }
 }

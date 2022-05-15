@@ -228,7 +228,12 @@ namespace FantasyTeams.Services
             }
             await _playerRepository.DeleteManyAsync(team.Id);
             await _teamRepository.DeleteAsync(deleteTeamCommand.TeamId);
-            await _userRepository.DeleteByTeamIdAsync(deleteTeamCommand.TeamId);
+            var user = await _userRepository.GetByTeamIdAsync(deleteTeamCommand.TeamId);
+            if(user != null)
+            {
+                user.TeamId = "";
+                await _userRepository.UpdateAsync(user.Id, user);
+            }
             return CommandResponse.Success();
         }
 
@@ -246,6 +251,28 @@ namespace FantasyTeams.Services
                 return CommandResponse.Failure(new string[] {"No team found to add this player"});
             }
             return CommandResponse.Failure(new string[] { "Not implemented" });
+        }
+
+        public async Task<CommandResponse> AssignToUser(AssignTeamCommand request)
+        {
+            var user = await _userRepository.GetByIdAsync(request.UserId);
+            if(user == null)
+            {
+                return CommandResponse.Failure(new string[] { "No user found to assign team" });
+            }
+            if (string.IsNullOrEmpty(user.TeamId))
+            {
+                return CommandResponse.Failure(new string[] { "User already has a team" });
+            }
+            var team = await _teamRepository.GetByIdAsync(request.TeamId);
+            if (team == null)
+            {
+                return CommandResponse.Failure(new string[] { "No team found to assign to user" });
+            }
+            user.TeamId = team.Id;
+            user.TeamName = team.Name;
+            await _userRepository.UpdateAsync(user.Id, user);
+            return CommandResponse.Success();
         }
     }
 }

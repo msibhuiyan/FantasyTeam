@@ -34,6 +34,12 @@ namespace FantasyTeams.Controllers
             return await _mediator.Send(createNewTeamCommand);
         }
         [Authorize(Roles = "Admin")]
+        [HttpPost("AssignTeam")]
+        public async Task<CommandResponse> AssignTeam([FromBody] AssignTeamCommand assignTeamCommand)
+        {
+            return await _mediator.Send(assignTeamCommand);
+        }
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetTeam")]
         public async Task<QueryResponse> GetTeam([FromQuery] string teamId, string teamName)
         {
