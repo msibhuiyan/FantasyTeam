@@ -14,12 +14,15 @@ You will see the installed version 3.1.*** [C:\Program Files\dotnet\sdk]
 Project Setup
 --------------------------
 Clone the repository
-
-cd .\Saiful-Islam\
-
-dotnet clean
-
-dotnet build
+```
+$ cd .\Saiful-Islam\
+```
+```
+$ dotnet clean
+```
+```
+$ dotnet build
+```
 
 Run tests
 --------------------------
