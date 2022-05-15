@@ -40,7 +40,7 @@ namespace FantasyTeams.Controllers
                 });
         }
         [Authorize(Roles = "Admin, Member")]
-        [HttpPost("FindPlayer")]
+        [HttpGet("FindPlayer")]
         public async Task<QueryResponse> FindPlayer(
             [FromBody] FindPlayerQuery findPlayerQuery)
         {
