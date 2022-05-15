@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using MediatR;
+using FantasyTeams.Exceptions;
 
 namespace FantasyTeams
 {
@@ -77,6 +78,8 @@ namespace FantasyTeams
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.ConfigureExceptionHandler();
+
             app.UseAuthentication();
 
             app.UseHttpsRedirection();
