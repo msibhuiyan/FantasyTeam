@@ -47,6 +47,7 @@ namespace FantasyTeams.Services
                 return CommandResponse.Failure(new string[] { "User doesn't exists for deletion" });
             }
             await _teamRepository.DeleteAsync(user.TeamId);
+            await _playerRepository.DeleteManyAsync(user.TeamId);
             await _userRepository.DeleteAsync(deleteUserCommand.Email);
             return CommandResponse.Success();
         }
