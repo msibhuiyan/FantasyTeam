@@ -217,6 +217,10 @@ namespace FantasyTeams.Services
         public async Task<CommandResponse> SetPlayerForSale(SetPlayerForSaleCommand setPlayerForSaleCommand)
         {
             var playerInfo  = await _playerRepository.GetByIdAsync(setPlayerForSaleCommand.PlayerId);
+            if(playerInfo == null)
+            {
+                return CommandResponse.Failure(new string[] { "No player found for update" });
+            }
             if(playerInfo.TeamId != setPlayerForSaleCommand.TeamId)
             {
                 return CommandResponse.FailureForBidden(new string[] { "Can not update other team player price" });

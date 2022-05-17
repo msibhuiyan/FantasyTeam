@@ -136,7 +136,19 @@ namespace FantasyTeams.Tests
             Assert.True(result.Succeeded);
         }
         [Fact]
-        public async Task SetPlayerForSaleShouldReturnError_WhenOtherTeamPlayerUpdateRequestReceives()
+        public async Task SetPlayerForSaleShouldReturnError_WhenPlayerDoesnotExists()
+        {
+            //Arrange
+            var setPlayerForSaleCommand = _fixture.Build<SetPlayerForSaleCommand>()
+                .Create();
+            //Act
+            var result = await _sut.SetPlayerForSale(setPlayerForSaleCommand);
+            //Assert
+            Assert.True(result.Errors.Length == 1);
+            Assert.Matches("No player found for update", result.Errors.FirstOrDefault());
+        }
+        [Fact]
+        public async Task SetPlayerForSaleShouldReturnError_WhenOtherTeamPlayerUpdateRequestReceivesFromOtherTeam()
         {
             //Arrange
             var setPlayerForSaleCommand = _fixture.Build<SetPlayerForSaleCommand>()
