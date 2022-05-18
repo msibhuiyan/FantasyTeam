@@ -42,13 +42,13 @@ namespace FantasyTeams.Controllers
             return await _mediator.Send(userLoginCommand);
         }
         [Authorize(Roles ="Admin")]
-        [HttpDelete("DeleteUser")]
+        [HttpDelete("Delete")]
         public async Task<CommandResponse> DeleteUser([FromBody] DeleteUserCommand deleteUserCommand)
         {
             return await _mediator.Send(deleteUserCommand);
         }
         [Authorize(Roles = "Admin")]
-        [HttpGet("GetUnAssignedUser")]
+        [HttpGet("UnAssignedUser")]
         public async Task<QueryResponse> GetUnAssignedUser([FromBody] GetUnAssignedUserQuery getUnAssignedUserQuery)
         {
             return await _mediator.Send(getUnAssignedUserQuery);
