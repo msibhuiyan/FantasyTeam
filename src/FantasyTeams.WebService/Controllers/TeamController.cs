@@ -40,7 +40,7 @@ namespace FantasyTeams.Controllers
             return await _mediator.Send(assignTeamCommand);
         }
         [Authorize(Roles = "Admin")]
-        [HttpGet("GetTeam")]
+        [HttpGet("TeamInfo")]
         public async Task<QueryResponse> GetTeam([FromQuery] string teamId, string teamName)
         {
             return await _mediator.Send(new GetTeamQuery { 
@@ -49,7 +49,7 @@ namespace FantasyTeams.Controllers
             });;
         }
         [Authorize(Roles = "Member")]
-        [HttpGet("GetMyTeam")]
+        [HttpGet("MyTeam")]
         public async Task<QueryResponse> GetMyTeam()
         {
             var teamId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -59,7 +59,7 @@ namespace FantasyTeams.Controllers
             });
         }
         [Authorize(Roles = "Admin, Member")]
-        [HttpPut("UpdateTeam")]
+        [HttpPut("Update")]
         public async Task<CommandResponse> UpdateTeam([FromBody] UpdateTeamCommand updateTeamCommand)
         {
             var teamId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -75,13 +75,13 @@ namespace FantasyTeams.Controllers
             return CommandResponse.FailureForBidden(new string[] { "Can not update other team info" });
         }
         [Authorize(Roles = "Admin")]
-        [HttpGet("GetAllTeam")]
+        [HttpGet("Teams")]
         public async Task<QueryResponse> GetAllTeam()
         {
             return await _mediator.Send(new GetAllTeamQuery()); ;
         }
         [Authorize(Roles = "Admin")]
-        [HttpDelete("DeleteTeam")]
+        [HttpDelete("Delete")]
         public async Task<CommandResponse> DeletePlayer([FromBody] DeleteTeamCommand deleteTeamCommand)
         {
             return await _mediator.Send(deleteTeamCommand);
