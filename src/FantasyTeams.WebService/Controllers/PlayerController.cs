@@ -23,13 +23,13 @@ namespace FantasyTeams.Controllers
             _mediator = mediator;
         }
         [Authorize(Roles = "Admin")]
-        [HttpPost("CreatePlayer")]
+        [HttpPost("Create")]
         public async Task<CommandResponse> CreatePlayer([FromBody] CreateNewPlayerCommand createNewPlayerCommand)
         {
             return await _mediator.Send(createNewPlayerCommand);
         }
         [Authorize(Roles = "Admin, Member")]
-        [HttpGet("GetAllPlayer")]
+        [HttpGet("Players")]
         public async Task<QueryResponse> GetAllPlayer()
         {
             var teamId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -45,7 +45,7 @@ namespace FantasyTeams.Controllers
 
         }
         [Authorize(Roles = "Admin, Member")]
-        [HttpGet("GetPlayer")]
+        [HttpGet("PlayerInfo")]
         public async Task<QueryResponse> GetPlayer([FromQuery] GetPlayerQuery getPlayerQuery)
         {
             var teamId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -77,7 +77,7 @@ namespace FantasyTeams.Controllers
             return await _mediator.Send(updatePlayerValueCommand);
         }
         [Authorize(Roles = "Admin")]
-        [HttpDelete("DeletePlayer")]
+        [HttpDelete("Delete")]
         public async Task<CommandResponse> DeletePlayer([FromBody] DeletePlayerCommand deletePlayerCommand)
         {
             return await _mediator.Send(deletePlayerCommand);
