@@ -24,13 +24,13 @@ namespace FantasyTeams.Controllers
             _mediator = mediator;
         }
         [Authorize(Roles = "Admin, Member")]
-        [HttpGet("GetAllPlayer")]
+        [HttpGet("Players")]
         public async Task<QueryResponse> GetAllPlayer()
         {
             return await _mediator.Send(new GetAllPlayerQuery());
         }
         [Authorize(Roles = "Admin, Member")]
-        [HttpGet("GetPlayer")]
+        [HttpGet("PlayerInfo")]
         public async Task<QueryResponse> GetPlayer([FromQuery] string PlayerId)
         {
             return await _mediator.Send(
@@ -40,14 +40,14 @@ namespace FantasyTeams.Controllers
                 });
         }
         [Authorize(Roles = "Admin, Member")]
-        [HttpGet("FindPlayer")]
+        [HttpGet("Search")]
         public async Task<QueryResponse> FindPlayer(
             [FromBody] FindPlayerQuery findPlayerQuery)
         {
             return await _mediator.Send(findPlayerQuery);
         }
         [Authorize(Roles = "Member")]
-        [HttpPost("PurchasePlayer")]
+        [HttpPost("Purchase")]
         public async Task<CommandResponse> PurchasePlayer([FromBody] PurchasePlayerCommand purchasePlayerCommand)
         {
             var teamId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -55,14 +55,14 @@ namespace FantasyTeams.Controllers
             return await _mediator.Send(purchasePlayerCommand);
         }
         [Authorize(Roles = "Admin")]
-        [HttpDelete("DeletePlayer")]
+        [HttpDelete("Delete")]
         public async Task<CommandResponse> DeletePlayer([FromBody] DeleteMarketPlacePlayerCommand deletePlayerCommand)
         {
             return await _mediator.Send(deletePlayerCommand);
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("CreatePlayer")]
+        [HttpPost("Create")]
         public async Task<CommandResponse> CreateNewMarketPlacePlayer([FromBody] 
         CreateMarketPlacePlayerCommand createNewMarketPlacePlayerCommand)
         {
