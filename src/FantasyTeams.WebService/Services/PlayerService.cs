@@ -6,6 +6,7 @@ using FantasyTeams.Models;
 using FantasyTeams.Queries.Player;
 using FantasyTeams.Repository;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +17,11 @@ namespace FantasyTeams.Services
     public class PlayerService : IPlayerService
     {
         private readonly ILogger<PlayerService> _logger;
-        private readonly IPlayerRepository _playerRepository;
-        private readonly ITeamRepository _teamRepository;
+        private readonly IRepository<Player> _playerRepository;
+        private readonly IRepository<Team> _teamRepository;
         public PlayerService(ILogger<PlayerService> logger,
-            IPlayerRepository playerRepository,
-            ITeamRepository teamRepository)
+            IRepository<Player> playerRepository,
+            IRepository<Team> teamRepository)
         {
             _logger = logger;
             _playerRepository = playerRepository;
@@ -28,7 +29,9 @@ namespace FantasyTeams.Services
         }
         public async Task<CommandResponse> CreateNewPlayer(CreateNewPlayerCommand createNewPlayerCommand)
         {
-            var team = await _teamRepository.GetByIdAsync(createNewPlayerCommand.TeamId);
+            var filter = new FilterDefinitionBuilder<Team>().Eq(x => x.Id, createNewPlayerCommand.TeamId);
+            //var filter = Builders<Team>.Filter.Eq(x => x.Id, createNewPlayerCommand.TeamId);
+            var team = await _teamRepository.GetByIdAsync(filter);
             if(team == null)
             {
                 return CommandResponse.Failure(new string[] { "Team doesn't exist to create player" });
