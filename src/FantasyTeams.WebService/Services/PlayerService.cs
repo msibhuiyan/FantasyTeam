@@ -29,16 +29,14 @@ namespace FantasyTeams.Services
         }
         public async Task<CommandResponse> CreateNewPlayer(CreateNewPlayerCommand createNewPlayerCommand)
         {
-            var filter = new FilterDefinitionBuilder<Team>().Eq(x => x.Id, createNewPlayerCommand.TeamId);
-            //var filter = Builders<Team>.Filter.Eq(x => x.Id, createNewPlayerCommand.TeamId);
-            var team = await _teamRepository.GetByIdAsync(filter);
+            var team = await _teamRepository.GetAsync(x=> x.Id == createNewPlayerCommand.TeamId);
             if(team == null)
             {
                 return CommandResponse.Failure(new string[] { "Team doesn't exist to create player" });
             }
             var fullname = createNewPlayerCommand.FirstName + " " + createNewPlayerCommand.LastName;
 
-            var player = await _playerRepository.GetByNameAsync(fullname);
+            var player = await _playerRepository.GetAsync(x => x.FullName == fullname);
             if(player != null)
             {
                 return CommandResponse.Failure(new string[] { "Player name already exists" });
@@ -94,7 +92,7 @@ namespace FantasyTeams.Services
                 team.GoalKeepers = playerTypeList.ToArray();
             }
 
-            await _teamRepository.UpdateAsync(team.Id, team);
+            await _teamRepository.UpdateAsync(x => x.Id == team.Id, team);
         }
 
         public async Task<QueryResponse> GetAllPlayer(GetAllPlayerQuery getAllPlayerQuery)
@@ -105,7 +103,9 @@ namespace FantasyTeams.Services
                 players = await _playerRepository.GetAllAsync();
                 return QueryResponse.Success(players);
             }
-            players =  await _playerRepository.GetAllAsync(getAllPlayerQuery.TeamId);
+            var filter = Builders<Player>.Filter.Eq(x => x.TeamId, getAllPlayerQuery.TeamId);
+            
+            players =  await _playerRepository.GetAllByFilterAsync(filter);
             return QueryResponse.Success(players);
         }
 
@@ -219,7 +219,7 @@ namespace FantasyTeams.Services
 
         public async Task<CommandResponse> SetPlayerForSale(SetPlayerForSaleCommand setPlayerForSaleCommand)
         {
-            var playerInfo  = await _playerRepository.GetByIdAsync(setPlayerForSaleCommand.PlayerId);
+            var playerInfo  = await _playerRepository.GetAsync(x => x.Id == setPlayerForSaleCommand.PlayerId);
             if(playerInfo == null)
             {
                 return CommandResponse.Failure(new string[] { "No player found for update" });
@@ -230,13 +230,13 @@ namespace FantasyTeams.Services
             }
             playerInfo.ForSale = true;
             playerInfo.AskingPrice = setPlayerForSaleCommand.AskingPrice;
-            await _playerRepository.UpdateAsync(playerInfo.Id, playerInfo);
+            await _playerRepository.UpdateAsync(x => x.Id == playerInfo.Id, playerInfo);
             return CommandResponse.Success();
         }
 
         public async Task<CommandResponse> UpdatePlayerInfo(UpdatePlayerCommand updatePlayerCommand)
         {
-            var playerInfo = await _playerRepository.GetByIdAsync(updatePlayerCommand.PlayerId);
+            var playerInfo = await _playerRepository.GetAsync( x=> x.Id == updatePlayerCommand.PlayerId);
             if (playerInfo == null)
             {
                 return CommandResponse.Failure(new string[] { "Player not found for update" });
@@ -254,7 +254,7 @@ namespace FantasyTeams.Services
             playerInfo.FullName = playerInfo.FirstName + " " + playerInfo.LastName;
             if(!string.IsNullOrEmpty(updatePlayerCommand.FirstName) || !string.IsNullOrEmpty(updatePlayerCommand.LastName))
             {
-                var playerAlreadyExistsWithName = await _playerRepository.GetByNameAsync(playerInfo.FullName);
+                var playerAlreadyExistsWithName = await _playerRepository.GetAsync(x=> x.FullName == playerInfo.FullName);
 
                 if(playerAlreadyExistsWithName != null)
                 {
@@ -265,27 +265,27 @@ namespace FantasyTeams.Services
             playerInfo.Country = string.IsNullOrEmpty(updatePlayerCommand.Country)?
                 playerInfo.Country : updatePlayerCommand.Country;
 
-            await _playerRepository.UpdateAsync(updatePlayerCommand.PlayerId, playerInfo);
+            await _playerRepository.UpdateAsync(x=> x.Id == updatePlayerCommand.PlayerId, playerInfo);
             return CommandResponse.Success();
         }
 
         public async Task<CommandResponse> DeletePlayer(DeletePlayerCommand deletePlayerCommand)
         {
-            var player = await _playerRepository.GetByIdAsync(deletePlayerCommand.PlayerId);
+            var player = await _playerRepository.GetAsync(x=> x.Id == deletePlayerCommand.PlayerId);
             if(player == null)
             {
                 return CommandResponse.Failure(new string[] { "Player not found to delete" });
             }
             if (!string.IsNullOrEmpty(player.TeamId))
             {
-                var team = await _teamRepository.GetByIdAsync(player.TeamId);
+                var team = await _teamRepository.GetAsync(x=> x.Id == player.TeamId);
                 if(team != null)
                 {
                     team.Value -= player.Value;
                     await DeletePlayerFromTeam(team, player);
                 }
             }
-            await _playerRepository.DeleteAsync(deletePlayerCommand.PlayerId);
+            await _playerRepository.DeleteAsync(x=> x.Id == deletePlayerCommand.PlayerId);
             return CommandResponse.Success();
         }
 
@@ -308,26 +308,26 @@ namespace FantasyTeams.Services
                 team.GoalKeepers = team.GoalKeepers.Where(e => e != playerInfo.Id).ToArray();
             }
 
-            await _teamRepository.UpdateAsync(team.Id, team);
+            await _teamRepository.UpdateAsync(x=> x.Id == team.Id, team);
         }
 
         public async Task<CommandResponse> UpdatePlayerValue(UpdatePlayerValueCommand updatePlayerPriceCommand)
         {
-            var player = await _playerRepository.GetByIdAsync(updatePlayerPriceCommand.PlayerId);
+            var player = await _playerRepository.GetAsync(x=> x.Id == updatePlayerPriceCommand.PlayerId);
             if(player == null)
             {
                 return CommandResponse.Failure(new string[] {"Player not found for update"});
             }
 
-            var team = await _teamRepository.GetByIdAsync(player.TeamId);
+            var team = await _teamRepository.GetAsync(x=> x.Id == player.TeamId);
             if (team != null)
             {
                 team.Value -= player.Value;
                 team.Value += updatePlayerPriceCommand.PlayerValue;
-                await _teamRepository.UpdateAsync(team.Id, team);
+                await _teamRepository.UpdateAsync(x=> x.Id == team.Id, team);
             }
             player.Value = updatePlayerPriceCommand.PlayerValue;
-            await _playerRepository.UpdateAsync(player.Id, player);
+            await _playerRepository.UpdateAsync(x=> x.Id == player.Id, player);
             return CommandResponse.Success();
         }
         //public async Task<CommandResponse> DeleteTeamPlayers(string teamId)
@@ -338,7 +338,7 @@ namespace FantasyTeams.Services
 
         public async Task<QueryResponse> GetPlayer(GetPlayerQuery request)
         {
-            var player = await _playerRepository.GetByIdAsync(request.PlayerId);
+            var player = await _playerRepository.GetAsync(x=> x.Id == request.PlayerId);
             if(player == null)
             {
                 return QueryResponse.Failure(new string[] { "Player not found" });
