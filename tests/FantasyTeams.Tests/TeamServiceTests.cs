@@ -19,17 +19,17 @@ namespace FantasyTeams.Tests
     public class TeamServiceTests
     {
         private readonly Mock<ILogger<TeamService>> _logger;
-        private readonly Mock<ITeamRepository> _teamRepository;
-        private readonly Mock<IPlayerRepository> _playerRepository;
-        private readonly Mock<IUserRepository> _userRepository;
+        private readonly Mock<IRepository<Team>> _teamRepository;
+        private readonly Mock<IRepository<Player>> _playerRepository;
+        private readonly Mock<IRepository<User>> _userRepository;
         private readonly ITeamService _sut;
         private readonly IFixture _fixture = new Fixture();
         public TeamServiceTests()
         {
             _logger = new Mock<ILogger<TeamService>>();
-            _teamRepository = new Mock<ITeamRepository>();
-            _playerRepository = new Mock<IPlayerRepository>();
-            _userRepository = new Mock<IUserRepository>();
+            _teamRepository = new Mock<IRepository<Team>>();
+            _playerRepository = new Mock<IRepository<Player>>();
+            _userRepository = new Mock<IRepository<User>>();
             _sut = new TeamService(
                 _logger.Object,
                 _teamRepository.Object,
@@ -46,7 +46,7 @@ namespace FantasyTeams.Tests
             var teamMock = _fixture.Build<Team>()
                 .Create();
 
-            var team = _teamRepository.Setup(x => x.GetByNameAsync(createTeamCommand.Name))
+            var team = _teamRepository.Setup(x => x.GetAsync(x=> x.Name == createTeamCommand.Name))
                 .ReturnsAsync(teamMock);
             //Act
             var result = await _sut.CreateNewTeam(createTeamCommand);
@@ -95,7 +95,7 @@ namespace FantasyTeams.Tests
                 .With(x=> x.Name, getTeamQuery.TeamName)
                 .Create();
 
-            var team = _teamRepository.Setup(x => x.GetByNameAsync(getTeamQuery.TeamName))
+            var team = _teamRepository.Setup(x => x.GetAsync(x=> x.Name == getTeamQuery.TeamName))
                 .ReturnsAsync(teamMock);
             //Act
             var result = await _sut.GetTeamInfo(getTeamQuery);
@@ -116,7 +116,7 @@ namespace FantasyTeams.Tests
                 .With(x => x.Id, getTeamQuery.TeamId)
                 .Create();
 
-            var team = _teamRepository.Setup(x => x.GetByNameAsync(getTeamQuery.TeamId))
+            var team = _teamRepository.Setup(x => x.GetAsync(x=> x.Name == getTeamQuery.TeamName))
                 .ReturnsAsync(teamMock);
             //Act
             var result = await _sut.GetTeamInfo(getTeamQuery);
@@ -137,7 +137,7 @@ namespace FantasyTeams.Tests
                 .With(x => x.Id, getTeamQuery.TeamId)
                 .Create();
 
-            var team = _teamRepository.Setup(x => x.GetByIdAsync(getTeamQuery.TeamId))
+            var team = _teamRepository.Setup(x => x.GetAsync(x=> x.Id== getTeamQuery.TeamId))
                 .ReturnsAsync(teamMock);
             //Act
             var result = await _sut.GetTeamInfo(getTeamQuery);
@@ -188,10 +188,10 @@ namespace FantasyTeams.Tests
                 .With(x=>x.Name, "TestTeamName")
                 .Create();
 
-            var teamById = _teamRepository.Setup(x => x.GetByIdAsync(updateTeamCommand.TeamId))
+            var teamById = _teamRepository.Setup(x => x.GetAsync(x => x.Id == updateTeamCommand.TeamId))
                 .ReturnsAsync(teamMock);
 
-            var teamByName = _teamRepository.Setup(x => x.GetByNameAsync(updateTeamCommand.Name))
+            var teamByName = _teamRepository.Setup(x => x.GetAsync( x=> x.Name== updateTeamCommand.Name))
                 .ReturnsAsync(teamMock);
             //Act
             var result = await _sut.UpdateTeamInfo(updateTeamCommand);
@@ -212,10 +212,10 @@ namespace FantasyTeams.Tests
                 .With(x => x.Name, "ExistingName")
                 .Create();
 
-            var teamById = _teamRepository.Setup(x => x.GetByIdAsync(updateTeamCommand.TeamId))
+            var teamById = _teamRepository.Setup(x => x.GetAsync( x=> x.Id == updateTeamCommand.TeamId))
                 .ReturnsAsync(teamMock);
 
-            _teamRepository.Setup(x => x.UpdateAsync(updateTeamCommand.TeamId, teamMock));
+            _teamRepository.Setup(x => x.UpdateAsync(x=> x.Id == updateTeamCommand.TeamId, teamMock));
             //Act
             var result = await _sut.UpdateTeamInfo(updateTeamCommand);
             //Assert
@@ -243,10 +243,10 @@ namespace FantasyTeams.Tests
             var teamMock = _fixture.Build<Team>()
                 .Create();
 
-            var teamById = _teamRepository.Setup(x => x.GetByIdAsync(deleteTeamCommand.TeamId))
+            var teamById = _teamRepository.Setup(x => x.GetAsync(x=> x.Id == deleteTeamCommand.TeamId))
                 .ReturnsAsync(teamMock);
 
-            _teamRepository.Setup(x => x.DeleteAsync(deleteTeamCommand.TeamId));
+            _teamRepository.Setup(x => x.DeleteAsync(x=> x.Id == deleteTeamCommand.TeamId));
             //Act
             var result = await _sut.DeleteTeam(deleteTeamCommand);
             //Assert
@@ -277,7 +277,7 @@ namespace FantasyTeams.Tests
             var userMock = _fixture.Build<User>()
                     .Create();
 
-            var user = _userRepository.Setup(x => x.GetByIdAsync(assignTeamCommand.UserId))
+            var user = _userRepository.Setup(x => x.GetAsync(x=> x.Id == assignTeamCommand.UserId))
                 .ReturnsAsync(userMock);
 
             //Act
@@ -296,7 +296,7 @@ namespace FantasyTeams.Tests
                 .Without(x=> x.TeamId)
                 .Create();
 
-            var user = _userRepository.Setup(x => x.GetByIdAsync(assignTeamCommand.UserId))
+            var user = _userRepository.Setup(x => x.GetAsync(x=> x.Id == assignTeamCommand.UserId))
                 .ReturnsAsync(userMock);
 
             //Act
@@ -315,13 +315,13 @@ namespace FantasyTeams.Tests
                 .Without(x => x.TeamId)
                 .Create();
 
-            var user = _userRepository.Setup(x => x.GetByIdAsync(assignTeamCommand.UserId))
+            var user = _userRepository.Setup(x => x.GetAsync(x=> x.Id == assignTeamCommand.UserId))
                 .ReturnsAsync(userMock);
 
             var teamMock = _fixture.Build<Team>()
                     .Create();
 
-            var teamById = _teamRepository.Setup(x => x.GetByIdAsync(assignTeamCommand.TeamId))
+            var teamById = _teamRepository.Setup(x => x.GetAsync(x => x.Id == assignTeamCommand.TeamId))
                 .ReturnsAsync(teamMock);
 
 
