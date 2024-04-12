@@ -23,19 +23,25 @@ namespace FantasyTeams.Repository
         {
             return _collection.Find(x => true).ToListAsync();
         }
-        public Task<T> GetByIdAsync(FilterDefinitionBuilder<Func<T>> dataFilters)
+        public Task<T> GetAsync(FilterDefinition<T> dataFilters)
         {
-            return null;
-            // return _collection.Find<T>(dataFilters).FirstOrDefaultAsync();
+            return _collection.Find<T>(dataFilters).FirstOrDefaultAsync();
         }
+
+        public Task<T> GetAsync(Expression<Func<T, bool>> dataFilters)
+        {
+            return _collection.Find<T>(dataFilters).FirstOrDefaultAsync();
+        }
+
         public async Task CreateAsync(T player)
         {
             await _collection.InsertOneAsync(player).ConfigureAwait(false);
         }
-        public Task UpdateAsync(Expression<Func<T, bool>> dataFilters, UpdateDefinition<T> update)
+        public Task UpdateAsync(Expression<Func<T, bool>> dataFilters, T updatedData)
         {
             var filter = Builders<T>.Filter.Where(dataFilters);
-            return _collection.UpdateOneAsync(filter, update);
+            return _collection.ReplaceOneAsync(filter, updatedData);
+            
         }
         public Task DeleteAsync(Expression<Func<T, bool>> dataFilters)
         {
@@ -52,14 +58,10 @@ namespace FantasyTeams.Repository
             await _collection.DeleteManyAsync(dataFilters);
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> dataFilters)
+        public async Task<List<T>> GetAllByFilterAsync(FilterDefinition<T> dataFilters)
         {
             return await _collection.Find(dataFilters).ToListAsync();
         }
 
-        public async Task<T> GetByNameAsync(Expression<Func<T, bool>> dataFilters)
-        {
-            return await _collection.Find(dataFilters).FirstOrDefaultAsync();
-        }
     }
 }

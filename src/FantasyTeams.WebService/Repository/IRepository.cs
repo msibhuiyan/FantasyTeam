@@ -9,13 +9,13 @@ namespace FantasyTeams.Repository
     public interface IRepository<T> where T : class
     {
         Task<List<T>> GetAllAsync();
-        Task<List<T>> GetAllAsync(Expression<Func<T, bool>> dataFilters);
-        Task<T> GetByIdAsync(FilterDefinitionBuilder<Func<T>> dataFilters);
+        Task<List<T>> GetAllByFilterAsync(FilterDefinition<T> dataFilters);
+        Task<T> GetAsync(FilterDefinition<T> dataFilters);
+        Task<T> GetAsync(Expression<Func<T, bool>> dataFilters);
         Task CreateAsync(T item);
         Task CreateManyAsync(List<T> entities);
-        Task UpdateAsync(Expression<Func<T, bool>> dataFilters, UpdateDefinition<T> update);
+        Task UpdateAsync(Expression<Func<T, bool>> dataFilters, T updatedData);
         Task DeleteAsync(Expression<Func<T, bool>> dataFilters);
         Task DeleteManyAsync(Expression<Func<T, bool>> dataFilters);
-        Task<T> GetByNameAsync(Expression<Func<T, bool>> dataFilters);
     }
 }
