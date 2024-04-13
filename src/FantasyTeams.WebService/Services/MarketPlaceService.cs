@@ -16,23 +16,23 @@ namespace FantasyTeams.Services
     public class MarketPlaceService : IMarketPlaceService
     {
         private readonly ILogger<MarketPlaceService> _logger;
-        private readonly IMarketPlaceRepository _marketPlacecRepository;
-        private readonly ITeamRepository _teamRepository;
+        private readonly IRepository<Team> _teamRepository;
+        private readonly IRepository<Player> _playerRepository;
 
         public MarketPlaceService(ILogger<MarketPlaceService> logger,
-            IMarketPlaceRepository marketPlacecRepository,
-            ITeamRepository teamRepository)
+            IRepository<Team> teamRepository,
+            IRepository<Player> playerRepository)
         {
             _logger = logger;
-            _marketPlacecRepository = marketPlacecRepository;
             _teamRepository = teamRepository;
+            _playerRepository = playerRepository;
         }
 
         public async Task<QueryResponse> FindMarketPlacePlayer(FindPlayerQuery findPlayerQuery)
         {
             var findPlayerfilter = GetFilteredPlayerAsync(findPlayerQuery);
 
-            var filteredPlayer = await this._marketPlacecRepository.GetByFilterDefinition(findPlayerfilter);
+            var filteredPlayer = await this._playerRepository.GetAsync(findPlayerfilter);
             
             return QueryResponse.Success(filteredPlayer);
         }
@@ -63,25 +63,25 @@ namespace FantasyTeams.Services
 
         public async Task<QueryResponse> GetAllMarketPlacePlayer()
         {
-            var marketPlacePlayers = await _marketPlacecRepository.GetAllAsync();
+            var marketPlacePlayers = await _playerRepository.GetAllByFilterAsync(x => x.ForSale == true);
             return QueryResponse.Success(marketPlacePlayers);
         }
 
         public async Task<QueryResponse> GetMarketPlacePlayer(string PlayerId)
         {
-            var marketPlacePlayer = await _marketPlacecRepository.GetByIdAsync(PlayerId);
+            var marketPlacePlayer = await _playerRepository.GetAsync(x=> x.Id == PlayerId && x.ForSale == true);
             return QueryResponse.Success(marketPlacePlayer);
         }
 
         public async Task<CommandResponse> PurchasePlayer(PurchasePlayerCommand purchasePlayerCommand)
         {
             Random rnd = new Random();
-            var buyerTeamInfo = await _teamRepository.GetByIdAsync(purchasePlayerCommand.TeamId);
+            var buyerTeamInfo = await _teamRepository.GetAsync(x=> x.Id == purchasePlayerCommand.TeamId);
             if(buyerTeamInfo == null)
             {
                 return CommandResponse.Failure(new string[] { "Buyer team doesn't exists" });
             }
-            var playerInfo = await _marketPlacecRepository.GetByIdAsync(purchasePlayerCommand.PlayerId);
+            var playerInfo = await _playerRepository.GetAsync(x=> x.Id == purchasePlayerCommand.PlayerId);
             if(playerInfo == null)
             {
                 return CommandResponse.Failure(new string[] { "The player is no longer in market place" });
@@ -96,7 +96,7 @@ namespace FantasyTeams.Services
             }
             if (!string.IsNullOrEmpty(playerInfo.TeamId))
             {
-                var sellerTeamInfo = await _teamRepository.GetByIdAsync(playerInfo.TeamId);
+                var sellerTeamInfo = await _teamRepository.GetAsync(x=> x.Id == playerInfo.TeamId);
                 sellerTeamInfo.Budget += playerInfo.AskingPrice;
                 sellerTeamInfo.Value -= playerInfo.Value;
                 
@@ -117,7 +117,7 @@ namespace FantasyTeams.Services
                     sellerTeamInfo.GoalKeepers = sellerTeamInfo.GoalKeepers.Where(e => e != playerInfo.Id).ToArray();
                 }
 
-                await _teamRepository.UpdateAsync(sellerTeamInfo.Id, sellerTeamInfo);
+                await _teamRepository.UpdateAsync(x=> x.Id == sellerTeamInfo.Id, sellerTeamInfo);
             }
 
             
@@ -156,14 +156,14 @@ namespace FantasyTeams.Services
 
             playerInfo.AskingPrice = 0;
 
-            await _marketPlacecRepository.UpdateAsync(playerInfo.Id, playerInfo);
-            await _teamRepository.UpdateAsync(buyerTeamInfo.Id, buyerTeamInfo);
+            await _playerRepository.UpdateAsync(x => x.Id == playerInfo.Id, playerInfo);
+            await _teamRepository.UpdateAsync(x=> x.Id == buyerTeamInfo.Id, buyerTeamInfo);
             return CommandResponse.Success();
         }
 
         public async Task<CommandResponse> DeletePlayer(DeleteMarketPlacePlayerCommand deletePlayerCommand)
         {
-            var player = await _marketPlacecRepository.GetByIdAsync(deletePlayerCommand.PlayerId);
+            var player = await _playerRepository.GetAsync(x=> x.Id == deletePlayerCommand.PlayerId && x.ForSale == true);
             if(player == null)
             {
                 return CommandResponse.Failure(new string[] {"Player not found in marketplace for deletion"});
@@ -172,7 +172,7 @@ namespace FantasyTeams.Services
             {
                 return CommandResponse.Failure(new string[] { "Can not delete market place player associated with a team" });
             }
-            await _marketPlacecRepository.DeleteAsync(deletePlayerCommand.PlayerId);
+            await _playerRepository.DeleteAsync(x=>x.Id == deletePlayerCommand.PlayerId);
             return CommandResponse.Success();
         }
 
@@ -180,7 +180,7 @@ namespace FantasyTeams.Services
         {
             Random rnd = new Random();
             var fullName = createNewMarketPlacePlayerCommand.FirstName + " " + createNewMarketPlacePlayerCommand.LastName;
-            var player = await _marketPlacecRepository.GetByNameAsync(fullName);
+            var player = await _playerRepository.GetAsync(x=> x.FullName == fullName);
             if(player != null)
             {
                 return CommandResponse.Failure(new string[] { "This player already exists" });
@@ -197,7 +197,7 @@ namespace FantasyTeams.Services
             player.AskingPrice = createNewMarketPlacePlayerCommand.AskingPrice;
             player.PlayerType = createNewMarketPlacePlayerCommand.PlayerType;
             player.TeamId = null;
-            await _marketPlacecRepository.CreateAsync(player);
+            await _playerRepository.CreateAsync(player);
             return CommandResponse.Success();
         }
     }

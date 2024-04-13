@@ -23,6 +23,12 @@ namespace FantasyTeams.Repository
         {
             return _collection.Find(x => true).ToListAsync();
         }
+
+        public async Task<List<T>> GetAllByFilterAsync(Expression<Func<T, bool>> dataFilters)
+        {
+            return await _collection.Find(dataFilters).ToListAsync();
+        }
+
         public Task<T> GetAsync(FilterDefinition<T> dataFilters)
         {
             return _collection.Find<T>(dataFilters).FirstOrDefaultAsync();

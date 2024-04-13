@@ -20,19 +20,19 @@ namespace FantasyTeams.Tests
     public class MarketPlaceServiceTests
     {
         private readonly Mock<ILogger<MarketPlaceService>> _logger;
-        private readonly Mock<ITeamRepository> _teamRepository;
-        private readonly Mock<IMarketPlaceRepository> _marketRepository;
+        private readonly Mock<IRepository<Team>> _teamRepository;
+        private readonly Mock<IRepository<Player>> _playerRepository;
         private readonly IMarketPlaceService _sut;
         private readonly IFixture _fixture = new Fixture();
         public MarketPlaceServiceTests()
         {
             _logger = new Mock<ILogger<MarketPlaceService>>();
-            _teamRepository = new Mock<ITeamRepository>();
-            _marketRepository = new Mock<IMarketPlaceRepository>();
+            _teamRepository = new Mock<IRepository<Team>>();
+            _playerRepository = new Mock<IRepository<Player>>();
             _sut = new MarketPlaceService(
                 _logger.Object,
-                _marketRepository.Object,
-                _teamRepository.Object);
+                _teamRepository.Object,
+                _playerRepository.Object);
         }
         [Fact]
         public async Task GetAllMarketPlacePlayerShouldReturnAllMarketPlacePlayer_WhenQueried()
@@ -43,7 +43,7 @@ namespace FantasyTeams.Tests
                 .CreateMany()
                 .ToList();
 
-            var players = _marketRepository.Setup(x => x.GetAllAsync())
+            var players = _playerRepository.Setup(x => x.GetAllByFilterAsync(x => x.ForSale ==true))
                 .ReturnsAsync(playersMock);
 
             //Act
@@ -64,7 +64,7 @@ namespace FantasyTeams.Tests
                 .With(x => x.ForSale, true)
                 .Create();
 
-            var players = _marketRepository.Setup(x => x.GetByIdAsync(playerId))
+            var players = _playerRepository.Setup(x => x.GetAsync(x=> x.Id == playerId && x.ForSale == true))
                 .ReturnsAsync(playerMock);
 
             //Act
@@ -98,7 +98,7 @@ namespace FantasyTeams.Tests
             var buyerTeamInfoMock = _fixture.Build<Team>()
                 .Create();
 
-            var buyerTeamInfo = _teamRepository.Setup(x => x.GetByIdAsync(purchasePlayerCommand.TeamId))
+            var buyerTeamInfo = _teamRepository.Setup(x => x.GetAsync(x=> x.Id == purchasePlayerCommand.TeamId))
                 .ReturnsAsync(buyerTeamInfoMock);
 
             //Act
@@ -123,14 +123,14 @@ namespace FantasyTeams.Tests
                 .With(x => x.TeamId, teamId)
                 .Create();
 
-            var players = _marketRepository.Setup(x => x.GetByIdAsync(purchasePlayerCommand.PlayerId))
+            var players = _playerRepository.Setup(x => x.GetAsync(x=> x.Id == purchasePlayerCommand.PlayerId))
                 .ReturnsAsync(playerMock);
 
             var buyerTeamInfoMock = _fixture.Build<Team>()
                 .With(x=> x.Id, teamId)
                 .Create();
 
-            var buyerTeamInfo = _teamRepository.Setup(x => x.GetByIdAsync(purchasePlayerCommand.TeamId))
+            var buyerTeamInfo = _teamRepository.Setup(x => x.GetAsync(x=> x.Id == purchasePlayerCommand.TeamId))
                 .ReturnsAsync(buyerTeamInfoMock);
 
             //Act
@@ -154,14 +154,14 @@ namespace FantasyTeams.Tests
                 .With(x => x.AskingPrice, 1000)
                 .Create();
 
-            var players = _marketRepository.Setup(x => x.GetByIdAsync(purchasePlayerCommand.PlayerId))
+            var players = _playerRepository.Setup(x => x.GetAsync(x=> x.Id == purchasePlayerCommand.PlayerId))
                 .ReturnsAsync(playerMock);
 
             var buyerTeamInfoMock = _fixture.Build<Team>()
                 .With(x => x.Budget, 100)
                 .Create();
 
-            var buyerTeamInfo = _teamRepository.Setup(x => x.GetByIdAsync(purchasePlayerCommand.TeamId))
+            var buyerTeamInfo = _teamRepository.Setup(x => x.GetAsync(x=> x.Id == purchasePlayerCommand.TeamId))
                 .ReturnsAsync(buyerTeamInfoMock);
 
             //Act
@@ -191,26 +191,26 @@ namespace FantasyTeams.Tests
                 .With(x => x.AskingPrice, 1000)
                 .Create();
 
-            var players = _marketRepository.Setup(x => x.GetByIdAsync(purchasePlayerCommand.PlayerId))
+            var players = _playerRepository.Setup(x => x.GetAsync(x=> x.Id == purchasePlayerCommand.PlayerId))
                 .ReturnsAsync(playerMock);
 
             var buyerTeamInfoMock = _fixture.Build<Team>()
                 .With(x => x.Budget, 10000)
                 .Create();
 
-            var buyerTeamInfo = _teamRepository.Setup(x => x.GetByIdAsync(purchasePlayerCommand.TeamId))
+            var buyerTeamInfo = _teamRepository.Setup(x => x.GetAsync(x=> x.Id == purchasePlayerCommand.TeamId))
                 .ReturnsAsync(buyerTeamInfoMock);
 
             var sellerTeamInfoMock = _fixture.Build<Team>()
                 .Create();
 
-            var sellerTeamInfo = _teamRepository.Setup(x => x.GetByIdAsync(playerMock.TeamId))
+            var sellerTeamInfo = _teamRepository.Setup(x => x.GetAsync(x=> x.Id == playerMock.TeamId))
                 .ReturnsAsync(sellerTeamInfoMock);
 
 
-            _marketRepository.Setup(x=> x.UpdateAsync(playerMock.Id, playerMock));
-            _teamRepository.Setup(x=>x.UpdateAsync(buyerTeamInfoMock.Id, buyerTeamInfoMock));
-            _teamRepository.Setup(x=>x.UpdateAsync(sellerTeamInfoMock.Id, sellerTeamInfoMock));
+            _playerRepository.Setup(x=> x.UpdateAsync( x=> x.Id == playerMock.Id, playerMock));
+            _teamRepository.Setup(x=>x.UpdateAsync( x=> x.Id == buyerTeamInfoMock.Id, buyerTeamInfoMock));
+            _teamRepository.Setup(x=>x.UpdateAsync( x=> x.Id == sellerTeamInfoMock.Id, sellerTeamInfoMock));
             //Act
             var result = await _sut.PurchasePlayer(purchasePlayerCommand);
             //Assert
@@ -238,18 +238,18 @@ namespace FantasyTeams.Tests
                 .Without(x => x.TeamId)
                 .Create();
 
-            var players = _marketRepository.Setup(x => x.GetByIdAsync(purchasePlayerCommand.PlayerId))
+            var players = _playerRepository.Setup(x => x.GetAsync(x=> x.Id == purchasePlayerCommand.PlayerId))
                 .ReturnsAsync(playerMock);
 
             var buyerTeamInfoMock = _fixture.Build<Team>()
                 .With(x => x.Budget, 10000)
                 .Create();
 
-            var buyerTeamInfo = _teamRepository.Setup(x => x.GetByIdAsync(purchasePlayerCommand.TeamId))
+            var buyerTeamInfo = _teamRepository.Setup(x => x.GetAsync(x=> x.Id == purchasePlayerCommand.TeamId))
                 .ReturnsAsync(buyerTeamInfoMock);
 
-            _marketRepository.Setup(x => x.UpdateAsync(playerMock.Id, playerMock));
-            _teamRepository.Setup(x => x.UpdateAsync(buyerTeamInfoMock.Id, buyerTeamInfoMock));
+            _playerRepository.Setup(x => x.UpdateAsync( x=> x.Id == playerMock.Id, playerMock));
+            _teamRepository.Setup(x => x.UpdateAsync( x=> x.Id == buyerTeamInfoMock.Id, buyerTeamInfoMock));
             //Act
             var result = await _sut.PurchasePlayer(purchasePlayerCommand);
             //Assert
@@ -283,7 +283,7 @@ namespace FantasyTeams.Tests
                 .With(x => x.ForSale, true)
                 .Create();
 
-            var players = _marketRepository.Setup(x => x.GetByIdAsync(deletePlayerCommand.PlayerId))
+            var players = _playerRepository.Setup(x => x.GetAsync(x=> x.Id == deletePlayerCommand.PlayerId && x.ForSale == true))
                 .ReturnsAsync(playerMock);
 
             //Act
@@ -308,10 +308,10 @@ namespace FantasyTeams.Tests
                 .With(x => x.ForSale, true)
                 .Create();
 
-            var players = _marketRepository.Setup(x => x.GetByIdAsync(deletePlayerCommand.PlayerId))
+            var players = _playerRepository.Setup(x => x.GetAsync(x=> x.Id == deletePlayerCommand.PlayerId && x.ForSale == true))
                 .ReturnsAsync(playerMock);
 
-            _marketRepository.Setup(x => x.DeleteAsync(deletePlayerCommand.PlayerId));
+            _playerRepository.Setup(x => x.DeleteAsync(x => x.Id == deletePlayerCommand.PlayerId));
             //Act
             var result = await _sut.DeletePlayer(deletePlayerCommand);
             //Assert
@@ -331,7 +331,7 @@ namespace FantasyTeams.Tests
                 .With(x => x.FullName, fullname)
                 .With(x => x.ForSale, true)
                 .Create();
-            var players = _marketRepository.Setup(x => x.GetByNameAsync(fullname))
+            var players = _playerRepository.Setup(x => x.GetAsync(x=> x.FullName == fullname))
                 .ReturnsAsync(playerMock);
 
             //Act
@@ -352,7 +352,7 @@ namespace FantasyTeams.Tests
                .With(x => x.ForSale, true)
                .Create();
             
-            _marketRepository.Setup(x => x.CreateAsync(playerMock));
+            _playerRepository.Setup(x => x.CreateAsync(playerMock));
             //Act
             var result = await _sut.CreateNewMarketPlacePlayer(createMarketPlacePlayerCommand);
             //Assert
