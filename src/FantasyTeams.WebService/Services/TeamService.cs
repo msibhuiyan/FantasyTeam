@@ -31,7 +31,7 @@ namespace FantasyTeams.Services
         }
         public async Task<CommandResponse> CreateNewTeam(CreateTeamCommand createNewTeamCommand, string teamId = null)
         {
-            var existingTeam = await _teamRepository.GetAsync(x=> x.Name == createNewTeamCommand.Name);
+            var existingTeam = await _teamRepository.GetAsync( x=> x.Name==createNewTeamCommand.Name);
             if(existingTeam != null)
             {
                 return CommandResponse.Failure(new string[] { "Team already exists." });
@@ -164,14 +164,14 @@ namespace FantasyTeams.Services
         {
             if (!string.IsNullOrEmpty(query.TeamName))
             {
-                var teamByname = await _teamRepository.GetAsync(x=> x.Name == query.TeamName);
+                var teamByname = await _teamRepository.GetAsync( x=> x.Name==query.TeamName);
                 if(teamByname == null)
                 {
                     return QueryResponse.Success(new string[] {"No team Found"});
                 }
                 return QueryResponse.Success(teamByname);
             }
-            var teamById = await _teamRepository.GetAsync(x=> x.Id == query.TeamId);
+            var teamById = await _teamRepository.GetAsync( x=> x.Id==query.TeamId);
             if (teamById == null)
             {
                 return QueryResponse.Success(new string[] { "No team Found" });
@@ -181,7 +181,7 @@ namespace FantasyTeams.Services
 
         //public async Task<Team> GetTeamInfo(string TeamId)
         //{
-        //    return await _teamRepository.GetByIdAsync(TeamId);
+        //    return await _teamRepository.GetAsync( x=> x.Id==TeamId);
         //}
 
         public async Task<QueryResponse> GetAllTeams()
@@ -192,7 +192,7 @@ namespace FantasyTeams.Services
 
         public async Task<CommandResponse> UpdateTeamInfo(UpdateTeamCommand updateTeamCommand)
         {
-            var teamInfo = await _teamRepository.GetAsync(x=> x.Id == updateTeamCommand.TeamId);
+            var teamInfo = await _teamRepository.GetAsync( x=> x.Id==updateTeamCommand.TeamId);
             if (teamInfo == null)
             {
                 return CommandResponse.Failure(new string[] { "No team found for update" });
@@ -204,7 +204,7 @@ namespace FantasyTeams.Services
             }
             if (!string.IsNullOrEmpty(updateTeamCommand.Name))
             {
-                var team = await _teamRepository.GetAsync(x=> x.Name == updateTeamCommand.Name);
+                var team = await _teamRepository.GetAsync( x=> x.Name==updateTeamCommand.Name);
                 if(team != null)
                 {
                     return CommandResponse.Failure(new string[] { "Already a team exists on this name" });
@@ -215,37 +215,37 @@ namespace FantasyTeams.Services
             teamInfo.Name = string.IsNullOrEmpty(updateTeamCommand.Name)?
                 teamInfo.Name : updateTeamCommand.Name;
 
-            await _teamRepository.UpdateAsync(x=> x.Id == updateTeamCommand.TeamId, teamInfo);
+            await _teamRepository.UpdateAsync( x=> x.Id ==updateTeamCommand.TeamId, teamInfo);
             return CommandResponse.Success();
         }
 
         public async Task<CommandResponse> DeleteTeam(DeleteTeamCommand deleteTeamCommand)
         {
-            var team = await _teamRepository.GetAsync(x => x.Id == deleteTeamCommand.TeamId);
+            var team = await _teamRepository.GetAsync( x=> x.Id==deleteTeamCommand.TeamId);
             if(team == null)
             {
                 return CommandResponse.Failure(new string[] { "No team found for delete" });
             }
-            await _playerRepository.DeleteManyAsync(x => x.TeamId == team.Id);
+            await _playerRepository.DeleteManyAsync(x=> x.TeamId == team.Id);
             await _teamRepository.DeleteAsync(x=> x.Id == deleteTeamCommand.TeamId);
-            var user = await _userRepository.GetAsync(x=> x.TeamId == deleteTeamCommand.TeamId);
+            var user = await _userRepository.GetAsync( x=> x.TeamId ==deleteTeamCommand.TeamId);
             if(user != null)
             {
                 user.TeamId = "";
-                await _userRepository.UpdateAsync(x =>x.Id == user.Id, user);
+                await _userRepository.UpdateAsync( x=> x.Id ==user.Id, user);
             }
             return CommandResponse.Success();
         }
 
         //public async Task<CommandResponse> UpdateTeamInfo(string id, Team team)
         //{
-        //    await _teamRepository.UpdateAsync(id, team);
+        //    await _teamRepository.UpdateAsync( x=> x.Id ==id, team);
         //    return CommandResponse.Success();
         //}
 
         public async Task<CommandResponse> CreateTeamPlayer(CreateTeamPlayerCommand request)
         {
-            var team = await _teamRepository.GetAsync(x => x.Id == request.TeamId);
+            var team = await _teamRepository.GetAsync( x=> x.Id==request.TeamId);
             if(team == null)
             {
                 return CommandResponse.Failure(new string[] {"No team found to add this player"});
@@ -255,7 +255,7 @@ namespace FantasyTeams.Services
 
         public async Task<CommandResponse> AssignToUser(AssignTeamCommand request)
         {
-            var user = await _userRepository.GetAsync(x=> x.Id == request.UserId);
+            var user = await _userRepository.GetAsync( x=> x.Id==request.UserId);
             if(user == null)
             {
                 return CommandResponse.Failure(new string[] { "No user found to assign team" });
@@ -264,14 +264,14 @@ namespace FantasyTeams.Services
             {
                 return CommandResponse.Failure(new string[] { "User already has a team" });
             }
-            var team = await _teamRepository.GetAsync(x=> x.Id == request.TeamId);
+            var team = await _teamRepository.GetAsync( x=> x.Id==request.TeamId);
             if (team == null)
             {
                 return CommandResponse.Failure(new string[] { "No team found to assign to user" });
             }
             user.TeamId = team.Id;
             user.TeamName = team.Name;
-            await _userRepository.UpdateAsync(x=> x.Id == user.Id, user);
+            await _userRepository.UpdateAsync( x=> x.Id ==user.Id, user);
             return CommandResponse.Success();
         }
     }
