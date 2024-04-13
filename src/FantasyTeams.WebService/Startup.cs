@@ -44,10 +44,7 @@ namespace FantasyTeams
             });
 
             services.Configure<DbConfiguration>(Configuration.GetSection("MongoDbConnection"));
-            services.AddScoped<ITeamRepository, TeamRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IPlayerRepository, PlayerRepository>();
-            services.AddScoped<IMarketPlaceRepository, MarketPlaceRepository>();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IPlayerService, PlayerService>();
             services.AddScoped<ITeamService, TeamService>();
             services.AddScoped<IUamService, UamService>();
@@ -75,6 +72,10 @@ namespace FantasyTeams
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "FantasyTeams");
             });
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             if (env.IsDevelopment())
             {
@@ -85,6 +86,7 @@ namespace FantasyTeams
             app.UseAuthentication();
 
             app.UseHttpsRedirection();
+            
 
             app.UseRouting();
 
