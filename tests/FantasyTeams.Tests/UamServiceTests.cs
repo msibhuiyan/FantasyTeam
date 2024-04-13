@@ -22,9 +22,9 @@ namespace FantasyTeams.Tests
     {
         private readonly Mock<ILogger<UamService>> _logger;
         private readonly Mock<IConfiguration> _configuration;
-        private readonly Mock<IUserRepository> _userRepository;
-        private readonly Mock<ITeamRepository> _teamRepository;
-        private readonly Mock<IPlayerRepository> _playerRepository;
+        private readonly Mock<IRepository<User>> _userRepository;
+        private readonly Mock<IRepository<Team>> _teamRepository;
+        private readonly Mock<IRepository<Player>> _playerRepository;
         private readonly IUamService _sut;
         private readonly IFixture _fixture = new Fixture();
 
@@ -32,9 +32,9 @@ namespace FantasyTeams.Tests
         {
             _logger = new Mock<ILogger<UamService>>();
             _configuration = new Mock<IConfiguration>();
-            _userRepository = new Mock<IUserRepository>();
-            _teamRepository = new Mock<ITeamRepository>();
-            _playerRepository = new Mock<IPlayerRepository>();
+            _userRepository = new Mock<IRepository<User>>();
+            _teamRepository = new Mock<IRepository<Team>>();
+            _playerRepository = new Mock<IRepository<Player>>();
             _sut = new UamService(
                 _logger.Object,
                 _configuration.Object,
@@ -56,7 +56,7 @@ namespace FantasyTeams.Tests
                 .With(x => x.Email, userRegistrationCommand.Email)
                 .Create();
 
-            var user = _userRepository.Setup(x => x.GetByEmailAsync(userRegistrationCommand.Email))
+            var user = _userRepository.Setup(x => x.GetAsync( x=> x.Email ==userRegistrationCommand.Email))
                 .ReturnsAsync(userMock);
             //Act
             var result = await _sut.RegisterUser(userRegistrationCommand);
@@ -78,7 +78,7 @@ namespace FantasyTeams.Tests
                 .With(x=> x.Name, userRegistrationCommand.TeamName)
                 .Create();
 
-            var teamByName = _teamRepository.Setup(x => x.GetByNameAsync(userRegistrationCommand.TeamName)).ReturnsAsync(team);
+            var teamByName = _teamRepository.Setup(x => x.GetAsync(x => x.Name == userRegistrationCommand.TeamName)).ReturnsAsync(team);
 
             //Act
             var result = await _sut.RegisterUser(userRegistrationCommand);
@@ -135,7 +135,7 @@ namespace FantasyTeams.Tests
                 .Create();
 
             var user = _userRepository.Setup(
-                x => x.GetByEmailAsync(userLoginCommand.Email))
+                x => x.GetAsync( x=> x.Email ==userLoginCommand.Email))
                 .ReturnsAsync(userMock);
 
             //Act
@@ -171,7 +171,7 @@ namespace FantasyTeams.Tests
                 .Create();
 
             var user = _userRepository.Setup(
-                x => x.GetByEmailAsync(deleteUserCommand.Email))
+                x => x.GetAsync( x=> x.Email ==deleteUserCommand.Email))
                 .ReturnsAsync(userMock);
 
             //Act
@@ -191,7 +191,7 @@ namespace FantasyTeams.Tests
                 .Create();
 
             var user = _userRepository.Setup(
-                x => x.GetByEmailAsync(onboardUserCommand.Email))
+                x => x.GetAsync( x=> x.Email ==onboardUserCommand.Email))
                 .ReturnsAsync(userMock);
 
             //Act

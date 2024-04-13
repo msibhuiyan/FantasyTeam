@@ -23,15 +23,15 @@ namespace FantasyTeams.Services
     {
         private readonly ILogger<UamService> _logger;
         private readonly IConfiguration _configuration;
-        private readonly IUserRepository _userRepository;
-        private readonly ITeamRepository _teamRepository;
-        private readonly IPlayerRepository _playerRepository;
+        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<Team> _teamRepository;
+        private readonly IRepository<Player> _playerRepository;
 
         public UamService(ILogger<UamService> logger,
             IConfiguration configuration,
-            IUserRepository userRepository,
-            ITeamRepository teamRepository,
-            IPlayerRepository playerRepository)
+            IRepository<User> userRepository,
+            IRepository<Team> teamRepository,
+            IRepository<Player> playerRepository)
         {
             _logger = logger;
             _configuration = configuration;
@@ -42,25 +42,25 @@ namespace FantasyTeams.Services
 
         public async Task<CommandResponse> DeleteUser(DeleteUserCommand deleteUserCommand)
         {
-            var user = await _userRepository.GetByEmailAsync(deleteUserCommand.Email);
+            var user = await _userRepository.GetAsync( x=> x.Email == deleteUserCommand.Email);
             if(user == null)
             {
                 return CommandResponse.Failure(new string[] { "User doesn't exists for deletion" });
             }
-            await _teamRepository.DeleteAsync(user.TeamId);
-            await _playerRepository.DeleteManyAsync(user.TeamId);
-            await _userRepository.DeleteAsync(deleteUserCommand.Email);
+            await _teamRepository.DeleteAsync(x=> x.Id == user.TeamId);
+            await _playerRepository.DeleteManyAsync(x => x.TeamId == user.TeamId);
+            await _userRepository.DeleteAsync(x =>x.Email == deleteUserCommand.Email);
             return CommandResponse.Success();
         }
 
         public async Task<User> GetUserInfo(string userEmail)
         {
-            return await _userRepository.GetByEmailAsync(userEmail);
+            return await _userRepository.GetAsync( x=> x.Email == userEmail);
         }
 
         public async Task<CommandResponse> RegisterUser(UserRegistrationCommand userRegistrationCommand)
         {
-            var user = await _userRepository.GetByEmailAsync(userRegistrationCommand.Email);
+            var user = await _userRepository.GetAsync( x=> x.Email == userRegistrationCommand.Email);
             if (user != null)
             {
                 return CommandResponse.Failure(new string[] { "User Already Exists" });
@@ -94,7 +94,7 @@ namespace FantasyTeams.Services
         }
         public async Task<CommandResponse> CreateNewTeam(string teamName, string country, string teamId)
         {
-            var team = await _teamRepository.GetByNameAsync(teamName);
+            var team = await _teamRepository.GetAsync(x=> x.Name == teamName);
             if (team != null)
             {
                 return CommandResponse.Failure(new string[] { "Team already exists." });
@@ -226,7 +226,7 @@ namespace FantasyTeams.Services
         public async Task<CommandResponse> UserLogin(UserLoginCommand userLoginCommand)
         {
             
-            var user = await _userRepository.GetByEmailAsync(userLoginCommand.Email);
+            var user = await _userRepository.GetAsync( x=> x.Email == userLoginCommand.Email);
             if (user == null)
                 return CommandResponse.Failure(new string[] { "User Doesn't Exists" });
             if (!VerifyPasswordHash(userLoginCommand.Password, user.Password, user.Salt))
@@ -282,7 +282,7 @@ namespace FantasyTeams.Services
 
         public async Task<CommandResponse> OnboardUser(OnboardUserCommand onboardUserCommand)
         {
-            var user = await _userRepository.GetByEmailAsync(onboardUserCommand.Email);
+            var user = await _userRepository.GetAsync( x=> x.Email == onboardUserCommand.Email);
             if (user != null)
             {
                 return CommandResponse.Failure(new string[] { "User Already Exists" });
@@ -309,7 +309,7 @@ namespace FantasyTeams.Services
 
         public async Task<QueryResponse> GetUnAssignedUser(GetUnAssignedUserQuery request)
         {
-            var users = await _userRepository.GetAllUnAssignedTeamAsync();
+            var users = await _userRepository.GetAllByFilterAsync(x => (x.TeamId == "" || x.TeamId == null) && x.Role != "Admin");
             return QueryResponse.Success(users.Select(x => new { x.Id, x.Email}));
         }
     }
