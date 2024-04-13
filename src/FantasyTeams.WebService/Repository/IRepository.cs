@@ -10,6 +10,7 @@ namespace FantasyTeams.Repository
     {
         Task<List<T>> GetAllAsync();
         Task<List<T>> GetAllByFilterAsync(FilterDefinition<T> dataFilters);
+        Task<List<T>> GetAllByFilterAsync(Expression<Func<T, bool>> dataFilters);
         Task<T> GetAsync(FilterDefinition<T> dataFilters);
         Task<T> GetAsync(Expression<Func<T, bool>> dataFilters);
         Task CreateAsync(T item);
