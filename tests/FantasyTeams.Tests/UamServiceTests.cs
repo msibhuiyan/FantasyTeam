@@ -74,11 +74,17 @@ namespace FantasyTeams.Tests
                 .With(x => x.Password, "1qazZAQ!")
                 .Create();
 
-            var team = _fixture.Build<Team>()
-                .With(x=> x.Name, userRegistrationCommand.TeamName)
+            var userMock = _fixture.Build<User>()
+                .With(x=> x.TeamName, userRegistrationCommand.TeamName)
+                .Create();
+            
+            var teamMock = _fixture.Build<Team>()
+                .With(x=> x.Name, userMock.TeamName)
                 .Create();
 
-            var teamByName = _teamRepository.Setup(x => x.GetAsync(x => x.Name == userRegistrationCommand.TeamName)).ReturnsAsync(team);
+            _teamRepository.Setup(repo => 
+                repo.GetAsync(x => x.Name == userRegistrationCommand.TeamName))
+                .ReturnsAsync(teamMock);
 
             //Act
             var result = await _sut.RegisterUser(userRegistrationCommand);
