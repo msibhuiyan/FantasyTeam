@@ -80,7 +80,7 @@ namespace FantasyTeams.Services
             user.LastName = userRegistrationCommand.LastName;
             user.Country = userRegistrationCommand.Country;
             user.Role = Role.Member.ToString();
-            var teamCreationResponse = await CreateNewTeam(user.TeamName, user.Country,
+            var teamCreationResponse = await CreateNewTeam(userRegistrationCommand,
              user.TeamId);
             if(teamCreationResponse.Errors.Length > 0)
             {
@@ -92,17 +92,17 @@ namespace FantasyTeams.Services
 
             return CommandResponse.Success();
         }
-        public async Task<CommandResponse> CreateNewTeam(string teamName, string country, string teamId)
+        public async Task<CommandResponse> CreateNewTeam(UserRegistrationCommand userRegistrationCommand, string teamId)
         {
-            var team = await _teamRepository.GetAsync(x=> x.Name == teamName);
+            var team = await _teamRepository.GetAsync(x=> x.Name == userRegistrationCommand.TeamName);
             if (team != null)
             {
                 return CommandResponse.Failure(new string[] { "Team already exists." });
             }
             team = new Team();
             team.Id = teamId;
-            team.Name = teamName;
-            team.Country = country;
+            team.Name =  userRegistrationCommand.TeamName;
+            team.Country =  userRegistrationCommand.Country;
 
             var getTeamMembers = await CreateNewTeamPlayers(team);
 
